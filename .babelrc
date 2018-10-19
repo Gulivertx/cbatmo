@@ -1,0 +1,18 @@
+{
+  "plugins": ["dynamic-import-webpack"],
+  "presets": [
+    ["env", {
+      "targets": {
+        "uglify": true
+      }
+    }],
+    "react",
+    "stage-0"
+  ],
+  "env": {
+    "production": {
+      "presets": ["react-optimize"],
+      "plugins": ["transform-remove-console"]
+    }
+  }
+}
