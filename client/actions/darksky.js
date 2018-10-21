@@ -1,9 +1,4 @@
 import fetch from 'cross-fetch';
-import api from '../../config/api.json';
-
-const DARKSKY_API_ROOT_URL = api.dark_sky.api_url;
-const DARKSKY_API_SECRET_ID = api.dark_sky.secret_key;
-const CORS_ANYWHERE = api.dark_sky.cors_anywhere;
 
 export const DARKSKY_REQUEST = 'DARKSKY_REQUEST';
 export const DARKSKY_SUCCESS = 'DARKSKY_SUCCESS';
@@ -35,11 +30,10 @@ export const fetchDarksky = () => {
         dispatch(requestDarksky());
 
         // TODO take lang and units from config
-        // TODO remove Cors Anywhere
         const lat = getState().darksky.latitude;
         const lng = getState().darksky.longitude;
 
-        return fetch(`${CORS_ANYWHERE}${DARKSKY_API_ROOT_URL}${DARKSKY_API_SECRET_ID}/${lat},${lng}?exclude=hourly,flags&lang=en&units=si`)
+        return fetch(`/darksky/${lat}/${lng}/en/si`)
             .then(
                 response => response.json(),
                 error => dispatch(failureDarksky(error))

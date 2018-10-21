@@ -9,12 +9,18 @@ const fs = require('fs');
 const path = require('path');
 const rfs = require('rotating-file-stream');
 const os = require('os');
+const DarkSkyApi = require('dark-sky-api');
 
 const common = require('./config/common');
 const config = common.config();
 const appInfo = common.info();
+const apiConfig = require('./config/api');
 
 const app = express();
+
+/** Configure DarkSkyApi **/
+DarkSkyApi.apiKey = apiConfig.dark_sky.secret_key;
+DarkSkyApi.proxy = true;
 
 /** Logs configuration **/
 // Set logs directory
@@ -72,6 +78,28 @@ app.get('/info', (req, res, next) => {
 
         }
     })
+});
+
+app.get('/darksky/:latitude/:longitude/:lang/:units', (req, res, next) => {
+    if (!req.params.latitude ||
+        !req.params.longitude ||
+        !req.params.lang ||
+        !req.params.units) return res.status(400).json({status: 'error', msg: 'Bad request'});
+
+    console.log(req.params.latitude, req.params.longitude, req.params.lang, req.params.units);
+
+    DarkSkyApi.units = req.params.units; // default 'us'
+    DarkSkyApi.language = req.params.lang; // default 'en'
+
+    const position = {
+        latitude: req.params.latitude,
+        longitude: req.params.longitude
+    };
+
+    DarkSkyApi.loadItAll('hourly,flags', position)
+        .then(result => {
+            res.json(result)
+            })
 });
 
 /** Catch 404 and forward to error handler **/
