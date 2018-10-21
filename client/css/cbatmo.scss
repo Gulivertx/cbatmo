@@ -1,0 +1,301 @@
+@import "~material-design-iconic-font/dist/css/material-design-iconic-font.css";
+@import "~weather-icons2/css/weather-icons.css";
+@import "~weather-icons2/css/weather-icons-wind.css";
+@import "~reboot.css/dist/reboot.css";
+@import "variables";
+
+html {
+  overflow: hidden;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+html,body {
+  height: 100%;
+  user-select: none;
+  margin: 0;
+  cursor: $cursor;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  line-height: 1.1;
+  background-color: $body-bg;
+  color: $body-color;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $white;
+  font-weight: 500;
+  line-height: 1.1;
+
+  small {
+    color: $body-color;
+  }
+}
+
+h1 {
+  font-size: 33px;
+}
+
+h3 {
+  font-size: 23px;
+}
+
+h1, h2, h3 {
+  margin-top: 18px;
+  margin-bottom: 9px;
+}
+
+small, .small {
+  font-size: 92%;
+}
+
+p {
+  margin-bottom: 20px;
+}
+
+.full-screen {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  //transition-duration: 500ms;
+}
+
+.full-page {
+  //position: fixed;
+  height: 100%;
+  //width: 754px;
+  padding: 15px;
+}
+
+.background {
+  background-color: $body-bg;
+  //z-index: 1000;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+*, *:active, *:active, *:hover {
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.m-20 {
+  margin: 20px;
+}
+
+.background-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/world_map_point.png');
+  //opacity: 0.3;
+}
+
+.loading {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.error {
+  display: flex;
+  height: 200px;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //margin-left: $side-navigation-width;
+  //padding: 15px 0
+}
+
+.content__header {
+  margin-bottom: 16px;
+  position: relative;
+
+  h2 {
+    font-size: 15px;
+    color: #b4bfc3;
+    margin: 0;
+    font-weight: 400;
+    text-transform: uppercase;
+
+    small {
+      display: inline;
+      text-transform: none;
+      margin-top: 8px;
+      margin-bottom: 20px;
+      color: rgba(177, 188, 192, 0.47);
+      line-height: 140%;
+      font-size: 13px;
+    }
+  }
+
+  .actions {
+    position: absolute;
+    right: 15px;
+    top: -5px;
+    z-index: 4;
+  }
+  .actions > div {
+    display: inline-block;
+  }
+  .actions > a,
+  .actions > div > a {
+    display: inline-block;
+    vertical-align: top;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding-top: 5px;
+    border-radius: 50%;
+  }
+  .actions > a > i,
+  .actions > div > a > i {
+    color: rgba(177, 188, 192, 0.47);
+    font-size: 20px;
+  }
+  .actions > a:hover,
+  .actions > div > a:hover {
+    background-color: rgba(74, 87, 91, 0.47);
+  }
+  .actions > a:hover > i,
+  .actions > div > a:hover > i {
+    color: #b4bfc3;
+  }
+  .actions > a,
+  .actions > div > a,
+  .actions > a > i,
+  .actions > div > a > i {
+    -webkit-transition: all;
+    -webkit-transition-duration: 400ms;
+  }
+}
+
+.content-centered {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+/*** TEXT COLORS ***/
+.text-blue {
+  color: $blue;
+}
+.text-red {
+  color: $red;
+}
+.text-yellow {
+  color: $yellow;
+}
+.text-green {
+  color: $green;
+}
+.text-cyan {
+  color: $cyan;
+}
+.text-white {
+  color: $white;
+}
+.color-gray {
+  color: $body-color;
+}
+
+.clearfix:before,
+.clearfix:after,
+.dl-horizontal dd:before,
+.dl-horizontal dd:after,
+.container:before,
+.container:after,
+.container-fluid:before,
+.container-fluid:after,
+.row:before,
+.row:after,
+.form-horizontal .form-group:before,
+.form-horizontal .form-group:after,
+.btn-toolbar:before,
+.btn-toolbar:after,
+.btn-group-vertical > .btn-group:before,
+.btn-group-vertical > .btn-group:after,
+.nav:before,
+.nav:after,
+.navbar:before,
+.navbar:after,
+.navbar-header:before,
+.navbar-header:after,
+.navbar-collapse:before,
+.navbar-collapse:after,
+.pager:before,
+.pager:after,
+.panel-body:before,
+.panel-body:after,
+.modal-header:before,
+.modal-header:after,
+.modal-footer:before,
+.modal-footer:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after,
+.dl-horizontal dd:after,
+.container:after,
+.container-fluid:after,
+.row:after,
+.form-horizontal .form-group:after,
+.btn-toolbar:after,
+.btn-group-vertical > .btn-group:after,
+.nav:after,
+.navbar:after,
+.navbar-header:after,
+.navbar-collapse:after,
+.pager:after,
+.panel-body:after,
+.modal-header:after,
+.modal-footer:after {
+  clear: both;
+}
+
+
+@import "form";
+@import "button";
+@import "card";
+@import "keyboard";
+@import "login";
+@import "homescreen";
+@import "netatmo";
+@import "animate";

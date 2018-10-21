@@ -7,10 +7,15 @@ exports.config = () => {
 };
 
 exports.info = () => {
+    let keywords = '';
+
+    pjson.keywords.map((keyword, index) => keywords += index !== 0 ? `, ${keyword}` : keyword);
+
     return {
         name: pjson.name,
         version: pjson.version,
         description: pjson.description,
-        author: pjson.author
+        author: pjson.author,
+        keywords: keywords
     };
 };

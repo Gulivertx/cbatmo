@@ -1,0 +1,45 @@
+/** Bootstrap Variables **/
+$font-size-base: 0.9rem;
+
+$enable-rounded: false;
+
+$body-bg: #262D37;//#242B35;
+$body-color: rgba(177, 188, 192, 0.47);//#8a9ba1;//#c2cbce; //#EDEFF0;
+
+$card-bg: #2F3742;//#2d3542;
+$card-bg-2: #212935;
+//$card-cap-bg: #23313A;
+
+$input-bg: #2C3942;
+$input-color: #b4bfc3;
+$input-border-color: #31424b;
+$input-box-shadow: none;
+$input-focus-border-color: #b4bfc3;
+$input-focus-box-shadow: none;
+$list-group-bg: #2b3942;
+
+$blue:    #1e88e5;
+$red:     #ef5350;
+$purpule: #e91e63;
+$yellow:  #f9a825;
+$green:   #4caf50;
+$cyan:    #00bcd4;
+$white: #c2cbce;
+
+$light:         #d9dee0;
+$dark:          #394650;
+
+/** My variables **/
+// Default cursor
+$cursor: none;
+
+// Side navigation dock
+$side-navigation-width: 46px;
+
+// Keyboard
+$background-color-modal: #333333;
+$background-color-keyboard: rgba(26, 26, 26,0.6);
+$border-color-modal: #2d2d2d;
+$border-color-keyboard: rgba(26, 26, 26,0.7);
+$font-color-normal: #aaa;
+$font-color-dimmed: #666;

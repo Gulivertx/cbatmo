@@ -8,6 +8,7 @@ const logger = require('morgan');
 const fs = require('fs');
 const path = require('path');
 const rfs = require('rotating-file-stream');
+const os = require('os');
 
 const common = require('./config/common');
 const config = common.config();
@@ -47,8 +48,30 @@ app.get('/', (req, res, next) => {
         title: appInfo.name,
         description: appInfo.description,
         version: appInfo.version,
-        author: appInfo.author
+        author: appInfo.author,
+        keywords: appInfo.keywords
     });
+});
+
+app.get('/info', (req, res, next) => {
+    res.json({
+        name: appInfo.name,
+        description: appInfo.description,
+        version: appInfo.version,
+        author: appInfo.author,
+        process: {
+            platform: os.platform(),
+            arch: os.arch(),
+            release: os.release(),
+            hostname: os.hostname(),
+            type: os.type(),
+            cpuload: os.loadavg(),
+            usedmem: Math.round((os.totalmem() - os.freemem()) / 1024 / 1024),
+            totalmem: Math.round(os.totalmem() / 1024 / 1024),
+            uptime: getTimeString(os.uptime() * 1000)
+
+        }
+    })
 });
 
 /** Catch 404 and forward to error handler **/
@@ -71,3 +94,16 @@ app.use((err, req, res, next) => {
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000')
 });
+
+const getTimeString = (milli) => {
+    let d, h, m, s, ms;
+    s = Math.floor(milli / 1000);
+    m = Math.floor(s / 60);
+    s = s % 60; s = s < 10 ? '0' + s : s;
+    h = Math.floor(m / 60);
+    m = m % 60; m = m < 10 ? '0' + m : m;
+    d = Math.floor(h / 24);
+    h = h % 24; h = h < 10 ? '0' + h : h;
+    ms = Math.floor((milli % 1000) * 1000) / 1000;
+    return `${d}d ${h}:${m}:${s}`;
+};

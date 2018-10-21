@@ -1891,7 +1891,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.5:
+classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
@@ -7846,6 +7846,11 @@ watchpack@^1.5.0:
     chokidar "^2.0.2"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+
+weather-icons2@^2.0.10:
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/weather-icons2/-/weather-icons2-2.0.10.tgz#19dde3447d88cbb30111ec409d46b2ffc3cb8e0d"
+  integrity sha512-gX/LkEblhL+RtUs3+hIlek+7EqVFhC8iJ+aOU9FJjGGUe5RHn8rHuD/ZzQLkx2kn18vgq5D11SjJ7S7f6ewjHA==
 
 webpack-bundle-analyzer@^3.0.3:
   version "3.0.3"

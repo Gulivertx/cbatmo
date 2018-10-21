@@ -1,0 +1,56 @@
+.btn-light {
+  background-color: #394650;
+  border-color: #394650;
+  color: #b4bfc3;
+}
+.btn-dark {
+  background-color: $card-bg-2;
+  border-color: #394650;
+  color: $white;
+}
+.btn {
+  -webkit-transition: all;
+  transition: all;
+  -webkit-transition-duration: 300ms;
+  transition-duration: 300ms;
+}
+.btn {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  border-radius: 2px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+}
+
+.btn-light:hover, .btn-light:focus {
+  background-color: #3f4e59;
+  border-color: #3f4e59;
+  color: #b4bfc3;
+}
+.btn-dark:hover, .btn-dark:focus {
+  background-color: $card-bg;
+  border-color: #3f4e59;
+  color: $body-color !important;
+}
+.btn:hover, .btn:focus, .btn.focus {
+  color: #22313a;
+  text-decoration: none;
+}
+.btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+  outline: none !important;
+}

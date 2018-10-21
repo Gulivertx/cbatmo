@@ -1,0 +1,100 @@
+//@import "variables";
+
+.keyboard {
+  width: 100%;
+  max-width: 1030px;
+  margin: 0 auto;
+  background: $card-bg-2;//#22313a;
+  //box-shadow: 0 2px 12px 0 rgba(0,0,0,0.5);
+}
+
+.keyboard-wrapper {
+  position:fixed;
+  bottom: 0;
+  z-index: 10000;
+  width: 580px;
+  left: calc(50% - 290px);
+
+  .keyboard-row {
+    display: flex;
+  }
+}
+
+.keyboard-button {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-basis: 100px;
+  font-size: 18px;
+  height: 38px;
+  //border-radius: 4px;
+  background-color: $card-bg-2;
+  border: 1px solid $card-bg;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  color: $body-color;
+  cursor: $cursor;
+
+  svg {
+    fill: currentColor;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  &:active {
+    background-color: #aaa;
+    color: #666666;
+  }
+
+  &.shift-symbols {
+    flex-basis: 210px;
+  }
+
+  &.keyboard-numberButton {
+    flex-grow: 1;
+  }
+
+  &.keyboard-halfButton {
+    flex-basis: 56px;
+  }
+
+  &.keyboard-space {
+    flex-grow: 1;
+  }
+
+  // TODO Should be remove?
+  &.keyboard-utilButton {
+    flex-grow: 2;
+    max-width: 55px;
+  }
+
+  // TODO Should be remove?
+  &.keyboard-additionalButton {
+    flex-basis: 128px;
+  }
+
+  &.keyboard-submitButton, &.keyboard-submit-button {
+    flex-basis: 95px;
+    background-color: $card-bg-2;
+    border-color: $card-bg;
+    color: $body-color;
+  }
+}
+
+// TODO Should be remove?
+.keyboard-keysSet {
+  display: flex;
+  flex-grow: 1;
+}

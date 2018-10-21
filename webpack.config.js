@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'analyse') {
 module.exports = {
     entry: {
         'bundle': './client/index.js',
-        //'vendor': ['react', 'react-dom', 'react-redux', 'react-router-dom', 'redux', 'redux-thunk', 'moment', '@formatz/ckeditor5-build-inline', '@formatz/ckeditor5-react']
+        //'vendor': ['react', 'react-dom', 'react-redux', 'redux', 'redux-thunk', 'moment']
     },
     /*optimization: {
         splitChunks: {
