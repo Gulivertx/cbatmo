@@ -86,8 +86,6 @@ app.get('/darksky/:latitude/:longitude/:lang/:units', (req, res, next) => {
         !req.params.lang ||
         !req.params.units) return res.status(400).json({status: 'error', msg: 'Bad request'});
 
-    console.log(req.params.latitude, req.params.longitude, req.params.lang, req.params.units);
-
     DarkSkyApi.units = req.params.units; // default 'us'
     DarkSkyApi.language = req.params.lang; // default 'en'
 
