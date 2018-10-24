@@ -10,6 +10,7 @@ const FirstAppSettingsWelcome = loadable(() => import('./FirstAppSettingsWelcome
 const FirstAppSettingsNetatmoContainer = loadable(() => import('../containers/FirstAppSettingsNetatmoContainer'));
 const FirstAppSettingsDarkskyContainer = loadable(() => import('../containers/FirstAppSettingsDarkskyContainer'));
 const NetatmoContainer = loadable(() => import('../containers/NetatmoContainer'));
+import ErrorBoundary from './ErrorBoundary';
 
 const DURATION = 800;
 const IDLETIMEOUT = 30 * 1000;
@@ -57,7 +58,6 @@ class App extends React.Component {
                             <div className='background-img'/>
                             <FirstAppSettingsWelcome
                                 next={() => this.props.changeAppSettingsStep(2)}
-                                isConnected={this.props.isConnected}
                                 appInfo={this.props.appInfo}
                             />
                         </div>
@@ -100,7 +100,9 @@ class App extends React.Component {
                 <div className='full-screen'>
                     <div className='background-img'/>
                     <div className="content">
-                        <NetatmoContainer/>
+                        <ErrorBoundary>
+                            <NetatmoContainer/>
+                        </ErrorBoundary>
                     </div>
                 </div>
 

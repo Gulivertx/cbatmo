@@ -8,6 +8,7 @@ const mapStateToProps = state => {
         netatmoData: state.netatmo.stationData,
         darkskyIsFirstFetch: state.darksky.isFirstFetch,
         netatmoIsFirstFetch: state.netatmo.isFirstFetch,
+        appInfo: state.main.appInfo
     }
 };
 

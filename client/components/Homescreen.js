@@ -4,6 +4,7 @@ import Transition from 'react-transition-group/Transition';
 
 import HomescreenDateTime from './HomescrrenDateTime';
 import HomescreenWeather from './HomescreenWeather';
+import HomescrrenAppInfo from './HomescrrenAppInfo';
 import ErrorBoundary from './ErrorBoundary';
 
 const duration = 500;
@@ -46,6 +47,7 @@ class Homescreen extends React.Component {
             <Transition in={this.state.startAnimation} timeout={duration} appear={true} unmountOnExit={true} mountOnEnter={true}>
                 {(state) => (
                     <div className='full-screen' style={{...defaultStyle, ...transitionStyles[state]}}>
+                        <HomescrrenAppInfo appInfo={this.props.appInfo}/>
                         <HomescreenDateTime/>
                         {
                             this.props.darkskyIsFirstFetch || this.props.netatmoIsFirstFetch ? null : (
@@ -62,11 +64,12 @@ class Homescreen extends React.Component {
 };
 
 Homescreen.propTypes = {
-    darkskyData: PropTypes.object,
-    netatmoData: PropTypes.object,
-    darkskyIsFirstFetch: PropTypes.bool,
-    netatmoIsFirstFetch: PropTypes.bool,
-    fetchDarksky: PropTypes.func
+    darkskyData: PropTypes.object.isRequired,
+    netatmoData: PropTypes.object.isRequired,
+    darkskyIsFirstFetch: PropTypes.bool.isRequired,
+    netatmoIsFirstFetch: PropTypes.bool.isRequired,
+    fetchDarksky: PropTypes.func.isRequired,
+    appInfo: PropTypes.object.isRequired
 };
 
 export default Homescreen;

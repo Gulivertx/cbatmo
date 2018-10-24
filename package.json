@@ -1,6 +1,6 @@
 {
   "name": "cbatmo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Netatmo Weather Station Web-APP for Raspberry Pi & official Raspberry touchscreen",
   "keywords": [
     "dark sky",
@@ -17,7 +17,7 @@
     "start": "NODE_ENV=production node server.js",
     "dev:start": "NODE_ENV=development concurrently -k \"webpack --watch --mode development\" \"node server.js\"",
     "dev:analyse": "rimraf app && NODE_ENV=analyse webpack --mode production",
-    "build": "rimraf public/* && webpack --progress --profile --bail -p --mode production"
+    "build": "rimraf public/* && NODE_ENV=production webpack --progress --profile --bail -p --mode production"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -39,6 +39,7 @@
     "babel-core": "^6.26.3",
     "babel-loader": "7",
     "babel-plugin-dynamic-import-webpack": "^1.1.0",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-react-constant-elements": "^6.23.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "babel-polyfill": "^6.26.0",
@@ -62,9 +63,9 @@
     "node-sass": "^4.9.4",
     "prop-types": "^15.6.2",
     "raw-loader": "^0.5.1",
-    "react": "^16.5.2",
+    "react": "^16.6.0",
     "react-chartjs-2": "^2.7.4",
-    "react-dom": "^16.5.2",
+    "react-dom": "^16.6.0",
     "react-idle-timer": "^4.0.9",
     "react-redux": "^5.0.7",
     "react-touch-screen-keyboard": "^0.3.15",

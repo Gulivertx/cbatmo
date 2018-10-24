@@ -1,5 +1,5 @@
 {
-  "plugins": ["dynamic-import-webpack"],
+  "plugins": ["dynamic-import-webpack", "syntax-dynamic-import"],
   "presets": [
     ["env", {
       "targets": {
