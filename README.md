@@ -33,12 +33,15 @@ adapted in the future...).
 
 Currently the app is only in English.
 
-### Next development focus
+### Next development focus by priorities
+* Bind Dark sky units, latitude, longitude and language to Netatmo settings
+* Bugs fix...
 * Add French language
-* Add ability to choose Dark sky units (Netatmo units are define in your Netatmo account)
-* Settings area to change language, units, latitude and longitude.
+* Dynamically recognize available Netatmo modules
 
 ## How to try this APP
+First you will need to have [NodeJS](https://nodejs.org/en/) installed and as an option [yarn](https://yarnpkg.com/en/) but this is not mandatory as NodeJS provide npm package manager.
+
 From your computer, clone the repo, install node_modules dependencies, edit the api.json and 
 start the dev-server. Do not install and build from a Raspberry, you will get an error, 
 node-sass dependence is not compatible ARM architecture then it is not possible to build 
