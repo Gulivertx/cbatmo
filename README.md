@@ -33,11 +33,11 @@ adapted in the future...).
 
 Currently the app is only in English.
 
-### Next development focus
-* Bind Drak sky units, latitude, longitude and language to Netatmo settings
-* Add French language
+### Next development focus by priorities
+* Bind Dark sky units, latitude, longitude and language to Netatmo settings
 * Bugs fix...
-* Dynimacly reconize available Netatmo modules
+* Add French language
+* Dynamically recgonize available Netatmo modules
 
 ## How to try this APP
 First you will need to have [NodeJS](https://nodejs.org/en/) installed and as an option [yarn](https://yarnpkg.com/en/) but this is not mandatory as NodeJS provide npm package manager.
