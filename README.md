@@ -34,7 +34,7 @@ adapted in the future...).
 Currently the app is only in English.
 
 ### Next development focus by priorities
-* Bind Dark sky units, latitude, longitude and language to Netatmo settings
+* Bind Dark sky units and language to Netatmo settings (latitude and longitude now take from Netatmo)
 * Bugs fix...
 * Add French language
 * Dynamically recognize available Netatmo modules
