@@ -71,8 +71,8 @@ class FirstAppSettingsNetatmo extends React.Component {
 
 FirstAppSettingsNetatmo.propType = {
     authResult: PropTypes.object,
-    isFetchingAuth: PropTypes.bool,
-    fetchNetatmoAuth: PropTypes.func
+    isFetchingAuth: PropTypes.bool.isRequired,
+    fetchNetatmoAuth: PropTypes.func.isRequired,
 };
 
 export default FirstAppSettingsNetatmo

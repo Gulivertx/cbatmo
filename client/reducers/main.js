@@ -10,7 +10,6 @@ import {
 const defaultState = {
     isAppConfigured: !!window.localStorage.getItem('appIsConfigured'),
     isNetatmoAuth: !!window.localStorage.getItem('NetatmoAccessToken'),
-    isSwissWeatherAuth: !!window.localStorage.getItem('SwissWeatherCity'),
     isLoading: true,
     appSettingsStep: 1,
     homeScreenOpen: false,

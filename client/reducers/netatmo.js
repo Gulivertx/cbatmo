@@ -127,6 +127,7 @@ const netatmo = (state = defaultState, action) => {
             stateValue.isFetchingStation = false;
             stateValue.isFirstFetch = false;
             stateValue.stationData = action.data;
+            stateValue.user = action.user;
             stateValue.stationLastUpdated = action.receivedAt;
             state = Object.assign({}, state, stateValue);
             break;

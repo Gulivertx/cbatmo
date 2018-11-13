@@ -28,20 +28,20 @@ class Netatmo extends React.Component {
     };
 
     componentDidMount() {
-        this.interval = setInterval(() => {
+        setInterval(() => {
             this.props.fetchNetatmoStationData();
         }, refreshTime);
 
         setTimeout(() => {
             this.setState({enterTitle: true});
             setTimeout(() => {
-                this.setState({enterModuleMain: true})
+                this.setState({enterModuleMain: true});
                 setTimeout(() => {
-                    this.setState({enterModuleInternal: true})
+                    this.setState({enterModuleInternal: true});
                     setTimeout(() => {
-                        this.setState({enterModuleRain: true})
+                        this.setState({enterModuleRain: true});
                         setTimeout(() => {
-                            this.setState({enterModuleExternal: true})
+                            this.setState({enterModuleExternal: true});
                             setTimeout(() => {
                                 this.setState({enterModuleWind: true})
                             }, cssAnimationDuration);
@@ -51,10 +51,6 @@ class Netatmo extends React.Component {
             }, cssAnimationDuration);
         }, 1000);
     }
-
-    /*componentWillUnmount() {
-        clearInterval(this.interval);
-    }*/
 
     radioStatusQuality = (value) => {
         if (value < 56) {

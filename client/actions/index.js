@@ -1,5 +1,3 @@
-import fetch from "cross-fetch";
-
 export * from './darksky';
 export * from './netatmo';
 

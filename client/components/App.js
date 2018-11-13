@@ -8,7 +8,6 @@ import Transition from 'react-transition-group/Transition';
 const HomescreenContainer = loadable(() => import('../containers/HomescreenContainer'));
 const FirstAppSettingsWelcome = loadable(() => import('./FirstAppSettingsWelcome'));
 const FirstAppSettingsNetatmoContainer = loadable(() => import('../containers/FirstAppSettingsNetatmoContainer'));
-const FirstAppSettingsDarkskyContainer = loadable(() => import('../containers/FirstAppSettingsDarkskyContainer'));
 const NetatmoContainer = loadable(() => import('../containers/NetatmoContainer'));
 import ErrorBoundary from './ErrorBoundary';
 
@@ -67,13 +66,6 @@ class App extends React.Component {
                         <div className='full-screen'>
                             <div className='background-img'/>
                             <FirstAppSettingsNetatmoContainer/>
-                        </div>
-                    );
-                case 3:
-                    return (
-                        <div className='full-screen'>
-                            <div className='background-img'/>
-                            <FirstAppSettingsDarkskyContainer/>
                         </div>
                     );
             }

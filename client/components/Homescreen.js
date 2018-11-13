@@ -42,6 +42,10 @@ class Homescreen extends React.Component {
         }, 800)
     }
 
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     render() {
         return (
             <Transition in={this.state.startAnimation} timeout={duration} appear={true} unmountOnExit={true} mountOnEnter={true}>

@@ -1,4 +1,3 @@
-import fetch from 'cross-fetch';
 import moment from 'moment';
 import {changeAppIsConfigured, changeAppSettingsStep} from "./index";
 import api from '../../config/api.json';
@@ -61,7 +60,7 @@ export const fetchNetatmoAuth = (email, password) => {
                         window.localStorage.setItem('appIsConfigured', true);
                         dispatch(changeRefreshToken(json.refresh_token));
                         dispatch(changeExpireIn(moment().unix() + json.expire_in));
-                        dispatch(changeAppSettingsStep(3));
+                        dispatch(changeAppIsConfigured(true));
                     }
                     dispatch(successNetatmoAuth(json));
                 }
@@ -170,6 +169,7 @@ export const successNetatmoStation = (json) => {
     return {
         type: NETATMO_STATION_DATA_SUCCESS,
         data: json.body.devices[0],
+        user: json.body.user,
         receivedAt: Date.now()
     }
 };
@@ -199,6 +199,7 @@ export const fetchNetatmoStation = () => {
                     )
                     .then(
                         json => {
+                            console.log('Station data:', json);
                             dispatch(successNetatmoStation(json))
                         }
                     )
@@ -213,6 +214,7 @@ export const fetchNetatmoStation = () => {
                     )
                     .then(
                         json => {
+                            console.log('Station data:', json)
                             dispatch(successNetatmoStation(json))
                         }
                     )
