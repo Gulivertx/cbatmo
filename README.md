@@ -39,6 +39,7 @@ Currently the app is only in English.
 * Bugs fix...
 
 ## How to try this APP
+First you will need to have [NodeJS](https://nodejs.org/en/) installed and as an option [yarn](https://yarnpkg.com/en/) but this is not mandatory as NodeJS provide npm package manager.
 From your computer, clone the repo, install node_modules dependencies, edit the api.json and 
 start the dev-server. Do not install and build from a Raspberry, you will get an error, 
 node-sass dependence is not compatible ARM architecture then it is not possible to build 
