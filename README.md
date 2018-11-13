@@ -35,8 +35,8 @@ Currently the app is only in English.
 
 ### Next development focus
 * Add French language
-* Add ability to choose Dark sky units (Netatmo units are define in your Netatmo account)
-* Settings area to change language, units, latitude and longitude.
+* Bind Drak sky units, latitude, longitude and language to Netatmo settings
+* Bugs fix...
 
 ## How to try this APP
 From your computer, clone the repo, install node_modules dependencies, edit the api.json and 
