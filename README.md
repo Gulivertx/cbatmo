@@ -31,13 +31,11 @@ If you don't have the same modules as mine you will also get mess because curren
 any intelligence to manage modules, means they are hard coded in the frontend (this part could be 
 adapted in the future...).
 
-Currently the app is only in English.
+Currently the app support English and French languages and the configuration of the locale is taken by Netatmo settings. If you're station is in French you will have this app in French, for all other languages the fallback locale is English.
 
 ### Next development focus by priorities
-* Bind Dark sky units and language to Netatmo settings (latitude and longitude now take from Netatmo)
-* Bugs fix...
-* Add French language
 * Dynamically recognize available Netatmo modules
+* Bind Dark sky units from Netatmo settings (latitude / longitude and language now taken from Netatmo)
 
 ## How to try this APP
 First you will need to have [NodeJS](https://nodejs.org/en/) installed and as an option [yarn](https://yarnpkg.com/en/) but this is not mandatory as NodeJS provide npm package manager.
