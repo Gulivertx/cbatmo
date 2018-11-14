@@ -4,7 +4,8 @@ import {
     CHANGE_HOMESCRREN_OPEN,
     APP_INFO_REQUEST,
     APP_INFO_SUCCESS,
-    APP_INFO_FAILURE
+    APP_INFO_FAILURE,
+    NETATMO_LOCALE
 } from "../actions";
 
 const defaultState = {
@@ -19,7 +20,8 @@ const defaultState = {
         version: '',
         author: '',
     },
-    isFetchingAppInfo: false
+    isFetchingAppInfo: false,
+    locale: 'en'
 };
 
 const main = (state = defaultState, action) => {
@@ -56,6 +58,16 @@ const main = (state = defaultState, action) => {
 
         case APP_INFO_FAILURE:
             stateValue.isFetchingAppInfo = false;
+            state = Object.assign({}, state, stateValue);
+            break;
+
+        /** SET locale from Netatmo API **/
+        case NETATMO_LOCALE:
+            let locale = 'en';
+            if (action.locale.includes('fr')) {
+                locale = 'fr';
+            }
+            stateValue.locale = locale;
             state = Object.assign({}, state, stateValue);
             break;
 

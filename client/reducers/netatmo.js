@@ -26,7 +26,7 @@ import {
     NETATMO_MEASURE_NAMODULE4_FAILURE,
     NETATMO_CHANGE_ACCESS_TOKEN,
     NETATMO_CHANGE_REFRESH_TOKEN,
-    NETATMO_CHANGE_EXPIRE_IN
+    NETATMO_CHANGE_EXPIRE_IN, NETATMO_FIRST_FETCH
 } from "../actions";
 
 const defaultState = {
@@ -125,7 +125,6 @@ const netatmo = (state = defaultState, action) => {
 
         case NETATMO_STATION_DATA_SUCCESS:
             stateValue.isFetchingStation = false;
-            stateValue.isFirstFetch = false;
             stateValue.stationData = action.data;
             stateValue.user = action.user;
             stateValue.stationLastUpdated = action.receivedAt;
@@ -139,6 +138,11 @@ const netatmo = (state = defaultState, action) => {
 
         case NETATMO_STATION_DATA_UPTODATE:
             stateValue.isFetchingStation = false;
+            state = Object.assign({}, state, stateValue);
+            break;
+
+        case NETATMO_FIRST_FETCH:
+            stateValue.isFirstFetch = false;
             state = Object.assign({}, state, stateValue);
             break;
 

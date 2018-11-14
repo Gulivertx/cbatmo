@@ -52,11 +52,11 @@ class Homescreen extends React.Component {
                 {(state) => (
                     <div className='full-screen' style={{...defaultStyle, ...transitionStyles[state]}}>
                         <HomescrrenAppInfo appInfo={this.props.appInfo}/>
-                        <HomescreenDateTime/>
+                        <HomescreenDateTime locale={this.props.locale}/>
                         {
                             this.props.darkskyIsFirstFetch || this.props.netatmoIsFirstFetch ? null : (
                                 <ErrorBoundary>
-                                    <HomescreenWeather darkskyData={this.props.darkskyData} netatmoData={this.props.netatmoData}/>
+                                    <HomescreenWeather darkskyData={this.props.darkskyData} netatmoData={this.props.netatmoData} locale={this.props.locale}/>
                                 </ErrorBoundary>
                             )
                         }
@@ -73,7 +73,8 @@ Homescreen.propTypes = {
     darkskyIsFirstFetch: PropTypes.bool.isRequired,
     netatmoIsFirstFetch: PropTypes.bool.isRequired,
     fetchDarksky: PropTypes.func.isRequired,
-    appInfo: PropTypes.object.isRequired
+    appInfo: PropTypes.object.isRequired,
+    locale: PropTypes.string.isRequired,
 };
 
 export default Homescreen;

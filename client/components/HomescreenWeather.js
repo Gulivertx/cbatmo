@@ -2,12 +2,19 @@ import React from 'react';
 import WeatherIcon from "./WeatherIcon";
 import HomescreenWeatherDaily from './HomescreenWeatherDaily'
 import moment from "moment/moment";
-import 'moment/locale/fr-ch';
 import PropTypes from "prop-types";
 
-moment.locale('en');
+const HomescreenWaether = ({darkskyData, netatmoData, locale}) => {
+    // Set locale for moment
+    if (locale === 'fr') {
+        console.log('Set moment to fr');
+        require('moment/locale/fr');
+        moment.locale('fr');
+    } else {
+        moment.locale('en');
+        console.log('Set moment to en')
+    }
 
-const HomescreenWaether = ({darkskyData, netatmoData}) => {
     return (
         <div className='homescreen-weather'>
             <div className='homescreen-forecast'>
@@ -40,11 +47,11 @@ const HomescreenWaether = ({darkskyData, netatmoData}) => {
 
             <div className='col-2'>
                 <div className='box-hourly'>
-                    <HomescreenWeatherDaily data={darkskyData.daily.data[1]} day={1} />
-                    <HomescreenWeatherDaily data={darkskyData.daily.data[2]} day={2} />
-                    <HomescreenWeatherDaily data={darkskyData.daily.data[3]} day={3} />
-                    <HomescreenWeatherDaily data={darkskyData.daily.data[4]} day={4} />
-                    <HomescreenWeatherDaily data={darkskyData.daily.data[5]} day={5} />
+                    <HomescreenWeatherDaily data={darkskyData.daily.data[1]} day={1} locale={locale}/>
+                    <HomescreenWeatherDaily data={darkskyData.daily.data[2]} day={2} locale={locale}/>
+                    <HomescreenWeatherDaily data={darkskyData.daily.data[3]} day={3} locale={locale}/>
+                    <HomescreenWeatherDaily data={darkskyData.daily.data[4]} day={4} locale={locale}/>
+                    <HomescreenWeatherDaily data={darkskyData.daily.data[5]} day={5} locale={locale}/>
                 </div>
             </div>
         </div>
@@ -53,7 +60,7 @@ const HomescreenWaether = ({darkskyData, netatmoData}) => {
 
 HomescreenWaether.propTypes = {
     darkskyData: PropTypes.object.isRequired,
-    netatmoData: PropTypes.object.isRequired
+    netatmoData: PropTypes.object.isRequired,
 };
 
 export default HomescreenWaether;

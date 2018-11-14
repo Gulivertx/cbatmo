@@ -2,12 +2,18 @@ import React from 'react';
 import cx from 'classnames';
 import WeatherIcon from "./WeatherIcon";
 import moment from "moment/moment";
-import 'moment/locale/fr-ch';
 import PropTypes from "prop-types";
 
-moment.locale('en');
-
-const HomescreenWeatherDaily = ({data, day}) => {
+const HomescreenWeatherDaily = ({data, day, locale}) => {
+    // Set locale for moment
+    if (locale === 'fr') {
+        console.log('Set moment to fr');
+        require('moment/locale/fr');
+        moment.locale('fr');
+    } else {
+        moment.locale('en');
+        console.log('Set moment to en')
+    }
 
     return (
         <div className={cx('col-hourly', day === 5 && 'no-right-border')}>
@@ -20,7 +26,8 @@ const HomescreenWeatherDaily = ({data, day}) => {
 
 HomescreenWeatherDaily.propTypes = {
     data: PropTypes.object.isRequired,
-    day: PropTypes.number.isRequired
+    day: PropTypes.number.isRequired,
+    locale: PropTypes.string.isRequired,
 };
 
 export default HomescreenWeatherDaily;

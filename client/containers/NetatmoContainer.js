@@ -12,7 +12,8 @@ const mapStateToProps = state => {
         isFetchingNAModule2: state.netatmo.isFetchingNAModule2,
         isFetchingNAModule3: state.netatmo.isFetchingNAModule3,
         isFetchingNAModule4: state.netatmo.isFetchingNAModule4,
-        stationData: state.netatmo.stationData
+        stationData: state.netatmo.stationData,
+        locale: state.main.locale
     }
 };
 

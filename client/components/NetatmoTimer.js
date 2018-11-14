@@ -1,16 +1,22 @@
 import React from 'react';
 import moment from 'moment';
-import 'moment/locale/fr-ch';
-
-moment.locale('en');
 
 class NetatmoTimer extends React.Component {
-
     state = {
         last_status_store: null
     };
 
-    componentWillMount() {
+    componentDidMount() {
+        // Set locale for moment
+        if (this.props.locale === 'fr') {
+            console.log('Set moment to fr');
+            require('moment/locale/fr');
+            moment.locale('fr');
+        } else {
+            moment.locale('en');
+            console.log('Set moment to en')
+        }
+
         this.lastStatusStore();
 
         this.interval = setInterval(() => {
@@ -30,7 +36,7 @@ class NetatmoTimer extends React.Component {
 
     render() {
         return (
-            <small>{this.state.last_status_store} ago</small>
+            <small>{this.state.last_status_store}</small>
         )
     }
 }

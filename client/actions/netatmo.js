@@ -158,6 +158,8 @@ export const NETATMO_STATION_DATA_REQUEST = 'NETATMO_STATION_DATA_REQUEST';
 export const NETATMO_STATION_DATA_SUCCESS = 'NETATMO_STATION_DATA_SUCCESS';
 export const NETATMO_STATION_DATA_FAILURE = 'NETATMO_STATION_DATA_FAILURE';
 export const NETATMO_STATION_DATA_UPTODATE = 'NETATMO_STATION_DATA_UPTODATE';
+export const NETATMO_LOCALE = 'NETATMO_LOCALE';
+export const NETATMO_FIRST_FETCH = 'NETATMO_FIRST_FETCH';
 
 export const requestNetatmoStation = () => {
     return {
@@ -187,6 +189,19 @@ export const updateToDateNetatmoStation = () => {
     }
 };
 
+export const updateNetatmoLocale = (locale) => {
+    return {
+        type: NETATMO_LOCALE,
+        locale: locale
+    }
+};
+
+export const updateFirstFetch = () => {
+    return {
+        type: NETATMO_FIRST_FETCH,
+    }
+};
+
 export const fetchNetatmoStation = () => {
     return (dispatch, getState) => {
         dispatch(requestNetatmoStation());
@@ -200,7 +215,15 @@ export const fetchNetatmoStation = () => {
                     .then(
                         json => {
                             console.log('Station data:', json);
-                            dispatch(successNetatmoStation(json))
+                            // Set locale only if this is the first netatmo fetch
+                            // Wait 500 milliseconds before to continu to be sure that the value is set in redux store
+                            if (getState().netatmo.isFirstFetch) {
+                                dispatch(updateNetatmoLocale(json.body.user.administrative.lang));
+                                setTimeout(() => {dispatch(successNetatmoStation(json))}, 500);
+                                setTimeout(() => {dispatch(updateFirstFetch())}, 800); // To show UI after 1 second
+                            } else {
+                                dispatch(successNetatmoStation(json))
+                            }
                         }
                     )
             });

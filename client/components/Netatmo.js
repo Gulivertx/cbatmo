@@ -49,7 +49,7 @@ class Netatmo extends React.Component {
                     }, cssAnimationDuration);
                 }, cssAnimationDuration);
             }, cssAnimationDuration);
-        }, 1000);
+        }, 2000);
     }
 
     radioStatusQuality = (value) => {
@@ -84,7 +84,7 @@ class Netatmo extends React.Component {
                         <div className='content__header fade-enter'>
                             <h2>{this.props.stationData.station_name} <small>{this.props.stationData.place.city} - {this.props.stationData.place.altitude}m</small></h2>
                             <div className="actions actions-weather">
-                                <NetatmoTimer last_status_store={this.props.stationData.last_status_store}/>
+                                <NetatmoTimer last_status_store={this.props.stationData.last_status_store} locale={this.props.locale}/>
                             </div>
                         </div>
                     </CSSTransition>
@@ -302,7 +302,9 @@ class Netatmo extends React.Component {
             )
         } else {
             return (
-                <div className='loading'>Loading....</div>
+                <div className='loading'>
+                    Loading....
+                </div>
             )
         }
     }
@@ -318,7 +320,8 @@ Netatmo.propTypes = {
     isFetchingNAModule3: PropTypes.bool,
     isFetchingNAModule4: PropTypes.bool,
     stationData: PropTypes.object,
-    fetchNetatmoStationData: PropTypes.func
+    fetchNetatmoStationData: PropTypes.func,
+    locale: PropTypes.string.isRequired,
 };
 
 export default Netatmo

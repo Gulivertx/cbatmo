@@ -42,8 +42,9 @@ export const fetchDarksky = () => {
             // Take latitude and longitude from Netatmo station
             const lat = getState().netatmo.stationData.place.location[1];
             const lng = getState().netatmo.stationData.place.location[0];
+            const locale = getState().main.locale;
 
-            return fetch(`/darksky/${lat}/${lng}/en/si`)
+            return fetch(`/darksky/${lat}/${lng}/${locale}/si`)
                 .then(
                     response => response.json(),
                     error => dispatch(failureDarksky(error))
