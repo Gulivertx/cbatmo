@@ -1,18 +1,10 @@
 {
-  "plugins": ["dynamic-import-webpack", "syntax-dynamic-import"],
-  "presets": [
-    ["env", {
-      "targets": {
-        "uglify": true
-      }
-    }],
-    "react",
-    "stage-0"
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-syntax-dynamic-import"
   ],
-  "env": {
-    "production": {
-      "presets": ["react-optimize"],
-      "plugins": ["transform-remove-console"]
-    }
-  }
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ]
 }
