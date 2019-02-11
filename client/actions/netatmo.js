@@ -44,27 +44,28 @@ export const fetchNetatmoAuth = (email, password) => {
         params.append('username', email);
         params.append('password', password);
 
-        return fetch(`${NETATMO_API_ROOT_URL}oauth2/token`, {
-            method: 'POST',
-            body: params
-        })
-            .then(
-                response => response.json(),
-                error => dispatch(failureNetatmoAuth(error))
-            )
-            .then(
-                json => {
-                    if (json.access_token) {
-                        window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
-                        window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
-                        window.localStorage.setItem('appIsConfigured', true);
-                        dispatch(changeRefreshToken(json.refresh_token));
-                        dispatch(changeExpireIn(moment().unix() + json.expire_in));
-                        dispatch(changeAppIsConfigured(true));
-                    }
-                    dispatch(successNetatmoAuth(json));
+        return fetch(`${NETATMO_API_ROOT_URL}oauth2/token`, {method: 'POST', body: params})
+            .then(response => {
+                if (!response.ok) throw response;
+                return response.json()
+            })
+            .then(json => {
+                if (json.access_token) {
+                    window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
+                    window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
+                    window.localStorage.setItem('appIsConfigured', true);
+                    dispatch(changeRefreshToken(json.refresh_token));
+                    dispatch(changeExpireIn(moment().unix() + json.expire_in));
+                    dispatch(changeAppIsConfigured(true));
                 }
-            )
+                dispatch(successNetatmoAuth(json));
+            })
+            .catch(error => {
+                error.json().then(errorMessage => {
+                    dispatch(failureNetatmoAuth(errorMessage))
+                })
+            });
+
     }
 };
 
@@ -104,27 +105,27 @@ export const fetchNetatmoRefreshToken = () => {
         params.append('grant_type', 'refresh_token');
         params.append('refresh_token', window.localStorage.getItem('NetatmoRefreshToken'));
 
-        return fetch(`${NETATMO_API_ROOT_URL}oauth2/token`, {
-            method: 'POST',
-            body: params
-        })
-            .then(
-                response => response.json(),
-                error => dispatch(failureNetatmoRefreshToken(error))
-            )
-            .then(
-                json => {
-                    if (json.access_token) {
-                        window.localStorage.setItem('NetatmoAccessToken', json.access_token);
-                        window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
-                        window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
-                        dispatch(changeAccessToken(json.access_token));
-                        dispatch(changeRefreshToken(json.refresh_token));
-                        dispatch(changeExpireIn(moment().unix() + json.expire_in));
-                    }
-                    dispatch(successNetatmoRefreshToken(json));
+        return fetch(`${NETATMO_API_ROOT_URL}oauth2/token`, {method: 'POST', body: params})
+            .then(response => {
+                if (!response.ok) throw response;
+                return response.json()
+            })
+            .then(json => {
+                if (json.access_token) {
+                    window.localStorage.setItem('NetatmoAccessToken', json.access_token);
+                    window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
+                    window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
+                    dispatch(changeAccessToken(json.access_token));
+                    dispatch(changeRefreshToken(json.refresh_token));
+                    dispatch(changeExpireIn(moment().unix() + json.expire_in));
                 }
-            )
+                dispatch(successNetatmoRefreshToken(json));
+            })
+            .catch(error => {
+                error.json().then(errorMessage => {
+                    dispatch(failureNetatmoRefreshToken(errorMessage))
+                })
+            });
     }
 };
 
@@ -205,42 +206,52 @@ export const updateFirstFetch = () => {
 export const fetchNetatmoStation = () => {
     return (dispatch, getState) => {
         dispatch(requestNetatmoStation());
-        if (!getState().netatmo.accessToken || moment.unix(Number(getState().netatmo.expireIn)).diff(moment(), 'minute') < 10 ) {
+        if (!getState().netatmo.accessToken || moment.unix(Number(getState().netatmo.expireIn)).diff(moment(), 'minute') < 10) {
             dispatch(fetchNetatmoRefreshToken()).then(() => {
                 return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.accessToken}`)
-                    .then(
-                        response => response.json(),
-                        error => dispatch(failureNetatmoStation(error))
-                    )
-                    .then(
-                        json => {
-                            console.log('Station data:', json);
-                            // Set locale only if this is the first netatmo fetch
-                            // Wait 500 milliseconds before to continu to be sure that the value is set in redux store
-                            if (getState().netatmo.isFirstFetch) {
-                                dispatch(updateNetatmoLocale(json.body.user.administrative.lang));
-                                setTimeout(() => {dispatch(successNetatmoStation(json))}, 500);
-                                setTimeout(() => {dispatch(updateFirstFetch())}, 800); // To show UI after 1 second
-                            } else {
+                    .then(response => {
+                        if (!response.ok) throw response;
+                        return response.json()
+                    })
+                    .then(json => {
+                        console.log('Station data:', json);
+                        // Set locale only if this is the first netatmo fetch
+                        // Wait 500 milliseconds before to continu to be sure that the value is set in redux store
+                        if (getState().netatmo.isFirstFetch) {
+                            dispatch(updateNetatmoLocale(json.body.user.administrative.lang));
+                            setTimeout(() => {
                                 dispatch(successNetatmoStation(json))
-                            }
+                            }, 500);
+                            setTimeout(() => {
+                                dispatch(updateFirstFetch())
+                            }, 800); // To show UI after 1 second
+                        } else {
+                            dispatch(successNetatmoStation(json))
                         }
-                    )
+                    })
+                    .catch(error => {
+                        error.json().then(errorMessage => {
+                            dispatch(failureNetatmoStation(errorMessage))
+                        })
+                    });
             });
         } else {
             // Fetch new data only if last data stored is bigger than 10 minutes
             if (moment().diff(moment.unix(Number(getState().netatmo.stationData.last_status_store)), 'minute') > 10) {
                 return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.accessToken}`)
-                    .then(
-                        response => response.json(),
-                        error => dispatch(failureNetatmoStation(error))
-                    )
-                    .then(
-                        json => {
-                            console.log('Station data:', json)
-                            dispatch(successNetatmoStation(json))
-                        }
-                    )
+                    .then(response => {
+                        if (!response.ok) throw response;
+                        return response.json()
+                    })
+                    .then(json => {
+                        console.log('Station data:', json)
+                        dispatch(successNetatmoStation(json))
+                    })
+                    .catch(error => {
+                        error.json().then(errorMessage => {
+                            dispatch(failureNetatmoStation(errorMessage))
+                        })
+                    });
             } else {
                 dispatch(updateToDateNetatmoStation())
             }
@@ -284,26 +295,29 @@ export const fetchNetatmoNAMainMeasure = (device, module, type) => {
         const date_end = moment().unix();
 
         return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.accessToken}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
-            .then(
-                response => response.json(),
-                error => dispatch(failureNetatmoNAMainMeasure(error))
-            )
-            .then(
-                json => {
-                    let beg_time = json.body[0].beg_time;
-                    const step_time = json.body[0].step_time;
+            .then(response => {
+                if (!response.ok) throw response;
+                return response.json()
+            })
+            .then(json => {
+                let beg_time = json.body[0].beg_time;
+                const step_time = json.body[0].step_time;
 
-                    let data = [], labels =[];
+                let data = [], labels = [];
 
-                    json.body[0].value.map(value => {
-                        let label = moment.unix(beg_time).format('HH:mm');
-                        labels = [...labels, label];
-                        data = [...data, value[0]];
-                        beg_time = beg_time+step_time;
-                    });
-                    dispatch(successNetatmoNAMainMeasure(labels, data))
-                }
-            )
+                json.body[0].value.map(value => {
+                    let label = moment.unix(beg_time).format('HH:mm');
+                    labels = [...labels, label];
+                    data = [...data, value[0]];
+                    beg_time = beg_time + step_time;
+                });
+                dispatch(successNetatmoNAMainMeasure(labels, data))
+            })
+            .catch(error => {
+                error.json().then(errorMessage => {
+                    dispatch(failureNetatmoNAMainMeasure(errorMessage))
+                })
+            });
     }
 };
 
@@ -342,26 +356,29 @@ export const fetchNetatmoNAModule1Measure = (device, module, type) => {
         const date_end = moment().unix();
 
         return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.accessToken}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
-            .then(
-                response => response.json(),
-                error => dispatch(failureNetatmoNAModule1Measure(error))
-            )
-            .then(
-                json => {
-                    let beg_time = json.body[0].beg_time;
-                    const step_time = json.body[0].step_time;
+            .then(response => {
+                if (!response.ok) throw response;
+                return response.json()
+            })
+            .then(json => {
+                let beg_time = json.body[0].beg_time;
+                const step_time = json.body[0].step_time;
 
-                    let data = [], labels =[];
+                let data = [], labels = [];
 
-                    json.body[0].value.map(value => {
-                        let label = moment.unix(beg_time).format('HH:mm');
-                        labels = [...labels, label];
-                        data = [...data, value[0]];
-                        beg_time = beg_time+step_time;
-                    });
-                    dispatch(successNetatmoNAModule1Measure(labels, data))
-                }
-            )
+                json.body[0].value.map(value => {
+                    let label = moment.unix(beg_time).format('HH:mm');
+                    labels = [...labels, label];
+                    data = [...data, value[0]];
+                    beg_time = beg_time + step_time;
+                });
+                dispatch(successNetatmoNAModule1Measure(labels, data))
+            })
+            .catch(error => {
+                error.json().then(errorMessage => {
+                    dispatch(failureNetatmoNAModule1Measure(errorMessage))
+                })
+            });
     }
 };
 
@@ -400,26 +417,29 @@ export const fetchNetatmoNAModule2Measure = (device, module, type) => {
         const date_end = moment().unix();
 
         return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.accessToken}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
-            .then(
-                response => response.json(),
-                error => dispatch(failureNetatmoNAModule2Measure(error))
-            )
-            .then(
-                json => {
-                    let beg_time = json.body[0].beg_time;
-                    const step_time = json.body[0].step_time;
+            .then(response => {
+                if (!response.ok) throw response;
+                return response.json()
+            })
+            .then(json => {
+                let beg_time = json.body[0].beg_time;
+                const step_time = json.body[0].step_time;
 
-                    let data = [], labels =[];
+                let data = [], labels = [];
 
-                    json.body[0].value.map(value => {
-                        let label = moment.unix(beg_time).format('HH:mm');
-                        labels = [...labels, label];
-                        data = [...data, value[0]];
-                        beg_time = beg_time+step_time;
-                    });
-                    dispatch(successNetatmoNAModule2Measure(labels, data))
-                }
-            )
+                json.body[0].value.map(value => {
+                    let label = moment.unix(beg_time).format('HH:mm');
+                    labels = [...labels, label];
+                    data = [...data, value[0]];
+                    beg_time = beg_time + step_time;
+                });
+                dispatch(successNetatmoNAModule2Measure(labels, data))
+            })
+            .catch(error => {
+                error.json().then(errorMessage => {
+                    dispatch(failureNetatmoNAModule2Measure(errorMessage))
+                })
+            });
     }
 };
 
@@ -458,26 +478,29 @@ export const fetchNetatmoNAModule3Measure = (device, module, type) => {
         const date_end = moment().unix();
 
         return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.accessToken}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
-            .then(
-                response => response.json(),
-                error => dispatch(failureNetatmoNAModule3Measure(error))
-            )
-            .then(
-                json => {
-                    let beg_time = json.body[0].beg_time;
-                    const step_time = json.body[0].step_time;
+            .then(response => {
+                if (!response.ok) throw response;
+                return response.json()
+            })
+            .then(json => {
+                let beg_time = json.body[0].beg_time;
+                const step_time = json.body[0].step_time;
 
-                    let data = [], labels =[];
+                let data = [], labels = [];
 
-                    json.body[0].value.map(value => {
-                        let label = moment.unix(beg_time).format('HH:mm');
-                        labels = [...labels, label];
-                        data = [...data, value[0]];
-                        beg_time = beg_time+step_time;
-                    });
-                    dispatch(successNetatmoNAModule3Measure(labels, data))
-                }
-            )
+                json.body[0].value.map(value => {
+                    let label = moment.unix(beg_time).format('HH:mm');
+                    labels = [...labels, label];
+                    data = [...data, value[0]];
+                    beg_time = beg_time + step_time;
+                });
+                dispatch(successNetatmoNAModule3Measure(labels, data))
+            })
+            .catch(error => {
+                error.json().then(errorMessage => {
+                    dispatch(failureNetatmoNAModule3Measure(errorMessage))
+                })
+            });
     }
 };
 
@@ -516,25 +539,28 @@ export const fetchNetatmoNAModule4Measure = (device, module, type) => {
         const date_end = moment().unix();
 
         return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.accessToken}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
-            .then(
-                response => response.json(),
-                error => dispatch(failureNetatmoNAModule4Measure(error))
-            )
-            .then(
-                json => {
-                    let beg_time = json.body[0].beg_time;
-                    const step_time = json.body[0].step_time;
+            .then(response => {
+                if (!response.ok) throw response;
+                return response.json()
+            })
+            .then(json => {
+                let beg_time = json.body[0].beg_time;
+                const step_time = json.body[0].step_time;
 
-                    let data = [], labels =[];
+                let data = [], labels = [];
 
-                    json.body[0].value.map(value => {
-                        let label = moment.unix(beg_time).format('HH:mm');
-                        labels = [...labels, label];
-                        data = [...data, value[0]];
-                        beg_time = beg_time+step_time;
-                    });
-                    dispatch(successNetatmoNAModule4Measure(labels, data))
-                }
-            )
+                json.body[0].value.map(value => {
+                    let label = moment.unix(beg_time).format('HH:mm');
+                    labels = [...labels, label];
+                    data = [...data, value[0]];
+                    beg_time = beg_time + step_time;
+                });
+                dispatch(successNetatmoNAModule4Measure(labels, data))
+            })
+            .catch(error => {
+                error.json().then(errorMessage => {
+                    dispatch(failureNetatmoNAModule4Measure(errorMessage))
+                })
+            });
     }
 };

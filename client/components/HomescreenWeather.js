@@ -35,7 +35,11 @@ const HomescreenWaether = ({darkskyData, netatmoData, locale}) => {
                             </div>
                         </div>
                         <div className='main-temp-label'>Netatmo</div>
-                        <div className='main-temp'>{netatmoData.modules[0].dashboard_data.Temperature}°</div>
+                        {
+                            netatmoData.modules[0].dashboard_data ? (
+                                <div className='main-temp'>{netatmoData.modules[0].dashboard_data.Temperature}°</div>
+                            ) : (<div className='main-temp'>ERROR</div>)
+                        }
                     </div>
                 </div>
                 <div className='day-forcast'>

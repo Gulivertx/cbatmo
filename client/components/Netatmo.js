@@ -115,15 +115,19 @@ class Netatmo extends React.Component {
                                                 </div>
                                             </div>
                                             <div className='col2 weather-padding-left'>
-                                                <div className='card-body-weather-content'>
-                                                    <div className='temperature'><i
-                                                        className='wi wi-thermometer'/> {Math.round(this.props.stationData.dashboard_data.Temperature)}°
-                                                    </div>
-                                                    <div className='hpa'><i className='wi wi-barometer'/> {Math.round(this.props.stationData.dashboard_data.Pressure)}mBar</div>
-                                                    <div className='humidity'><i className='wi wi-humidity'/> {this.props.stationData.dashboard_data.Humidity}%</div>
-                                                    <div className='noise'><i className='wi wi-earthquake'/> {this.props.stationData.dashboard_data.Noise}dB</div>
-                                                    <div className='co2'><i className='wi wi-cloud-refresh'/> {this.props.stationData.dashboard_data.CO2}ppm</div>
-                                                </div>
+                                                {
+                                                    this.props.stationData.dashboard_data ? (
+                                                        <div className='card-body-weather-content'>
+                                                            <div className='temperature'><i
+                                                                className='wi wi-thermometer'/> {Math.round(this.props.stationData.dashboard_data.Temperature)}°
+                                                            </div>
+                                                            <div className='hpa'><i className='wi wi-barometer'/> {Math.round(this.props.stationData.dashboard_data.Pressure)}mBar</div>
+                                                            <div className='humidity'><i className='wi wi-humidity'/> {this.props.stationData.dashboard_data.Humidity}%</div>
+                                                            <div className='noise'><i className='wi wi-earthquake'/> {this.props.stationData.dashboard_data.Noise}dB</div>
+                                                            <div className='co2'><i className='wi wi-cloud-refresh'/> {this.props.stationData.dashboard_data.CO2}ppm</div>
+                                                        </div>
+                                                    ) : (<div className='card-body-weather-content'>ERROR</div>)
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -132,170 +136,210 @@ class Netatmo extends React.Component {
                         </CSSTransition>
 
                         {/* Module 2 - internal */}
-                        <CSSTransition in={this.state.enterModuleInternal} classNames='fade' timeout={cssAnimationDuration}>
-                            <div className='module-internal fade-enter'>
-                                <div className="card">
-                                    <div className='card__header'>{this.props.stationData.modules[1].module_name}
-                                        <div className='pull-right'>
+                        {
+                            this.props.stationData.modules[1] && (
+                                <CSSTransition in={this.state.enterModuleInternal} classNames='fade' timeout={cssAnimationDuration}>
+                                    <div className='module-internal fade-enter'>
+                                        <div className="card">
+                                            <div className='card__header'>{this.props.stationData.modules[1].module_name}
+                                                <div className='pull-right'>
                                             <span className={this.batteryStatusQuality(this.props.stationData.modules[1].battery_percent)}><i
                                                 className="zmdi zmdi-battery-flash"/></span> <span
-                                            className='battery-percent'>{this.props.stationData.modules[1].battery_percent}%</span>
-                                            <span className={this.radioStatusQuality(this.props.stationData.modules[1].rf_status)}><i
-                                                className="zmdi zmdi-portable-wifi"/></span>
-                                        </div>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className='row'>
-                                            <div className='col1'>
-                                                <div className='chart-weather-line'>
-                                                    <NetatmoNAModule4ChartLineContainer
-                                                        device={this.props.stationData._id}
-                                                        module={this.props.stationData.modules[1]._id}
-                                                        type='temperature'
-                                                        color='#ffa000'
-                                                        offsetMin={2}
-                                                        offsetMax={2}
-                                                    />
+                                                    className='battery-percent'>{this.props.stationData.modules[1].battery_percent}%</span>
+                                                    <span className={this.radioStatusQuality(this.props.stationData.modules[1].rf_status)}><i
+                                                        className="zmdi zmdi-portable-wifi"/></span>
                                                 </div>
                                             </div>
-                                            <div className='col2 weather-padding-left'>
-                                                <div className='card-body-weather-content'>
-                                                    <div className='temperature'><i
-                                                        className='wi wi-thermometer'/> {Math.round(this.props.stationData.modules[1].dashboard_data.Temperature)}°
+                                            <div className="card-body">
+                                                <div className='row'>
+                                                    <div className='col1'>
+                                                        <div className='chart-weather-line'>
+                                                            <NetatmoNAModule4ChartLineContainer
+                                                                device={this.props.stationData._id}
+                                                                module={this.props.stationData.modules[1]._id}
+                                                                type='temperature'
+                                                                color='#ffa000'
+                                                                offsetMin={2}
+                                                                offsetMax={2}
+                                                            />
+                                                        </div>
                                                     </div>
-                                                    <div className='humidity'><i className='wi wi-humidity'/> {this.props.stationData.modules[1].dashboard_data.Humidity}%</div>
-                                                    <div className='co2'><i className='wi wi-cloud-refresh'/> {this.props.stationData.modules[1].dashboard_data.CO2}ppm</div>
+                                                    <div className='col2 weather-padding-left'>
+                                                        {
+                                                            this.props.stationData.modules[1].dashboard_data ? (
+                                                                <div className='card-body-weather-content'>
+                                                                    <div className='temperature'><i
+                                                                        className='wi wi-thermometer'/> {Math.round(this.props.stationData.modules[1].dashboard_data.Temperature)}°
+                                                                    </div>
+                                                                    <div className='humidity'><i className='wi wi-humidity'/> {this.props.stationData.modules[1].dashboard_data.Humidity}%</div>
+                                                                    <div className='co2'><i className='wi wi-cloud-refresh'/> {this.props.stationData.modules[1].dashboard_data.CO2}ppm</div>
+                                                                </div>
+                                                            ) : (
+                                                                <div className='card-body-weather-content'>ERROR</div>
+                                                            )
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </CSSTransition>
+                                </CSSTransition>
+                            )
+                        }
 
 
                         {/* Module 3 - rain */}
-                        <CSSTransition in={this.state.enterModuleRain} classNames='fade' timeout={cssAnimationDuration}>
-                            <div className='module-rain fade-enter'>
-                                <div className="card">
-                                    <div className='card__header'>{this.props.stationData.modules[2].module_name}
-                                        <div className='pull-right'>
+                        {
+                            this.props.stationData.modules[2] && (
+                                <CSSTransition in={this.state.enterModuleRain} classNames='fade' timeout={cssAnimationDuration}>
+                                    <div className='module-rain fade-enter'>
+                                        <div className="card">
+                                            <div className='card__header'>{this.props.stationData.modules[2].module_name}
+                                                <div className='pull-right'>
                                             <span className={this.batteryStatusQuality(this.props.stationData.modules[2].battery_percent)}><i
                                                 className="zmdi zmdi-battery-flash"/></span> <span
-                                            className='battery-percent'>{this.props.stationData.modules[2].battery_percent}%</span>
-                                            <span className={this.radioStatusQuality(this.props.stationData.modules[2].rf_status)}><i
-                                                className="zmdi zmdi-portable-wifi"/></span>
-                                        </div>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className='row'>
-                                            <div className='col1'>
-                                                <div className='chart-weather-line'>
-                                                    <NetatmoNAModule2ChartLineContainer
-                                                        device={this.props.stationData._id}
-                                                        module={this.props.stationData.modules[2]._id}
-                                                        type='rain'
-                                                        color='#1e88e5'
-                                                        offsetMin={0}
-                                                        offsetMax={0.1}
-                                                    />
+                                                    className='battery-percent'>{this.props.stationData.modules[2].battery_percent}%</span>
+                                                    <span className={this.radioStatusQuality(this.props.stationData.modules[2].rf_status)}><i
+                                                        className="zmdi zmdi-portable-wifi"/></span>
                                                 </div>
                                             </div>
-                                            <div className='col2 weather-padding-left'>
-                                                <div className='card-body-weather-content'>
-                                                    <div className='rain'><i className='wi wi-raindrop'/> {this.props.stationData.modules[2].dashboard_data.Rain.toFixed(1)}
-                                                        <small>mm</small>
+                                            <div className="card-body">
+                                                <div className='row'>
+                                                    <div className='col1'>
+                                                        <div className='chart-weather-line'>
+                                                            <NetatmoNAModule2ChartLineContainer
+                                                                device={this.props.stationData._id}
+                                                                module={this.props.stationData.modules[2]._id}
+                                                                type='rain'
+                                                                color='#1e88e5'
+                                                                offsetMin={0}
+                                                                offsetMax={0.1}
+                                                            />
+                                                        </div>
                                                     </div>
-                                                    <div className='rain24'><i
-                                                        className='wi wi-raindrop'/> {this.props.stationData.modules[2].dashboard_data.sum_rain_24.toFixed(1)}mm
+                                                    <div className='col2 weather-padding-left'>
+                                                        {
+                                                            this.props.stationData.modules[2].dashboard_data ? (
+                                                                <div className='card-body-weather-content'>
+                                                                    <div className='rain'><i className='wi wi-raindrop'/> {this.props.stationData.modules[2].dashboard_data.Rain.toFixed(1)}
+                                                                        <small>mm</small>
+                                                                    </div>
+                                                                    <div className='rain24'><i
+                                                                        className='wi wi-raindrop'/> {this.props.stationData.modules[2].dashboard_data.sum_rain_24.toFixed(1)}mm
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <div className='card-body-weather-content'>ERROR</div>
+                                                            )
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </CSSTransition>
+                                </CSSTransition>
+                            )
+                        }
 
 
                         {/* Module 1 - external */}
-                        <CSSTransition in={this.state.enterModuleExternal} classNames='fade' timeout={cssAnimationDuration}>
-                            <div className='module-external fade-enter'>
-                                <div className="card">
-                                    <div className='card__header'>{this.props.stationData.modules[0].module_name}
-                                        <div className='pull-right'>
+                        {
+                            this.props.stationData.modules[0] && (
+                                <CSSTransition in={this.state.enterModuleExternal} classNames='fade' timeout={cssAnimationDuration}>
+                                    <div className='module-external fade-enter'>
+                                        <div className="card">
+                                            <div className='card__header'>{this.props.stationData.modules[0].module_name}
+                                                <div className='pull-right'>
                                             <span className={this.batteryStatusQuality(this.props.stationData.modules[0].battery_percent)}><i
                                                 className="zmdi zmdi-battery-flash"/></span> <span
-                                            className='battery-percent'>{this.props.stationData.modules[0].battery_percent}%</span>
-                                            <span className={this.radioStatusQuality(this.props.stationData.modules[0].rf_status)}><i
-                                                className="zmdi zmdi-portable-wifi"/></span>
-                                        </div>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className='row'>
-                                            <div className='col1'>
-                                                <div className='chart-weather-line'>
-                                                    <NetatmoNAModule1ChartLineContainer
-                                                        device={this.props.stationData._id}
-                                                        module={this.props.stationData.modules[0]._id}
-                                                        type='temperature'
-                                                        color='#ffa000'
-                                                        offsetMin={2}
-                                                        offsetMax={2}
-                                                    />
+                                                    className='battery-percent'>{this.props.stationData.modules[0].battery_percent}%</span>
+                                                    <span className={this.radioStatusQuality(this.props.stationData.modules[0].rf_status)}><i
+                                                        className="zmdi zmdi-portable-wifi"/></span>
                                                 </div>
                                             </div>
-                                            <div className='col2 weather-padding-left'>
-                                                <div className='card-body-weather-content'>
-                                                    <div className='temperature'><i
-                                                        className='wi wi-thermometer'/> {Math.round(this.props.stationData.modules[0].dashboard_data.Temperature)}°
+                                            <div className="card-body">
+                                                <div className='row'>
+                                                    <div className='col1'>
+                                                        <div className='chart-weather-line'>
+                                                            <NetatmoNAModule1ChartLineContainer
+                                                                device={this.props.stationData._id}
+                                                                module={this.props.stationData.modules[0]._id}
+                                                                type='temperature'
+                                                                color='#ffa000'
+                                                                offsetMin={2}
+                                                                offsetMax={2}
+                                                            />
+                                                        </div>
                                                     </div>
-                                                    <div className='humidity'><i className='wi wi-humidity'/> {this.props.stationData.modules[0].dashboard_data.Humidity}%</div>
+                                                    <div className='col2 weather-padding-left'>
+                                                        {
+                                                            this.props.stationData.modules[0].dashboard_data ? (
+                                                                <div className='card-body-weather-content'>
+                                                                    <div className='temperature'><i
+                                                                        className='wi wi-thermometer'/> {Math.round(this.props.stationData.modules[0].dashboard_data.Temperature)}°
+                                                                    </div>
+                                                                    <div className='humidity'><i className='wi wi-humidity'/> {this.props.stationData.modules[0].dashboard_data.Humidity}%</div>
+                                                                </div>
+                                                            ) : (
+                                                                <div className='card-body-weather-content'>ERROR</div>
+                                                            )
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </CSSTransition>
+                                </CSSTransition>
+                            )
+                        }
 
 
                         {/* Module 4 - wind */}
-                        <CSSTransition in={this.state.enterModuleWind} classNames='fade' timeout={cssAnimationDuration}>
-                            <div className='module-wind fade-enter'>
-                                <div className="card">
-                                    <div className='card__header'>{this.props.stationData.modules[3].module_name}
-                                        <div className='pull-right'>
+                        {
+                            this.props.stationData.modules[3] && (
+                                <CSSTransition in={this.state.enterModuleWind} classNames='fade' timeout={cssAnimationDuration}>
+                                    <div className='module-wind fade-enter'>
+                                        <div className="card">
+                                            <div className='card__header'>{this.props.stationData.modules[3].module_name}
+                                                <div className='pull-right'>
                                             <span className={this.batteryStatusQuality(this.props.stationData.modules[3].battery_percent)}><i
                                                 className="zmdi zmdi-battery-flash"/></span> <span
-                                            className='battery-percent'>{this.props.stationData.modules[3].battery_percent}%</span>
-                                            <span className={this.radioStatusQuality(this.props.stationData.modules[3].rf_status)}><i
-                                                className="zmdi zmdi-portable-wifi"/></span>
-                                        </div>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className='row'>
-                                            <div className='col1'>
-                                                <div className='chart-weather-line'>
-                                                    <i className={'wind-icon wi wi-wind from-' + this.props.stationData.modules[3].dashboard_data.WindAngle + '-deg'}/>
+                                                    className='battery-percent'>{this.props.stationData.modules[3].battery_percent}%</span>
+                                                    <span className={this.radioStatusQuality(this.props.stationData.modules[3].rf_status)}><i
+                                                        className="zmdi zmdi-portable-wifi"/></span>
                                                 </div>
                                             </div>
-                                            <div className='col2 weather-padding-left'>
-                                                <div className='card-body-weather-content'>
-                                                    <div className='temperature'><i
-                                                        className='wi wi-small-craft-advisory'/> {this.props.stationData.modules[3].dashboard_data.WindStrength}km/h
+                                            <div className="card-body">
+                                                <div className='row'>
+                                                    <div className='col1'>
+                                                        <div className='chart-weather-line'>
+                                                            <i className={'wind-icon wi wi-wind from-' + this.props.stationData.modules[3].dashboard_data.WindAngle + '-deg'}/>
+                                                        </div>
                                                     </div>
-                                                    <div className='humidity'><i className='wi wi-strong-wind'/> {this.props.stationData.modules[3].dashboard_data.GustStrength}km/h
-                                                    </div>
-                                                    <div className='co2'><i className='wi wi-wind-direction'/> {this.props.stationData.modules[3].dashboard_data.max_wind_str}km/h
+                                                    <div className='col2 weather-padding-left'>
+                                                        {
+                                                            this.props.stationData.modules[3].dashboard_data ? (
+                                                                <div className='card-body-weather-content'>
+                                                                    <div className='temperature'><i
+                                                                        className='wi wi-small-craft-advisory'/> {this.props.stationData.modules[3].dashboard_data.WindStrength}km/h
+                                                                    </div>
+                                                                    <div className='humidity'><i className='wi wi-strong-wind'/> {this.props.stationData.modules[3].dashboard_data.GustStrength}km/h
+                                                                    </div>
+                                                                    <div className='co2'><i className='wi wi-wind-direction'/> {this.props.stationData.modules[3].dashboard_data.max_wind_str}km/h
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <div className='card-body-weather-content'>ERROR</div>
+                                                            )
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </CSSTransition>
+                                </CSSTransition>
+                            )
+                        }
 
                     </div>
                 </div>
