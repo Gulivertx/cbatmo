@@ -30,22 +30,22 @@ const HomescreenWaether = ({darkskyData, netatmoData, locale}) => {
                         <div className='main-temp'>
                             {Math.round(darkskyData.currently.temperature)}°
                             <div className='min-max-temp'>
-                                <div><i className='wi wi-thermometer-exterior color-gray'/> <span className='text-white'>{Math.round(darkskyData.daily.data[0].temperatureLow)}°</span></div>
-                                <div><i className='wi wi-thermometer color-gray'/> <span className='text-white'>{Math.round(darkskyData.daily.data[0].temperatureHigh)}°</span></div>
+                                <div><i className='wi wi-thermometer-exterior color-gray'/> <span className='text-white'>{Math.round(darkskyData.daily.data[0].temperature_low)}°</span></div>
+                                <div><i className='wi wi-thermometer color-gray'/> <span className='text-white'>{Math.round(darkskyData.daily.data[0].temperature_high)}°</span></div>
                             </div>
                         </div>
                         <div className='main-temp-label'>Netatmo</div>
                         {
-                            netatmoData.modules[0].dashboard_data ? (
-                                <div className='main-temp'>{netatmoData.modules[0].dashboard_data.Temperature}°</div>
+                            netatmoData.modules.OUTDOOR.reachable ? (
+                                <div className='main-temp'>{netatmoData.modules.OUTDOOR.data.temperature}°</div>
                             ) : (<div className='main-temp'>ERROR</div>)
                         }
                     </div>
                 </div>
                 <div className='day-forcast'>
                     <div className='inline'><i className="zmdi zmdi-pin"/> <span className='text-white'>{netatmoData.place.city}</span></div>
-                    <div className='inline'><i className='wi wi-sunrise'/> <span className='text-white'>{moment.unix(darkskyData.daily.data[0].sunriseTime).format('HH:mm')}</span></div>
-                    <div className='inline'><i className='wi wi-sunset'/> <span className='text-white'>{moment.unix(darkskyData.daily.data[0].sunsetTime).format('HH:mm')}</span></div>
+                    <div className='inline'><i className='wi wi-sunrise'/> <span className='text-white'>{moment.unix(darkskyData.daily.data[0].sunrise_time).format('HH:mm')}</span></div>
+                    <div className='inline'><i className='wi wi-sunset'/> <span className='text-white'>{moment.unix(darkskyData.daily.data[0].sunset_time).format('HH:mm')}</span></div>
                 </div>
             </div>
 

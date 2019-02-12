@@ -1,40 +1,41 @@
 import moment from 'moment';
-import {changeAppIsConfigured, changeAppSettingsStep} from "./index";
-import api from '../../config/api.json';
+import {appConfigured, setLocale} from "../application/actions";
+import api from '../../../config/api.json';
+import NetatmoStationData from '../../DTO/NetatmoStationData';
 
 const NETATMO_API_ROOT_URL = api.netatmo.api_url;
 const NETATMO_API_CLIENT_ID = api.netatmo.client_id;
 const NETATMO_API_CLIENT_SECRET = api.netatmo.client_secret;
 
 
-export const NETATMO_AUTH_REQUEST = 'NETATMO_AUTH_REQUEST';
-export const NETATMO_AUTH_SUCCESS = 'NETATMO_AUTH_SUCCESS';
-export const NETATMO_AUTH_FAILURE = 'NETATMO_AUTH_FAILURE';
+export const AUTH_REQUEST = '@@netatmo/AUTH_REQUEST';
+export const AUTH_SUCCESS = '@@netatmo/AUTH_SUCCESS';
+export const AUTH_FAILURE = '@@netatmo/AUTH_FAILURE';
 
-export const requestNetatmoAuth = () => {
+export const requestAuth = () => {
     return {
-        type: NETATMO_AUTH_REQUEST
+        type: AUTH_REQUEST
     }
 };
 
-export const successNetatmoAuth = (json) => {
+export const successAuth = (json) => {
     return {
-        type: NETATMO_AUTH_SUCCESS,
-        data: json,
+        type: AUTH_SUCCESS,
+        payload: json,
         receivedAt: Date.now()
     }
 };
 
-export const failureNetatmoAuth = (error) => {
+export const failureAuth = (error) => {
     return {
-        type: NETATMO_AUTH_FAILURE,
+        type: AUTH_FAILURE,
         error: error
     }
 };
 
-export const fetchNetatmoAuth = (email, password) => {
+export const fetchAuth = (email, password) => {
     return (dispatch) => {
-        dispatch(requestNetatmoAuth());
+        dispatch(requestAuth());
 
         const params = new URLSearchParams();
         params.append('client_id', NETATMO_API_CLIENT_ID);
@@ -50,19 +51,15 @@ export const fetchNetatmoAuth = (email, password) => {
                 return response.json()
             })
             .then(json => {
-                if (json.access_token) {
-                    window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
-                    window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
-                    window.localStorage.setItem('appIsConfigured', true);
-                    dispatch(changeRefreshToken(json.refresh_token));
-                    dispatch(changeExpireIn(moment().unix() + json.expire_in));
-                    dispatch(changeAppIsConfigured(true));
-                }
-                dispatch(successNetatmoAuth(json));
+                window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
+                window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
+                window.localStorage.setItem('appIsConfigured', 'true');
+                dispatch(successAuth(json));
+                dispatch(appConfigured(true));
             })
             .catch(error => {
                 error.json().then(errorMessage => {
-                    dispatch(failureNetatmoAuth(errorMessage))
+                    dispatch(failureAuth(errorMessage))
                 })
             });
 
@@ -70,34 +67,34 @@ export const fetchNetatmoAuth = (email, password) => {
 };
 
 
-export const NETATMO_REFRESH_TOKEN_REQUEST = 'NETATMO_REFRESH_TOKEN_REQUEST';
-export const NETATMO_REFRESH_TOKEN_SUCCESS = 'NETATMO_REFRESH_TOKEN_SUCCESS';
-export const NETATMO_REFRESH_TOKEN_FAILURE = 'NETATMO_REFRESH_TOKEN_FAILURE';
+export const REFRESH_TOKEN_REQUEST = '@@netatmo/REFRESH_TOKEN_REQUEST';
+export const REFRESH_TOKEN_SUCCESS = '@@netatmo/REFRESH_TOKEN_SUCCESS';
+export const REFRESH_TOKEN_FAILURE = '@@netatmo/REFRESH_TOKEN_FAILURE';
 
-export const requestNetatmoRefreshToken = () => {
+export const requestRefreshToken = () => {
     return {
-        type: NETATMO_REFRESH_TOKEN_REQUEST
+        type: REFRESH_TOKEN_REQUEST
     }
 };
 
-export const successNetatmoRefreshToken = (json) => {
+export const successRefreshToken = (json) => {
     return {
-        type: NETATMO_REFRESH_TOKEN_SUCCESS,
-        data: json,
+        type: REFRESH_TOKEN_SUCCESS,
+        payload: json,
         receivedAt: Date.now()
     }
 };
 
-export const failureNetatmoRefreshToken = (error) => {
+export const failureRefreshToken = (error) => {
     return {
-        type: NETATMO_REFRESH_TOKEN_FAILURE,
+        type: REFRESH_TOKEN_FAILURE,
         error: error
     }
 };
 
-export const fetchNetatmoRefreshToken = () => {
+export const fetchRefreshToken = () => {
     return (dispatch, getState) => {
-        dispatch(requestNetatmoRefreshToken());
+        dispatch(requestRefreshToken());
 
         const params = new URLSearchParams();
         params.append('client_id', NETATMO_API_CLIENT_ID);
@@ -111,149 +108,93 @@ export const fetchNetatmoRefreshToken = () => {
                 return response.json()
             })
             .then(json => {
-                if (json.access_token) {
-                    window.localStorage.setItem('NetatmoAccessToken', json.access_token);
-                    window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
-                    window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
-                    dispatch(changeAccessToken(json.access_token));
-                    dispatch(changeRefreshToken(json.refresh_token));
-                    dispatch(changeExpireIn(moment().unix() + json.expire_in));
-                }
-                dispatch(successNetatmoRefreshToken(json));
+                window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
+                window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
+                dispatch(successRefreshToken(json));
             })
             .catch(error => {
                 error.json().then(errorMessage => {
-                    dispatch(failureNetatmoRefreshToken(errorMessage))
+                    dispatch(failureRefreshToken(errorMessage))
                 })
             });
     }
 };
 
-export const NETATMO_CHANGE_ACCESS_TOKEN = 'NETATMO_CHANGE_ACCESS_TOKEN';
-export const NETATMO_CHANGE_REFRESH_TOKEN = 'NETATMO_CHANGE_REFRESH_TOKEN';
-export const NETATMO_CHANGE_EXPIRE_IN = 'NETATMO_CHANGE_EXPIRE_IN';
+export const STATION_DATA_REQUEST = '@@netatmo/STATION_DATA_REQUEST';
+export const STATION_DATA_SUCCESS = '@@netatmo/STATION_DATA_SUCCESS';
+export const STATION_DATA_FAILURE = '@@netatmo/STATION_DATA_FAILURE';
+export const STATION_DATA_UPTODATE = '@@netatmo/STATION_DATA_UPTODATE';
 
-export const changeAccessToken = (access_token) => {
+export const requestStationData = () => {
     return {
-        type: NETATMO_CHANGE_ACCESS_TOKEN,
-        value: access_token
+        type: STATION_DATA_REQUEST
     }
 };
 
-export const changeRefreshToken = (refresh_token) => {
+export const successStationData = (json) => {
     return {
-        type: NETATMO_CHANGE_REFRESH_TOKEN,
-        value: refresh_token
-    }
-};
-
-export const changeExpireIn = (expire_in) => {
-    return {
-        type: NETATMO_CHANGE_EXPIRE_IN,
-        value: expire_in
-    }
-};
-
-
-export const NETATMO_STATION_DATA_REQUEST = 'NETATMO_STATION_DATA_REQUEST';
-export const NETATMO_STATION_DATA_SUCCESS = 'NETATMO_STATION_DATA_SUCCESS';
-export const NETATMO_STATION_DATA_FAILURE = 'NETATMO_STATION_DATA_FAILURE';
-export const NETATMO_STATION_DATA_UPTODATE = 'NETATMO_STATION_DATA_UPTODATE';
-export const NETATMO_LOCALE = 'NETATMO_LOCALE';
-export const NETATMO_FIRST_FETCH = 'NETATMO_FIRST_FETCH';
-
-export const requestNetatmoStation = () => {
-    return {
-        type: NETATMO_STATION_DATA_REQUEST
-    }
-};
-
-export const successNetatmoStation = (json) => {
-    return {
-        type: NETATMO_STATION_DATA_SUCCESS,
-        data: json.body.devices[0],
-        user: json.body.user,
+        type: STATION_DATA_SUCCESS,
+        payload: json,
         receivedAt: Date.now()
     }
 };
 
-export const failureNetatmoStation = (error) => {
+export const failureStationData = (error) => {
     return {
-        type: NETATMO_STATION_DATA_FAILURE,
+        type: STATION_DATA_FAILURE,
         error: error
     }
 };
 
-export const updateToDateNetatmoStation = () => {
+export const updateToDateStationData = () => {
     return {
-        type: NETATMO_STATION_DATA_UPTODATE
+        type: STATION_DATA_UPTODATE
     }
 };
 
-export const updateNetatmoLocale = (locale) => {
-    return {
-        type: NETATMO_LOCALE,
-        locale: locale
-    }
-};
-
-export const updateFirstFetch = () => {
-    return {
-        type: NETATMO_FIRST_FETCH,
-    }
-};
-
-export const fetchNetatmoStation = () => {
+export const fetchStationData = () => {
     return (dispatch, getState) => {
-        dispatch(requestNetatmoStation());
-        if (!getState().netatmo.accessToken || moment.unix(Number(getState().netatmo.expireIn)).diff(moment(), 'minute') < 10) {
-            dispatch(fetchNetatmoRefreshToken()).then(() => {
-                return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.accessToken}`)
+        dispatch(requestStationData());
+
+        // If no access token or refresh token is soon expired
+        if (!getState().netatmo.access_token || moment.unix(Number(getState().netatmo.access_token_expire_in)).diff(moment(), 'minute') < 10) {
+            // Fetch a new access token from refresh token and then fetch station data
+            dispatch(fetchRefreshToken()).then(() => {
+                return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.access_token}`)
                     .then(response => {
                         if (!response.ok) throw response;
                         return response.json()
                     })
                     .then(json => {
-                        console.log('Station data:', json);
-                        // Set locale only if this is the first netatmo fetch
-                        // Wait 500 milliseconds before to continu to be sure that the value is set in redux store
-                        if (getState().netatmo.isFirstFetch) {
-                            dispatch(updateNetatmoLocale(json.body.user.administrative.lang));
-                            setTimeout(() => {
-                                dispatch(successNetatmoStation(json))
-                            }, 500);
-                            setTimeout(() => {
-                                dispatch(updateFirstFetch())
-                            }, 800); // To show UI after 1 second
-                        } else {
-                            dispatch(successNetatmoStation(json))
-                        }
+                        const data = new NetatmoStationData(json.body.devices[0]);
+                        dispatch(successStationData(data))
+                        dispatch(setLocale(json.body.user.administrative.lang));
                     })
                     .catch(error => {
                         error.json().then(errorMessage => {
-                            dispatch(failureNetatmoStation(errorMessage))
+                            dispatch(failureStationData(errorMessage))
                         })
                     });
             });
         } else {
             // Fetch new data only if last data stored is bigger than 10 minutes
-            if (moment().diff(moment.unix(Number(getState().netatmo.stationData.last_status_store)), 'minute') > 10) {
-                return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.accessToken}`)
+            if (moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+                return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.access_token}`)
                     .then(response => {
                         if (!response.ok) throw response;
                         return response.json()
                     })
                     .then(json => {
-                        console.log('Station data:', json)
-                        dispatch(successNetatmoStation(json))
+                        const data = new NetatmoStationData(json.body.devices[0]);
+                        dispatch(successStationData(data))
                     })
                     .catch(error => {
                         error.json().then(errorMessage => {
-                            dispatch(failureNetatmoStation(errorMessage))
+                            dispatch(failureStationData(errorMessage))
                         })
                     });
             } else {
-                dispatch(updateToDateNetatmoStation())
+                dispatch(updateToDateStationData())
             }
 
         }

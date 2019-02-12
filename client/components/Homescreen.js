@@ -51,15 +51,11 @@ class Homescreen extends React.Component {
             <Transition in={this.state.startAnimation} timeout={duration} appear={true} unmountOnExit={true} mountOnEnter={true}>
                 {(state) => (
                     <div className='full-screen' style={{...defaultStyle, ...transitionStyles[state]}}>
-                        <HomescrrenAppInfo appInfo={this.props.appInfo}/>
+                        <HomescrrenAppInfo appInfo={this.props.info}/>
                         <HomescreenDateTime locale={this.props.locale}/>
-                        {
-                            this.props.darkskyIsFirstFetch || this.props.netatmoIsFirstFetch ? null : (
-                                <ErrorBoundary>
-                                    <HomescreenWeather darkskyData={this.props.darkskyData} netatmoData={this.props.netatmoData} locale={this.props.locale}/>
-                                </ErrorBoundary>
-                            )
-                        }
+                        <ErrorBoundary>
+                            <HomescreenWeather darkskyData={this.props.darkskyData} netatmoData={this.props.netatmoData} locale={this.props.locale}/>
+                        </ErrorBoundary>
                     </div>
                 )}
             </Transition>
@@ -70,10 +66,8 @@ class Homescreen extends React.Component {
 Homescreen.propTypes = {
     darkskyData: PropTypes.object.isRequired,
     netatmoData: PropTypes.object.isRequired,
-    darkskyIsFirstFetch: PropTypes.bool.isRequired,
-    netatmoIsFirstFetch: PropTypes.bool.isRequired,
     fetchDarksky: PropTypes.func.isRequired,
-    appInfo: PropTypes.object.isRequired,
+    info: PropTypes.object.isRequired,
     locale: PropTypes.string.isRequired,
 };
 

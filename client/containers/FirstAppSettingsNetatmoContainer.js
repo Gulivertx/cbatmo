@@ -1,18 +1,18 @@
 import {connect} from 'react-redux'
-import * as actions from '../actions'
+import * as actions from '../store/netatmo/actions'
 import FirstAppSettingsNetatmo from "../components/FirstAppSettingsNetatmo";
 
 const mapStateToProps = state => {
     return {
-        authResult: state.netatmo.authResult,
-        isFetchingAuth: state.netatmo.isFetchingAuth
+        auth_errors: state.netatmo.auth_errors,
+        loading_auth: state.netatmo.loading_auth
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchNetatmoAuth: (email, password) => {
-            dispatch(actions.fetchNetatmoAuth(email, password));
+        fetchAuth: (email, password) => {
+            dispatch(actions.fetchAuth(email, password));
         }
     }
 };

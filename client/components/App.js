@@ -5,10 +5,14 @@ import IdleTimer from 'react-idle-timer';
 import Transition from 'react-transition-group/Transition';
 
 /** React components **/
-const HomescreenContainer = loadable(() => import('../containers/HomescreenContainer'));
-const FirstAppSettingsWelcome = loadable(() => import('./FirstAppSettingsWelcome'));
-const FirstAppSettingsNetatmoContainer = loadable(() => import('../containers/FirstAppSettingsNetatmoContainer'));
-const NetatmoContainer = loadable(() => import('../containers/NetatmoContainer'));
+//const HomescreenContainer = loadable(() => import('../containers/HomescreenContainer'));
+//const FirstAppSettingsWelcome = loadable(() => import('./FirstAppSettingsWelcome'));
+//const FirstAppSettingsNetatmoContainer = loadable(() => import('../containers/FirstAppSettingsNetatmoContainer'));
+//const NetatmoContainer = loadable(() => import('../containers/NetatmoContainer'));
+import HomescreenContainer from '../containers/HomescreenContainer';
+import FirstAppSettingsWelcome from './FirstAppSettingsWelcome';
+import FirstAppSettingsNetatmoContainer from '../containers/FirstAppSettingsNetatmoContainer';
+import NetatmoContainer from '../containers/NetatmoContainer';
 import ErrorBoundary from './ErrorBoundary';
 
 const DURATION = 800;
@@ -39,25 +43,25 @@ class App extends React.Component {
     _onActive = (e) => {
         console.log('User is active', e);
         console.log('Time remaining', this.idleTimer.getRemainingTime());
-        this.props.changeHomescreenOpen(false);
+        this.props.homescreenOpen(false);
     };
 
     _onIdle = () => {
         console.log('User is idle');
         console.log('Last active', this.idleTimer.getLastActiveTime());
-        this.props.changeHomescreenOpen(true);
+        this.props.homescreenOpen(true);
     };
 
     render() {
-        if (!this.props.isAppConfigured) {
-            switch (this.props.appSettingsStep) {
+        if (!this.props.isConfigured) {
+            switch (this.props.settingsStep) {
                 case 1:
                     return (
                         <div className='full-screen'>
                             <div className='background-img'/>
                             <FirstAppSettingsWelcome
-                                next={() => this.props.changeAppSettingsStep(2)}
-                                appInfo={this.props.appInfo}
+                                next={() => this.props.appSettingsStep(2)}
+                                appInfo={this.props.info}
                             />
                         </div>
                     );
@@ -69,51 +73,48 @@ class App extends React.Component {
                         </div>
                     );
             }
-        }
+        } else {
+            return (
+                <IdleTimer
+                    ref={ref => {
+                        this.idleTimer = ref
+                    }}
+                    element={document}
+                    onActive={this._onActive}
+                    onIdle={this._onIdle}
+                    timeout={this.idleTimeout}>
 
-        return (
-            <IdleTimer
-                ref={ref => {
-                    this.idleTimer = ref
-                }}
-                element={document}
-                onActive={this._onActive}
-                onIdle={this._onIdle}
-                timeout={this.idleTimeout}>
-
-                <Transition in={this.props.homeScreenOpen} timeout={DURATION} appear={true} unmountOnExit={true} mountOnEnter={true}>
-                    {(state) => (
-                        <div className='full-screen background' style={{...defaultStyle, ...transitionStyles[state]}}>
-                            <div className='background-img'/>
-                            <HomescreenContainer/>
+                    <Transition in={this.props.isHomeScreenOpen} timeout={DURATION} appear={true} unmountOnExit={true} mountOnEnter={true}>
+                        {(state) => (
+                            <div className='full-screen background' style={{...defaultStyle, ...transitionStyles[state]}}>
+                                <div className='background-img'/>
+                                <HomescreenContainer/>
+                            </div>
+                        )}
+                    </Transition>
+                    <div className='full-screen'>
+                        <div className='background-img'/>
+                        <div className="content">
+                            <ErrorBoundary>
+                                <NetatmoContainer/>
+                            </ErrorBoundary>
                         </div>
-                    )}
-                </Transition>
-                <div className='full-screen'>
-                    <div className='background-img'/>
-                    <div className="content">
-                        <ErrorBoundary>
-                            <NetatmoContainer/>
-                        </ErrorBoundary>
                     </div>
-                </div>
-
-            </IdleTimer>
-        )
+                </IdleTimer>
+            )
+        }
     }
 }
 
 App.propTypes = {
+    loading: PropTypes.bool.isRequired,
+    isConfigured: PropTypes.bool.isRequired,
+    isHomeScreenOpen: PropTypes.bool.isRequired,
+    info: PropTypes.object.isRequired,
+    settingsStep: PropTypes.number.isRequired,
     initApp: PropTypes.func.isRequired,
-    isNetatmoAuth: PropTypes.bool,
-    isSwissWeatherAuth: PropTypes.bool,
-    isLoading: PropTypes.bool,
-    isAppConfigured: PropTypes.bool,
-    appSettingsStep: PropTypes.number,
-    appInfo: PropTypes.object,
-    changeAppSettingsStep: PropTypes.func,
-    changeHomescreenOpen: PropTypes.func,
-    homeScreenOpen: PropTypes.bool
+    homescreenOpen: PropTypes.func.isRequired,
+    appSettingsStep: PropTypes.func.isRequired
 };
 
 export default App

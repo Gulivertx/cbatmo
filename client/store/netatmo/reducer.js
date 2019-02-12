@@ -1,14 +1,25 @@
+/**
+ * Netatmo reducer
+ * NAMain = MAIN module
+ * NAModule1 = OUTDOOR module
+ * NAModule2 = WIND module
+ * NAModule3 = RAIN module
+ * NAModule4 = INDOOR module
+ */
+
+import moment from 'moment';
+
 import {
-    NETATMO_AUTH_REQUEST,
-    NETATMO_AUTH_SUCCESS,
-    NETATMO_AUTH_FAILURE,
-    NETATMO_REFRESH_TOKEN_REQUEST,
-    NETATMO_REFRESH_TOKEN_SUCCESS,
-    NETATMO_REFRESH_TOKEN_FAILURE,
-    NETATMO_STATION_DATA_REQUEST,
-    NETATMO_STATION_DATA_SUCCESS,
-    NETATMO_STATION_DATA_FAILURE,
-    NETATMO_STATION_DATA_UPTODATE,
+    AUTH_REQUEST,
+    AUTH_SUCCESS,
+    AUTH_FAILURE,
+    REFRESH_TOKEN_REQUEST,
+    REFRESH_TOKEN_SUCCESS,
+    REFRESH_TOKEN_FAILURE,
+    STATION_DATA_REQUEST,
+    STATION_DATA_SUCCESS,
+    STATION_DATA_FAILURE,
+    STATION_DATA_UPTODATE,
     NETATMO_MEASURE_NAMAIN_REQUEST,
     NETATMO_MEASURE_NAMAIN_SUCCESS,
     NETATMO_MEASURE_NAMAIN_FAILURE,
@@ -23,26 +34,29 @@ import {
     NETATMO_MEASURE_NAMODULE3_FAILURE,
     NETATMO_MEASURE_NAMODULE4_REQUEST,
     NETATMO_MEASURE_NAMODULE4_SUCCESS,
-    NETATMO_MEASURE_NAMODULE4_FAILURE,
-    NETATMO_CHANGE_ACCESS_TOKEN,
-    NETATMO_CHANGE_REFRESH_TOKEN,
-    NETATMO_CHANGE_EXPIRE_IN, NETATMO_FIRST_FETCH
-} from "../actions";
+    NETATMO_MEASURE_NAMODULE4_FAILURE
+} from "./actions";
 
 const defaultState = {
-    accessToken: '',
-    refreshToken: '',
-    expireIn: 0,
-    isFirstFetch: true,
-    isFetchingStation: false,
-    stationData: {},
-    stationLastUpdated: null,
-    isFetchingAuth: false,
-    authResult: {},
-    isFetchingRefreshToken: false,
-    refreshTokenResult: {},
-    isFirstFetchNAMain: true,
-    isFetchingNAMain: false,
+    loading_auth: false,
+    loading_refresh_token: false,
+    auth_errors: undefined,
+    access_token: '',
+    refresh_token: window.localStorage.getItem('NetatmoRefreshToken') || '',
+    access_token_expire_in: 0,
+
+    loading_station_data: true,
+    station_data_last_updated: 0,
+    station_data_errors: undefined,
+    station_data: {},
+
+    main_module: {},
+    outdoor_module: {},
+    wind_module: {},
+    rain_module: {},
+    indoor_module: {},
+
+    loading_main: false,
     measureDataNAMain: [],
     measureLabelsNAMain: [],
     isFirstFetchNAModule1: true,
@@ -63,86 +77,75 @@ const defaultState = {
     measurelabelsNAModule4: []
 };
 
-const netatmo = (state = defaultState, action) => {
+const reducer = (state = defaultState, action) => {
     let stateValue = {};
 
     switch (action.type) {
-        /** NETATMO CHANGE TOKENS **/
-        case NETATMO_CHANGE_ACCESS_TOKEN:
-            stateValue.accessToken = action.value;
+        /** NETATMO AUTH **/
+        case AUTH_REQUEST:
+            stateValue.loading_auth = true;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_CHANGE_REFRESH_TOKEN:
-            stateValue.refreshToken = action.value;
+        case AUTH_SUCCESS:
+            stateValue.loading_auth = false;
+            stateValue.auth_errors = undefined;
+            stateValue.access_token = action.payload.access_token;
+            stateValue.refresh_token = action.payload.refresh_token;
+            stateValue.access_token_expire_in = moment().unix() + action.payload.expire_in;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_CHANGE_EXPIRE_IN:
-            stateValue.expireIn = action.value;
-            state = Object.assign({}, state, stateValue);
-            break;
-
-            /** NETATMO AUTH **/
-        case NETATMO_AUTH_REQUEST:
-            stateValue.isFetchingAuth = true;
-            state = Object.assign({}, state, stateValue);
-            break;
-
-        case NETATMO_AUTH_SUCCESS:
-            stateValue.isFetchingAuth = false;
-            stateValue.authResult = action.data;
-            state = Object.assign({}, state, stateValue);
-            break;
-
-        case NETATMO_AUTH_FAILURE:
-            stateValue.isFetchingAuth = false;
+        case AUTH_FAILURE:
+            stateValue.loading_auth = false;
+            stateValue.auth_errors = action.error;
             state = Object.assign({}, state, stateValue);
             break;
 
         /** NETATMO REFRESH TOKEN **/
-        case NETATMO_REFRESH_TOKEN_REQUEST:
-            stateValue.isFetchingRefreshToken = true;
+        case REFRESH_TOKEN_REQUEST:
+            stateValue.loading_auth = true;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_REFRESH_TOKEN_SUCCESS:
-            stateValue.isFetchingRefreshToken = false;
-            stateValue.refreshTokenResult = action.data;
+        case REFRESH_TOKEN_SUCCESS:
+            stateValue.loading_auth = false;
+            stateValue.auth_errors = undefined;
+            stateValue.access_token = action.payload.access_token;
+            stateValue.refresh_token = action.payload.refresh_token;
+            stateValue.access_token_expire_in = moment().unix() + action.payload.expire_in;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_REFRESH_TOKEN_FAILURE:
-            stateValue.isFetchingRefreshToken = false;
+        case REFRESH_TOKEN_FAILURE:
+            stateValue.loading_auth = false;
+            stateValue.auth_errors = action.error;
             state = Object.assign({}, state, stateValue);
             break;
 
         /** NETATMO STATION DATA **/
-        case NETATMO_STATION_DATA_REQUEST:
-            stateValue.isFetchingStation = true;
+        case STATION_DATA_REQUEST:
+            stateValue.loading_station_data = true;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_STATION_DATA_SUCCESS:
-            stateValue.isFetchingStation = false;
-            stateValue.stationData = action.data;
-            stateValue.user = action.user;
-            stateValue.stationLastUpdated = action.receivedAt;
+        case STATION_DATA_SUCCESS:
+            console.log(action.payload)
+            stateValue.loading_station_data = false;
+            stateValue.station_data = action.payload;
+            stateValue.station_data_last_updated = action.receivedAt;
+            stateValue.station_data_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_STATION_DATA_FAILURE:
-            stateValue.isFetchingStation = false;
+        case STATION_DATA_FAILURE:
+            stateValue.loading_station_data = false;
+            stateValue.station_data_errors = action.error;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_STATION_DATA_UPTODATE:
-            stateValue.isFetchingStation = false;
-            state = Object.assign({}, state, stateValue);
-            break;
-
-        case NETATMO_FIRST_FETCH:
-            stateValue.isFirstFetch = false;
+        case STATION_DATA_UPTODATE:
+            stateValue.loading_station_data = false;
             state = Object.assign({}, state, stateValue);
             break;
 
@@ -244,4 +247,4 @@ const netatmo = (state = defaultState, action) => {
     return state;
 };
 
-export default netatmo
+export {reducer as netatmoReducer}

@@ -19,7 +19,7 @@ const HomescreenWeatherDaily = ({data, day, locale}) => {
         <div className={cx('col-hourly', day === 5 && 'no-right-border')}>
             <div className='label'>{moment.unix(data.time).format('dddd')}</div>
             <div className='icon'><WeatherIcon condition={data.icon}/></div>
-            <div className='temp'>{Math.round(data.temperatureLow)}° <span className='color-gray'>/</span> {Math.round(data.temperatureHigh)}°</div>
+            <div className='temp'>{Math.round(data.temperature_low)}° <span className='color-gray'>/</span> {Math.round(data.temperature_high)}°</div>
         </div>
     )
 };

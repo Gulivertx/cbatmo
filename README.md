@@ -15,6 +15,15 @@ Swiss Weather forecast API and WebcamTravel API**. For this public
 release I have removed Google Cal API, WebcamTraval API and change Swiss Weather 
 API by Dark Sky API.
 
+## About 2.0.0-dev git branch
+This is the development branch for the next CBatmo version which will rework and include the following features :
+* New Redux reducer / actions for a better store and more comprehensive code
+* New Data Transfert Object (DTO) to manage data received from Netatmo and Darksky API
+* Recognizing dynamically which Netatmo modules are present
+* Give an UI feedback if a module is unavailable (for instance no battery anymore...)
+
+This is a work in progress and could not work ! I will tell you when this branch will be ready for test.
+
 ## Development
 This project is a Web APP write in Javascript with **ReactJS, Redux** for the frontend and **ExpressJS** 
 for the backend.
