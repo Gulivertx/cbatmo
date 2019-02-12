@@ -15,9 +15,12 @@ class NetatmoModuleWind {
 
         if (this.reachable) {
             this.data = {
-                rain: data.dashboard_data.Rain,
-                sum_rain_24: data.dashboard_data.sum_rain_24, // Last 24 hours
-                sum_rain_1: data.dashboard_data.sum_rain_1 // Last hour
+                wind_strength: data.dashboard_data.WindStrength,
+                wind_angle: data.dashboard_data.WindAngle,
+                gust_strength: data.dashboard_data.GustStrength,
+                gust_angle: data.dashboard_data.GustAngle,
+                max_wind_str: data.dashboard_data.max_wind_str,
+                max_wind_angle: data.dashboard_data.max_wind_angle
             }
         }
     }

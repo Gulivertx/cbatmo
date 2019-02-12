@@ -52,7 +52,7 @@ class NetatmoStationData {
             'RAIN': false,
             'WIND': false
         };
-        this.modules = [];
+        this.modules = {};
 
         // Handle modules
         data.modules.map(module => {
