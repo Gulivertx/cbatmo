@@ -2,15 +2,27 @@ import React from 'react';
 import {Line} from 'react-chartjs-2';
 import PropTypes from "prop-types";
 
+//import { AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+
 const intervalMinutes = 10, refreshTime = intervalMinutes * 60 * 1000;
+
+const data = [
+    {name: 'Page A', uv: 4000, pv: 9000},
+    {name: 'Page B', uv: 3000, pv: 7222},
+    {name: 'Page C', uv: 2000, pv: 6222},
+    {name: 'Page D', uv: 1223, pv: 5400},
+    {name: 'Page E', uv: 1890, pv: 3200},
+    {name: 'Page F', uv: 2390, pv: 2500},
+    {name: 'Page G', uv: 3490, pv: 1209},
+];
 
 class NetatmoChartLine extends React.Component {
 
     componentWillMount() {
-        this.props.fetchNetatmoMeasurenData(this.props.device, this.props.module, this.props.type);
+        this.props.fetchMeasurenData(this.props.device, this.props.module, this.props.type);
 
         this.interval = setInterval(() => {
-            this.props.fetchNetatmoMeasurenData(this.props.device, this.props.module, this.props.type);
+            this.props.fetchMeasurenData(this.props.device, this.props.module, this.props.type);
         }, refreshTime);
     }
 
@@ -20,7 +32,7 @@ class NetatmoChartLine extends React.Component {
 
     render() {
         return (
-            this.props.isFirstFetch ? (
+            this.props.loading ? (
                 null
             ) : (
                 <Line
@@ -99,22 +111,36 @@ class NetatmoChartLine extends React.Component {
 
         )
     }
+    /*render() {
+        return(
+            this.props.loading ? (null) : (
+                <AreaChart
+                    width={520}
+                    height={75}
+                    data={data}
+                    syncId="anyId"
+                    margin={{top: 10, right: 0, left: 0, bottom: 0}}
+                >
+                    <CartesianGrid strokeDasharray="1 1"/>
+                    <YAxis/>
+                    <Area type='monotone' dataKey='pv' stroke='#82ca9d' fill='#82ca9d' />
+                </AreaChart>
+                )
+        )
+    }*/
 }
 
 NetatmoChartLine.propTypes = {
-    isFirstFetch: PropTypes.bool,
-    isFetching: PropTypes.bool,
-    data: PropTypes.array,
-    labels: PropTypes.array,
-    offsetMin: PropTypes.number,
-    offsetMax: PropTypes.number,
-    device: PropTypes.string,
-    module: PropTypes.string,
-    type: PropTypes.string,
-    color: PropTypes.string,
-    access_token: PropTypes.string,
-    refresh_token: PropTypes.string,
-    expire_in: PropTypes.number,
+    loading: PropTypes.bool.isRequired,
+    data: PropTypes.array.isRequired,
+    labels: PropTypes.array.isRequired,
+    offsetMin: PropTypes.number.isRequired,
+    offsetMax: PropTypes.number.isRequired,
+    device: PropTypes.string.isRequired,
+    module: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
+    fetchMeasurenData: PropTypes.func.isRequired
 };
 
 

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from "prop-types";
 import {CSSTransition} from "react-transition-group";
 
-//import NetatmoNAMainChartLineContainer from '../containers/NetatmoNAMainChartLineContainer';
-//import NetatmoNAModule1ChartLineContainer from '../containers/NetatmoNAModule1ChartLineContainer';
-//import NetatmoNAModule2ChartLineContainer from '../containers/NetatmoNAModule2ChartLineContainer';
-//import NetatmoNAModule4ChartLineContainer from '../containers/NetatmoNAModule4ChartLineContainer';
+import NetatmoNAMainChartLineContainer from '../containers/NetatmoNAMainChartLineContainer';
+import NetatmoNAModule1ChartLineContainer from '../containers/NetatmoNAModule1ChartLineContainer';
+import NetatmoNAModule2ChartLineContainer from '../containers/NetatmoNAModule2ChartLineContainer';
+import NetatmoNAModule4ChartLineContainer from '../containers/NetatmoNAModule4ChartLineContainer';
 import NetatmoTimer from './NetatmoTimer';
 import NetatmoModuleError from './NetatmoModuleError';
 
@@ -107,14 +107,14 @@ class Netatmo extends React.Component {
                                                 <div className='row'>
                                                     <div className='col1'>
                                                         <div className='chart-weather-line'>
-                                                            {/*<NetatmoNAMainChartLineContainer
-                                                        device={this.props.station_data.id}
-                                                        module={this.props.station_data.id}
-                                                        type='temperature'
-                                                        color='#ffa000'
-                                                        offsetMin={2}
-                                                        offsetMax={2}
-                                                    />*/}
+                                                            <NetatmoNAMainChartLineContainer
+                                                                device={this.props.station_data.id}
+                                                                module={this.props.station_data.id}
+                                                                type='temperature'
+                                                                color='#ffa000'
+                                                                offsetMin={2}
+                                                                offsetMax={2}
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className='col2 weather-padding-left'>
@@ -146,11 +146,13 @@ class Netatmo extends React.Component {
                                         <div className="card">
                                             <div className='card__header'>{this.props.station_data.modules.INDOOR.module_name}
                                                 <div className='pull-right'>
-                                            <span className={this.batteryStatusQuality(this.props.station_data.modules.INDOOR.battery_percent)}><i
-                                                className="zmdi zmdi-battery-flash"/></span> <span
-                                                    className='battery-percent'>{this.props.station_data.modules.INDOOR.battery_percent}%</span>
-                                                    <span className={this.radioStatusQuality(this.props.station_data.modules.INDOOR.rf_status)}><i
-                                                        className="zmdi zmdi-portable-wifi"/></span>
+                                                    <span className={this.batteryStatusQuality(this.props.station_data.modules.INDOOR.battery_percent)}>
+                                                        <i className="zmdi zmdi-battery-flash"/>
+                                                    </span>{' '}
+                                                    <span className='battery-percent'>{this.props.station_data.modules.INDOOR.battery_percent}%</span>
+                                                    <span className={this.radioStatusQuality(this.props.station_data.modules.INDOOR.rf_status)}>
+                                                        <i className="zmdi zmdi-portable-wifi"/>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="card-body">
@@ -159,14 +161,14 @@ class Netatmo extends React.Component {
                                                         <div className='row'>
                                                             <div className='col1'>
                                                                 <div className='chart-weather-line'>
-                                                                    {/*<NetatmoNAModule4ChartLineContainer
-                                                                device={this.props.stationData._id}
-                                                                module={this.props.stationData.modules[1]._id}
-                                                                type='temperature'
-                                                                color='#ffa000'
-                                                                offsetMin={2}
-                                                                offsetMax={2}
-                                                            />*/}
+                                                                    <NetatmoNAModule4ChartLineContainer
+                                                                        device={this.props.station_data.id}
+                                                                        module={this.props.station_data.modules.INDOOR.id}
+                                                                        type='temperature'
+                                                                        color='#ffa000'
+                                                                        offsetMin={2}
+                                                                        offsetMax={2}
+                                                                    />
                                                                 </div>
                                                             </div>
                                                             <div className='col2 weather-padding-left'>
@@ -198,11 +200,13 @@ class Netatmo extends React.Component {
                                         <div className="card">
                                             <div className='card__header'>{this.props.station_data.modules.RAIN.module_name}
                                                 <div className='pull-right'>
-                                            <span className={this.batteryStatusQuality(this.props.station_data.modules.RAIN.battery_percent)}><i
-                                                className="zmdi zmdi-battery-flash"/></span> <span
-                                                    className='battery-percent'>{this.props.station_data.modules.RAIN.battery_percent}%</span>
-                                                    <span className={this.radioStatusQuality(this.props.station_data.modules.RAIN.rf_status)}><i
-                                                        className="zmdi zmdi-portable-wifi"/></span>
+                                                    <span className={this.batteryStatusQuality(this.props.station_data.modules.RAIN.battery_percent)}>
+                                                        <i className="zmdi zmdi-battery-flash"/>
+                                                    </span>{' '}
+                                                    <span className='battery-percent'>{this.props.station_data.modules.RAIN.battery_percent}%</span>
+                                                    <span className={this.radioStatusQuality(this.props.station_data.modules.RAIN.rf_status)}>
+                                                        <i className="zmdi zmdi-portable-wifi"/>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="card-body">
@@ -211,14 +215,14 @@ class Netatmo extends React.Component {
                                                         <div className='row'>
                                                             <div className='col1'>
                                                                 <div className='chart-weather-line'>
-                                                                    {/*<NetatmoNAModule2ChartLineContainer
-                                                                device={this.props.stationData._id}
-                                                                module={this.props.stationData.modules[2]._id}
-                                                                type='rain'
-                                                                color='#1e88e5'
-                                                                offsetMin={0}
-                                                                offsetMax={0.1}
-                                                            />*/}
+                                                                    <NetatmoNAModule2ChartLineContainer
+                                                                        device={this.props.station_data.id}
+                                                                        module={this.props.station_data.modules.RAIN.id}
+                                                                        type='rain'
+                                                                        color='#1e88e5'
+                                                                        offsetMin={0}
+                                                                        offsetMax={0.1}
+                                                                    />
                                                                 </div>
                                                             </div>
                                                             <div className='col2 weather-padding-left'>
@@ -251,11 +255,13 @@ class Netatmo extends React.Component {
                                         <div className="card">
                                             <div className='card__header'>{this.props.station_data.modules.OUTDOOR.module_name}
                                                 <div className='pull-right'>
-                                            <span className={this.batteryStatusQuality(this.props.station_data.modules.OUTDOOR.battery_percent)}><i
-                                                className="zmdi zmdi-battery-flash"/></span> <span
-                                                    className='battery-percent'>{this.props.station_data.modules.OUTDOOR.battery_percent}%</span>
-                                                    <span className={this.radioStatusQuality(this.props.station_data.modules.OUTDOOR.rf_status)}><i
-                                                        className="zmdi zmdi-portable-wifi"/></span>
+                                                    <span className={this.batteryStatusQuality(this.props.station_data.modules.OUTDOOR.battery_percent)}>
+                                                        <i className="zmdi zmdi-battery-flash"/>
+                                                    </span>{' '}
+                                                    <span className='battery-percent'>{this.props.station_data.modules.OUTDOOR.battery_percent}%</span>
+                                                    <span className={this.radioStatusQuality(this.props.station_data.modules.OUTDOOR.rf_status)}>
+                                                        <i className="zmdi zmdi-portable-wifi"/>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="card-body">
@@ -264,14 +270,14 @@ class Netatmo extends React.Component {
                                                         <div className='row'>
                                                             <div className='col1'>
                                                                 <div className='chart-weather-line'>
-                                                                    {/*<NetatmoNAModule1ChartLineContainer
-                                                                device={this.props.stationData._id}
-                                                                module={this.props.stationData.modules[0]._id}
-                                                                type='temperature'
-                                                                color='#ffa000'
-                                                                offsetMin={2}
-                                                                offsetMax={2}
-                                                            />*/}
+                                                                    <NetatmoNAModule1ChartLineContainer
+                                                                        device={this.props.station_data.id}
+                                                                        module={this.props.station_data.modules.INDOOR.id}
+                                                                        type='temperature'
+                                                                        color='#ffa000'
+                                                                        offsetMin={2}
+                                                                        offsetMax={2}
+                                                                    />
                                                                 </div>
                                                             </div>
                                                             <div className='col2 weather-padding-left'>
@@ -303,11 +309,12 @@ class Netatmo extends React.Component {
                                         <div className="card">
                                             <div className='card__header'>{this.props.station_data.modules.WIND.module_name}
                                                 <div className='pull-right'>
-                                            <span className={this.batteryStatusQuality(this.props.station_data.modules.WIND.battery_percent)}><i
-                                                className="zmdi zmdi-battery-flash"/></span> <span
-                                                    className='battery-percent'>{this.props.station_data.modules.WIND.battery_percent}%</span>
-                                                    <span className={this.radioStatusQuality(this.props.station_data.modules.WIND.rf_status)}><i
-                                                        className="zmdi zmdi-portable-wifi"/></span>
+                                                    <span className={this.batteryStatusQuality(this.props.station_data.modules.WIND.battery_percent)}>
+                                                        <i className="zmdi zmdi-battery-flash"/>
+                                                    </span>{' '}<span className='battery-percent'>{this.props.station_data.modules.WIND.battery_percent}%</span>
+                                                    <span className={this.radioStatusQuality(this.props.station_data.modules.WIND.rf_status)}>
+                                                        <i className="zmdi zmdi-portable-wifi"/>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="card-body">

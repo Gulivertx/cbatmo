@@ -1,23 +1,19 @@
 import {connect} from 'react-redux'
-import * as actions from '../actions'
+import * as netatmoActions from '../store/netatmo/actions'
 import NetatmoChartLine from "../components/NetatmoChartLine";
 
 const mapStateToProps = state => {
     return {
-        isFirstFetch: state.netatmo.isFirstFetchNAModule2,
-        isFetching: state.netatmo.isFetchingNAModule2,
-        data: state.netatmo.measureDataNAModule2,
-        labels: state.netatmo.measurelabelsNAModule2,
-        access_token: state.netatmo.accessToken,
-        refresh_token:  state.netatmo.refreshToken,
-        expire_in: state.netatmo.expireIn
+        loading: state.netatmo.loading_wind,
+        data: state.netatmo.measure_wind_data,
+        labels: state.netatmo.measure_wind_labels
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchNetatmoMeasurenData: (device, module, type) => {
-            dispatch(actions.fetchNetatmoNAModule2Measure(device, module, type));
+        fetchMeasurenData: (device, module, type) => {
+            dispatch(netatmoActions.fetchWindMeasure(device, module, type));
         }
     }
 };

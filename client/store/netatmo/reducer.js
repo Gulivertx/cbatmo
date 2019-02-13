@@ -20,21 +20,21 @@ import {
     STATION_DATA_SUCCESS,
     STATION_DATA_FAILURE,
     STATION_DATA_UPTODATE,
-    NETATMO_MEASURE_NAMAIN_REQUEST,
-    NETATMO_MEASURE_NAMAIN_SUCCESS,
-    NETATMO_MEASURE_NAMAIN_FAILURE,
-    NETATMO_MEASURE_NAMODULE1_REQUEST,
-    NETATMO_MEASURE_NAMODULE1_SUCCESS,
-    NETATMO_MEASURE_NAMODULE1_FAILURE,
-    NETATMO_MEASURE_NAMODULE2_REQUEST,
-    NETATMO_MEASURE_NAMODULE2_SUCCESS,
-    NETATMO_MEASURE_NAMODULE2_FAILURE,
-    NETATMO_MEASURE_NAMODULE3_REQUEST,
-    NETATMO_MEASURE_NAMODULE3_SUCCESS,
-    NETATMO_MEASURE_NAMODULE3_FAILURE,
-    NETATMO_MEASURE_NAMODULE4_REQUEST,
-    NETATMO_MEASURE_NAMODULE4_SUCCESS,
-    NETATMO_MEASURE_NAMODULE4_FAILURE
+    MEASURE_MAIN_REQUEST,
+    MEASURE_MAIN_SUCCESS,
+    MEASURE_MAIN_FAILURE,
+    MEASURE_OUTDOOR_REQUEST,
+    MEASURE_OUTDOOR_SUCCESS,
+    MEASURE_OUTDOOR_FAILURE,
+    MEASURE_WIND_REQUEST,
+    MEASURE_WIND_SUCCESS,
+    MEASURE_WIND_FAILURE,
+    MEASURE_RAIN_REQUEST,
+    MEASURE_RAIN_SUCCESS,
+    MEASURE_RAIN_FAILURE,
+    MEASURE_INDOOR_REQUEST,
+    MEASURE_INDOOR_SUCCESS,
+    MEASURE_INDOOR_FAILURE
 } from "./actions";
 
 const defaultState = {
@@ -50,31 +50,35 @@ const defaultState = {
     station_data_errors: undefined,
     station_data: {},
 
-    main_module: {},
-    outdoor_module: {},
-    wind_module: {},
-    rain_module: {},
-    indoor_module: {},
-
+    // MAIN module history
     loading_main: false,
-    measureDataNAMain: [],
-    measureLabelsNAMain: [],
-    isFirstFetchNAModule1: true,
-    isFetchingNAModule1: false,
-    measureDataNAModule1: [],
-    measurelabelsNAModule1: [],
-    isFirstFetchNAModule2: true,
-    isFetchingNAModule2: false,
-    measureDataNAModule2: [],
-    measurelabelsNAModule2: [],
-    isFirstFetchNAModule3: true,
-    isFetchingNAModule3: false,
-    measureDataNAModule3: [],
-    measurelabelsNAModule3: [],
-    isFirstFetchNAModule4: true,
-    isFetchingNAModule4: false,
-    measureDataNAModule4: [],
-    measurelabelsNAModule4: []
+    measure_main_errors: undefined,
+    measure_main_data: [],
+    measure_main_labels: [],
+
+    // OUTDOOR module history (namodule1)
+    loading_outdoor: false,
+    measure_outdoor_errors: undefined,
+    measure_outdoor_data: [],
+    measure_outdoor_labels: [],
+
+    // WIND module history (namodule2)
+    loading_wind: false,
+    measure_wind_errors: undefined,
+    measure_wind_data: [],
+    measure_wind_labels: [],
+
+    // Rain module history (namodule3)
+    loading_rain: true,
+    measure_rain_errors: undefined,
+    measure_rain_data: [],
+    measure_rain_labels: [],
+
+    // INDOOR module history (namodule4)
+    loading_indoor: true,
+    measure_indoor_errors: undefined,
+    measure_indoor_data: [],
+    measure_indoor_labels: []
 };
 
 const reducer = (state = defaultState, action) => {
@@ -130,7 +134,7 @@ const reducer = (state = defaultState, action) => {
             break;
 
         case STATION_DATA_SUCCESS:
-            console.log(action.payload)
+            console.log(action.payload);
             stateValue.loading_station_data = false;
             stateValue.station_data = action.payload;
             stateValue.station_data_last_updated = action.receivedAt;
@@ -150,93 +154,99 @@ const reducer = (state = defaultState, action) => {
             break;
 
         /** NETATMO MEASURE DATA **/
-        case NETATMO_MEASURE_NAMAIN_REQUEST:
-            stateValue.isFetchingNAMain = true;
+        case MEASURE_MAIN_REQUEST:
+            stateValue.loading_main = true;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMAIN_SUCCESS:
-            stateValue.isFirstFetchNAMain = false;
-            stateValue.isFetchingNAMain = false;
-            stateValue.measureDataNAMain = action.data;
-            stateValue.measureLabelsNAMain = action.labels;
+        case MEASURE_MAIN_SUCCESS:
+            stateValue.loading_main = false;
+            stateValue.measure_main_data = action.data;
+            stateValue.measure_main_labels = action.labels;
+            stateValue.measure_main_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMAIN_FAILURE:
-            stateValue.isFetchingNAMain = false;
+        case MEASURE_MAIN_FAILURE:
+            stateValue.loading_main = false;
+            stateValue.measure_main_errors = action.error;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE1_REQUEST:
-            stateValue.isFetchingNAModule1 = true;
+
+        case MEASURE_OUTDOOR_REQUEST:
+            stateValue.loading_outdoor = true;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE1_SUCCESS:
-            stateValue.isFirstFetchNAModule1 = false;
-            stateValue.isFetchingNAModule1 = false;
-            stateValue.measureDataNAModule1 = action.data;
-            stateValue.measurelabelsNAModule1 = action.labels;
+        case MEASURE_OUTDOOR_SUCCESS:
+            stateValue.loading_outdoor = false;
+            stateValue.measure_outdoor_data = action.data;
+            stateValue.measure_outdoor_labels = action.labels;
+            stateValue.measure_outdoor_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE1_FAILURE:
-            stateValue.isFetchingNAModule1 = false;
+        case MEASURE_OUTDOOR_FAILURE:
+            stateValue.loading_outdoor = false;
+            stateValue.measure_outdoor_errors = action.error;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE2_REQUEST:
-            stateValue.isFetchingNAModule2 = true;
+        case MEASURE_WIND_REQUEST:
+            stateValue.loading_wind = true;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE2_SUCCESS:
-            stateValue.isFirstFetchNAModule2 = false;
-            stateValue.isFetchingNAModule2 = false;
-            stateValue.measureDataNAModule2 = action.data;
-            stateValue.measurelabelsNAModule2 = action.labels;
+        case MEASURE_WIND_SUCCESS:
+            stateValue.loading_wind = false;
+            stateValue.measure_outdoor_data = action.data;
+            stateValue.measure_outdoor_labels = action.labels;
+            stateValue.measure_wind_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE2_FAILURE:
-            stateValue.isFetchingNAModule2 = false;
+        case MEASURE_WIND_FAILURE:
+            stateValue.loading_wind = false;
+            stateValue.measure_wind_errors = action.error;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE3_REQUEST:
-            stateValue.isFetchingNAModule3 = true;
+        case MEASURE_RAIN_REQUEST:
+            stateValue.loading_rain = true;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE3_SUCCESS:
-            stateValue.isFirstFetchNAModule3 = false;
-            stateValue.isFetchingNAModule3 = false;
-            stateValue.measureDataNAModule3 = action.data;
-            stateValue.measurelabelsNAModule3 = action.labels;
+        case MEASURE_RAIN_SUCCESS:
+            stateValue.loading_rain = false;
+            stateValue.measure_rain_data = action.data;
+            stateValue.measure_rain_labels = action.labels;
+            stateValue.measure_rain_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE3_FAILURE:
-            stateValue.isFetchingNAModule3 = false;
+        case MEASURE_RAIN_FAILURE:
+            stateValue.loading_rain = false;
+            stateValue.measure_rain_errors = action.error;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE4_REQUEST:
-            stateValue.isFetchingNAModule4 = true;
+        case MEASURE_INDOOR_REQUEST:
+            stateValue.loading_indoor = true;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE4_SUCCESS:
-            stateValue.isFirstFetchNAModule4 = false;
-            stateValue.isFetchingNAModule4 = false;
-            stateValue.measureDataNAModule4 = action.data;
-            stateValue.measurelabelsNAModule4 = action.labels;
+        case MEASURE_INDOOR_SUCCESS:
+            stateValue.loading_indoor = false;
+            stateValue.measure_indoor_data = action.data;
+            stateValue.measure_indoor_labels = action.labels;
+            stateValue.measure_indoor_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;
 
-        case NETATMO_MEASURE_NAMODULE4_FAILURE:
-            stateValue.isFetchingNAModule4 = false;
+        case MEASURE_INDOOR_FAILURE:
+            stateValue.loading_indoor = false;
+            stateValue.measure_indoor_errors = action.error;
             state = Object.assign({}, state, stateValue);
             break;
 

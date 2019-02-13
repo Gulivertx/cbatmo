@@ -38,7 +38,15 @@ const HomescreenWaether = ({darkskyData, netatmoData, locale}) => {
                         {
                             netatmoData.modules.OUTDOOR.reachable ? (
                                 <div className='main-temp'>{netatmoData.modules.OUTDOOR.data.temperature}°</div>
-                            ) : (<div className='main-temp'>ERROR</div>)
+                            ) : (
+                                <div className='main-temp'>
+                                    <i className="zmdi zmdi-alert-triangle text-yellow"/>
+                                    <div className='min-max-temp' style={{fontSize: '10px'}}>
+                                        <div className='color-gray'>Ce module ne peut</div>
+                                        <div className='color-gray'>pas joindre la Station</div>
+                                    </div>
+                                </div>
+                            )
                         }
                     </div>
                 </div>

@@ -202,40 +202,40 @@ export const fetchStationData = () => {
 };
 
 
-export const NETATMO_MEASURE_NAMAIN_REQUEST = 'NETATMO_MEASURE_NAMAIN_REQUEST';
-export const NETATMO_MEASURE_NAMAIN_SUCCESS = 'NETATMO_MEASURE_NAMAIN_SUCCESS';
-export const NETATMO_MEASURE_NAMAIN_FAILURE = 'NETATMO_MEASURE_NAMAIN_FAILURE';
+export const MEASURE_MAIN_REQUEST = '@@netatmo/MEASURE_MAIN_REQUEST';
+export const MEASURE_MAIN_SUCCESS = '@@netatmo/MEASURE_MAIN_SUCCESS';
+export const MEASURE_MAIN_FAILURE = '@@netatmo/MEASURE_MAIN_FAILURE';
 
-export const requestNetatmoNAMainMeasure = () => {
+export const requestMainMeasure = () => {
     return {
-        type: NETATMO_MEASURE_NAMAIN_REQUEST
+        type: MEASURE_MAIN_REQUEST
     }
 };
 
-export const successNetatmoNAMainMeasure = (labels, data) => {
+export const successMainMeasure = (labels, data) => {
     return {
-        type: NETATMO_MEASURE_NAMAIN_SUCCESS,
+        type: MEASURE_MAIN_SUCCESS,
         data: data,
         labels: labels,
         receivedAt: Date.now()
     }
 };
 
-export const failureNetatmoNAMainMeasure = (error) => {
+export const failureMainMeasure = (error) => {
     return {
-        type: NETATMO_MEASURE_NAMAIN_FAILURE,
+        type: MEASURE_MAIN_FAILURE,
         error: error
     }
 };
 
-export const fetchNetatmoNAMainMeasure = (device, module, type) => {
+export const fetchMainMeasure = (device, module, type) => {
     return (dispatch, getState) => {
-        dispatch(requestNetatmoNAMainMeasure());
+        dispatch(requestMainMeasure());
 
         const date_begin = moment().subtract(12, 'hours').unix();
         const date_end = moment().unix();
 
-        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.accessToken}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
+        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
             .then(response => {
                 if (!response.ok) throw response;
                 return response.json()
@@ -252,51 +252,51 @@ export const fetchNetatmoNAMainMeasure = (device, module, type) => {
                     data = [...data, value[0]];
                     beg_time = beg_time + step_time;
                 });
-                dispatch(successNetatmoNAMainMeasure(labels, data))
+                dispatch(successMainMeasure(labels, data))
             })
             .catch(error => {
                 error.json().then(errorMessage => {
-                    dispatch(failureNetatmoNAMainMeasure(errorMessage))
+                    dispatch(failureMainMeasure(errorMessage))
                 })
             });
     }
 };
 
 
-export const NETATMO_MEASURE_NAMODULE1_REQUEST = 'NETATMO_MEASURE_NAMODULE1_REQUEST';
-export const NETATMO_MEASURE_NAMODULE1_SUCCESS = 'NETATMO_MEASURE_NAMODULE1_SUCCESS';
-export const NETATMO_MEASURE_NAMODULE1_FAILURE = 'NETATMO_MEASURE_NAMODULE1_FAILURE';
+export const MEASURE_OUTDOOR_REQUEST = '@@netatmo/MEASURE_OUTDOOR_REQUEST';
+export const MEASURE_OUTDOOR_SUCCESS = '@@netatmo/MEASURE_OUTDOOR_SUCCESS';
+export const MEASURE_OUTDOOR_FAILURE = '@@netatmo/MEASURE_OUTDOOR_FAILURE';
 
-export const requestNetatmoNAModule1Measure = () => {
+export const requestOutdoorMeasure = () => {
     return {
-        type: NETATMO_MEASURE_NAMODULE1_REQUEST
+        type: MEASURE_OUTDOOR_REQUEST
     }
 };
 
-export const successNetatmoNAModule1Measure = (labels, data) => {
+export const successOutdoorMeasure = (labels, data) => {
     return {
-        type: NETATMO_MEASURE_NAMODULE1_SUCCESS,
+        type: MEASURE_OUTDOOR_SUCCESS,
         data: data,
         labels: labels,
         receivedAt: Date.now()
     }
 };
 
-export const failureNetatmoNAModule1Measure = (error) => {
+export const failureOutdoorMeasure = (error) => {
     return {
-        type: NETATMO_MEASURE_NAMODULE1_FAILURE,
+        type: MEASURE_OUTDOOR_FAILURE,
         error: error
     }
 };
 
-export const fetchNetatmoNAModule1Measure = (device, module, type) => {
+export const fetchoutdoorMeasure = (device, module, type) => {
     return (dispatch, getState) => {
-        dispatch(requestNetatmoNAModule1Measure());
+        dispatch(requestOutdoorMeasure());
 
         const date_begin = moment().subtract(12, 'hours').unix();
         const date_end = moment().unix();
 
-        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.accessToken}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
+        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
             .then(response => {
                 if (!response.ok) throw response;
                 return response.json()
@@ -313,51 +313,51 @@ export const fetchNetatmoNAModule1Measure = (device, module, type) => {
                     data = [...data, value[0]];
                     beg_time = beg_time + step_time;
                 });
-                dispatch(successNetatmoNAModule1Measure(labels, data))
+                dispatch(successOutdoorMeasure(labels, data))
             })
             .catch(error => {
                 error.json().then(errorMessage => {
-                    dispatch(failureNetatmoNAModule1Measure(errorMessage))
+                    dispatch(failureOutdoorMeasure(errorMessage))
                 })
             });
     }
 };
 
 
-export const NETATMO_MEASURE_NAMODULE2_REQUEST = 'NETATMO_MEASURE_NAMODULE2_REQUEST';
-export const NETATMO_MEASURE_NAMODULE2_SUCCESS = 'NETATMO_MEASURE_NAMODULE2_SUCCESS';
-export const NETATMO_MEASURE_NAMODULE2_FAILURE = 'NETATMO_MEASURE_NAMODULE2_FAILURE';
+export const MEASURE_WIND_REQUEST = '@@netatmo/MEASURE_WIND_REQUEST';
+export const MEASURE_WIND_SUCCESS = '@@netatmo/MEASURE_WIND_SUCCESS';
+export const MEASURE_WIND_FAILURE = '@@netatmo/MEASURE_WIND_FAILURE';
 
-export const requestNetatmoNAModule2Measure = () => {
+export const requestWindMeasure = () => {
     return {
-        type: NETATMO_MEASURE_NAMODULE2_REQUEST
+        type: MEASURE_WIND_REQUEST
     }
 };
 
-export const successNetatmoNAModule2Measure = (labels, data) => {
+export const successWindMeasure = (labels, data) => {
     return {
-        type: NETATMO_MEASURE_NAMODULE2_SUCCESS,
+        type: MEASURE_WIND_SUCCESS,
         data: data,
         labels: labels,
         receivedAt: Date.now()
     }
 };
 
-export const failureNetatmoNAModule2Measure = (error) => {
+export const failureWindMeasure = (error) => {
     return {
-        type: NETATMO_MEASURE_NAMODULE2_FAILURE,
+        type: MEASURE_WIND_FAILURE,
         error: error
     }
 };
 
-export const fetchNetatmoNAModule2Measure = (device, module, type) => {
+export const fetchWindMeasure = (device, module, type) => {
     return (dispatch, getState) => {
-        dispatch(requestNetatmoNAModule2Measure());
+        dispatch(requestWindMeasure());
 
         const date_begin = moment().subtract(12, 'hours').unix();
         const date_end = moment().unix();
 
-        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.accessToken}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
+        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
             .then(response => {
                 if (!response.ok) throw response;
                 return response.json()
@@ -374,51 +374,51 @@ export const fetchNetatmoNAModule2Measure = (device, module, type) => {
                     data = [...data, value[0]];
                     beg_time = beg_time + step_time;
                 });
-                dispatch(successNetatmoNAModule2Measure(labels, data))
+                dispatch(successWindMeasure(labels, data))
             })
             .catch(error => {
                 error.json().then(errorMessage => {
-                    dispatch(failureNetatmoNAModule2Measure(errorMessage))
+                    dispatch(failureWindMeasure(errorMessage))
                 })
             });
     }
 };
 
 
-export const NETATMO_MEASURE_NAMODULE3_REQUEST = 'NETATMO_MEASURE_NAMODULE3_REQUEST';
-export const NETATMO_MEASURE_NAMODULE3_SUCCESS = 'NETATMO_MEASURE_NAMODULE3_SUCCESS';
-export const NETATMO_MEASURE_NAMODULE3_FAILURE = 'NETATMO_MEASURE_NAMODULE3_FAILURE';
+export const MEASURE_RAIN_REQUEST = '@@netatmo/MEASURE_RAIN_REQUEST';
+export const MEASURE_RAIN_SUCCESS = '@@netatmo/MEASURE_RAIN_SUCCESS';
+export const MEASURE_RAIN_FAILURE = '@@netatmo/MEASURE_RAIN_FAILURE';
 
-export const requestNetatmoNAModule3Measure = () => {
+export const requestRainMeasure = () => {
     return {
-        type: NETATMO_MEASURE_NAMODULE3_REQUEST
+        type: MEASURE_RAIN_REQUEST
     }
 };
 
-export const successNetatmoNAModule3Measure = (labels, data) => {
+export const successRainMeasure = (labels, data) => {
     return {
-        type: NETATMO_MEASURE_NAMODULE3_SUCCESS,
+        type: MEASURE_RAIN_SUCCESS,
         data: data,
         labels: labels,
         receivedAt: Date.now()
     }
 };
 
-export const failureNetatmoNAModule3Measure = (error) => {
+export const failureNRainMeasure = (error) => {
     return {
-        type: NETATMO_MEASURE_NAMODULE3_FAILURE,
+        type: MEASURE_RAIN_FAILURE,
         error: error
     }
 };
 
-export const fetchNetatmoNAModule3Measure = (device, module, type) => {
+export const fetchRainMeasure = (device, module, type) => {
     return (dispatch, getState) => {
-        dispatch(requestNetatmoNAModule3Measure());
+        dispatch(requestRainMeasure());
 
         const date_begin = moment().subtract(12, 'hours').unix();
         const date_end = moment().unix();
 
-        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.accessToken}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
+        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
             .then(response => {
                 if (!response.ok) throw response;
                 return response.json()
@@ -435,51 +435,51 @@ export const fetchNetatmoNAModule3Measure = (device, module, type) => {
                     data = [...data, value[0]];
                     beg_time = beg_time + step_time;
                 });
-                dispatch(successNetatmoNAModule3Measure(labels, data))
+                dispatch(successRainMeasure(labels, data))
             })
             .catch(error => {
                 error.json().then(errorMessage => {
-                    dispatch(failureNetatmoNAModule3Measure(errorMessage))
+                    dispatch(failureNRainMeasure(errorMessage))
                 })
             });
     }
 };
 
 
-export const NETATMO_MEASURE_NAMODULE4_REQUEST = 'NETATMO_MEASURE_NAMODULE4_REQUEST';
-export const NETATMO_MEASURE_NAMODULE4_SUCCESS = 'NETATMO_MEASURE_NAMODULE4_SUCCESS';
-export const NETATMO_MEASURE_NAMODULE4_FAILURE = 'NETATMO_MEASURE_NAMODULE4_FAILURE';
+export const MEASURE_INDOOR_REQUEST = '@@netatmo/MEASURE_INDOOR_REQUEST';
+export const MEASURE_INDOOR_SUCCESS = '@@netatmo/MEASURE_INDOOR_SUCCESS';
+export const MEASURE_INDOOR_FAILURE = '@@netatmo/MEASURE_INDOOR_FAILURE';
 
-export const requestNetatmoNAModule4Measure = () => {
+export const requestIndoorMeasure = () => {
     return {
-        type: NETATMO_MEASURE_NAMODULE4_REQUEST
+        type: MEASURE_INDOOR_REQUEST
     }
 };
 
-export const successNetatmoNAModule4Measure = (labels, data) => {
+export const successIndoorMeasure = (labels, data) => {
     return {
-        type: NETATMO_MEASURE_NAMODULE4_SUCCESS,
+        type: MEASURE_INDOOR_SUCCESS,
         data: data,
         labels: labels,
         receivedAt: Date.now()
     }
 };
 
-export const failureNetatmoNAModule4Measure = (error) => {
+export const failureIndooMeasure = (error) => {
     return {
-        type: NETATMO_MEASURE_NAMODULE4_FAILURE,
+        type: MEASURE_INDOOR_FAILURE,
         error: error
     }
 };
 
-export const fetchNetatmoNAModule4Measure = (device, module, type) => {
+export const fetchIndoorMeasure = (device, module, type) => {
     return (dispatch, getState) => {
-        dispatch(requestNetatmoNAModule4Measure());
+        dispatch(requestIndoorMeasure());
 
         const date_begin = moment().subtract(12, 'hours').unix();
         const date_end = moment().unix();
 
-        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.accessToken}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
+        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
             .then(response => {
                 if (!response.ok) throw response;
                 return response.json()
@@ -496,11 +496,11 @@ export const fetchNetatmoNAModule4Measure = (device, module, type) => {
                     data = [...data, value[0]];
                     beg_time = beg_time + step_time;
                 });
-                dispatch(successNetatmoNAModule4Measure(labels, data))
+                dispatch(successIndoorMeasure(labels, data))
             })
             .catch(error => {
                 error.json().then(errorMessage => {
-                    dispatch(failureNetatmoNAModule4Measure(errorMessage))
+                    dispatch(failureIndooMeasure(errorMessage))
                 })
             });
     }

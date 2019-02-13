@@ -66,6 +66,7 @@
     "react-touch-screen-keyboard": "^1.0.0",
     "react-transition-group": "^2.5.3",
     "reboot.css": "^1.0.4",
+    "recharts": "^1.4.3",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "rimraf": "^2.6.3",
