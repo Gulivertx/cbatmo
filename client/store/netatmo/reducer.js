@@ -134,7 +134,7 @@ const reducer = (state = defaultState, action) => {
             break;
 
         case STATION_DATA_SUCCESS:
-            console.log(action.payload);
+            console.debug(action.payload);
             stateValue.loading_station_data = false;
             stateValue.station_data = action.payload;
             stateValue.station_data_last_updated = action.receivedAt;

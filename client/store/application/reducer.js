@@ -5,7 +5,7 @@ import {
     INFO_SUCCESS,
     INFO_FAILURE,
     SETTINGS_STEP,
-    LOCALE
+    USER_INFO
 } from "./actions";
 
 const defaultState = {
@@ -18,7 +18,14 @@ const defaultState = {
         author: '',
     },
     loading: false,
-    locale: 'en',
+    user: {
+        mail: '',
+        lang: 'en',
+        locale: '',
+        pressure_unit: '',
+        unit: 'si',
+        windunit: ''
+    },
     settingsStep: 1
 };
 
@@ -58,9 +65,9 @@ const reducer = (state = defaultState, action) => {
             state = Object.assign({}, state, stateValue);
             break;
 
-        /** SET locale from Netatmo API **/
-        case LOCALE:
-            stateValue.locale = action.payload.includes('fr') ? 'fr' : 'en';
+        /** SET user info from Netatmo API **/
+        case USER_INFO:
+            stateValue.user = action.payload;
             state = Object.assign({}, state, stateValue);
             break;
 

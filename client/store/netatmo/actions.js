@@ -1,7 +1,8 @@
 import moment from 'moment';
-import {appConfigured, setLocale} from "../application/actions";
+import {appConfigured, setUserInfo} from "../application/actions";
 import api from '../../../config/api.json';
 import NetatmoStationData from '../../DTO/NetatmoStationData';
+import NetatmoUserInformation from "../../DTO/NetatmoUserInformation";
 
 const NETATMO_API_ROOT_URL = api.netatmo.api_url;
 const NETATMO_API_CLIENT_ID = api.netatmo.client_id;
@@ -167,8 +168,9 @@ export const fetchStationData = () => {
                     })
                     .then(json => {
                         const data = new NetatmoStationData(json.body.devices[0]);
-                        dispatch(successStationData(data))
-                        dispatch(setLocale(json.body.user.administrative.lang));
+                        const user = new NetatmoUserInformation(json.body.user);
+                        dispatch(successStationData(data));
+                        dispatch(setUserInfo(user));
                     })
                     .catch(error => {
                         error.json().then(errorMessage => {
@@ -241,6 +243,7 @@ export const fetchMainMeasure = (device, module, type) => {
                 return response.json()
             })
             .then(json => {
+                console.log(json)
                 let beg_time = json.body[0].beg_time;
                 const step_time = json.body[0].step_time;
 
@@ -250,8 +253,11 @@ export const fetchMainMeasure = (device, module, type) => {
                     let label = moment.unix(beg_time).format('HH:mm');
                     labels = [...labels, label];
                     data = [...data, value[0]];
+                    //data = [...data, {name: label, temp: value[0]}];
                     beg_time = beg_time + step_time;
                 });
+
+                console.debug(labels, data);
                 dispatch(successMainMeasure(labels, data))
             })
             .catch(error => {
@@ -424,6 +430,7 @@ export const fetchRainMeasure = (device, module, type) => {
                 return response.json()
             })
             .then(json => {
+                console.debug(json)
                 let beg_time = json.body[0].beg_time;
                 const step_time = json.body[0].step_time;
 

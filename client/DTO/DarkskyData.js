@@ -37,7 +37,7 @@ class DarkskyData {
             this.daily.data.push(dataDay);
         });
 
-        console.log(this)
+        console.debug(this)
     }
 }
 

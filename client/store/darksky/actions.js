@@ -39,29 +39,32 @@ export const fetchDarksky = () => {
         dispatch(requestData());
 
         if (getState().darksky.updated_at === null || getState().darksky.updated_at !== null && moment(moment()).diff(getState().darksky.updated_at, 'minute') >= 10) {
-            console.log('Update Dark sky:', moment(moment()).diff(getState().darksky.updated_at, 'minute'));
+            console.debug('Update Dark sky:', moment(moment()).diff(getState().darksky.updated_at, 'minute'));
 
             // Take latitude and longitude from Netatmo station
             const lat = getState().netatmo.station_data.place.latitude;
             const lng = getState().netatmo.station_data.place.longitude;
-            const locale = getState().application.locale;
+            const locale = getState().application.user.lang;
+            const unit = getState().application.user.unit;
 
-            return fetch(`/darksky/${lat}/${lng}/${locale}/si`)
+            return fetch(`/darksky/${lat}/${lng}/${locale}/${unit}`)
                 .then(response => {
                     if (!response.ok) throw response;
                     return response.json()
                 })
                 .then(json => {
+                    console.debug(json)
                     const data = new DarkskyData(json);
                     dispatch(successData(data))
                 })
                 .catch(error => {
+                    console.error(error)
                     error.json().then(errorMessage => {
                         dispatch(failureData(errorMessage))
                     })
                 });
         } else {
-            console.log('Dark sky data is up to date', moment(getState().darksky.updated_at).diff(moment(), 'minute'));
+            console.debug('Dark sky data is up to date', moment(getState().darksky.updated_at).diff(moment(), 'minute'));
             dispatch(updateToDateData())
         }
     }

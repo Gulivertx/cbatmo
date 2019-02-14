@@ -4,7 +4,7 @@ import {CSSTransition} from "react-transition-group";
 
 import NetatmoNAMainChartLineContainer from '../containers/NetatmoNAMainChartLineContainer';
 import NetatmoNAModule1ChartLineContainer from '../containers/NetatmoNAModule1ChartLineContainer';
-import NetatmoNAModule2ChartLineContainer from '../containers/NetatmoNAModule2ChartLineContainer';
+import NetatmoNAModule3ChartLineContainer from '../containers/NetatmoNAModule3ChartLineContainer';
 import NetatmoNAModule4ChartLineContainer from '../containers/NetatmoNAModule4ChartLineContainer';
 import NetatmoTimer from './NetatmoTimer';
 import NetatmoModuleError from './NetatmoModuleError';
@@ -16,7 +16,7 @@ class Netatmo extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log('Fetch Netatmo Station Data');
+        console.debug('Fetch Netatmo Station Data');
         this.props.fetchStationData();
     }
 
@@ -138,7 +138,7 @@ class Netatmo extends React.Component {
                             </div>
                         </CSSTransition>
 
-                        {/* Module 2 - internal */}
+                        {/* Module 4 - internal */}
                         {
                             this.props.station_data.available_modules.INDOOR && (
                                 <CSSTransition in={this.state.enterModuleInternal} classNames='fade' timeout={cssAnimationDuration}>
@@ -215,7 +215,7 @@ class Netatmo extends React.Component {
                                                         <div className='row'>
                                                             <div className='col1'>
                                                                 <div className='chart-weather-line'>
-                                                                    <NetatmoNAModule2ChartLineContainer
+                                                                    <NetatmoNAModule3ChartLineContainer
                                                                         device={this.props.station_data.id}
                                                                         module={this.props.station_data.modules.RAIN.id}
                                                                         type='rain'
@@ -331,7 +331,7 @@ class Netatmo extends React.Component {
                                                                     <div className='temperature'><i
                                                                         className='wi wi-small-craft-advisory'/> {this.props.station_data.modules.WIND.data.wind_strength}km/h
                                                                     </div>
-                                                                    <div className='humidity'><i className='wi wi-strong-wind'/> {this.props.station_data.modules.WIND.gust_strength}km/h
+                                                                    <div className='humidity'><i className='wi wi-strong-wind'/> {this.props.station_data.modules.WIND.data.gust_strength}km/h
                                                                     </div>
                                                                     <div className='co2'><i className='wi wi-wind-direction'/> {this.props.station_data.modules.WIND.data.max_wind_str}km/h
                                                                     </div>
@@ -366,11 +366,6 @@ Netatmo.propTypes = {
     loading_station_data: PropTypes.bool.isRequired,
     loading_refresh_token: PropTypes.bool.isRequired,
     station_data: PropTypes.object.isRequired,
-    isFetchingNAMain: PropTypes.bool,
-    isFetchingNAModule1: PropTypes.bool,
-    isFetchingNAModule2: PropTypes.bool,
-    isFetchingNAModule3: PropTypes.bool,
-    isFetchingNAModule4: PropTypes.bool,
     fetchStationData: PropTypes.func.isRequired,
     locale: PropTypes.string.isRequired,
 };

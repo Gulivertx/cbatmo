@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchMeasurenData: (device, module, type) => {
+        fetchMeasureData: (device, module, type) => {
             dispatch(netatmoActions.fetchMainMeasure(device, module, type));
         }
     }

@@ -9,12 +9,12 @@ class NetatmoTimer extends React.Component {
     componentDidMount() {
         // Set locale for moment
         if (this.props.locale === 'fr') {
-            console.log('Set moment to fr');
+            console.debug('Set moment to fr');
             require('moment/locale/fr');
             moment.locale('fr');
         } else {
             moment.locale('en');
-            console.log('Set moment to en')
+            console.debug('Set moment to en')
         }
 
         this.lastStatusStore();

@@ -7,12 +7,12 @@ import PropTypes from "prop-types";
 const HomescreenWaether = ({darkskyData, netatmoData, locale}) => {
     // Set locale for moment
     if (locale === 'fr') {
-        console.log('Set moment to fr');
+        console.debug('Set moment to fr');
         require('moment/locale/fr');
         moment.locale('fr');
     } else {
         moment.locale('en');
-        console.log('Set moment to en')
+        console.debug('Set moment to en')
     }
 
     return (

@@ -6,23 +6,13 @@ import PropTypes from "prop-types";
 
 const intervalMinutes = 10, refreshTime = intervalMinutes * 60 * 1000;
 
-const data = [
-    {name: 'Page A', uv: 4000, pv: 9000},
-    {name: 'Page B', uv: 3000, pv: 7222},
-    {name: 'Page C', uv: 2000, pv: 6222},
-    {name: 'Page D', uv: 1223, pv: 5400},
-    {name: 'Page E', uv: 1890, pv: 3200},
-    {name: 'Page F', uv: 2390, pv: 2500},
-    {name: 'Page G', uv: 3490, pv: 1209},
-];
-
 class NetatmoChartLine extends React.Component {
 
     componentWillMount() {
-        this.props.fetchMeasurenData(this.props.device, this.props.module, this.props.type);
+        this.props.fetchMeasureData(this.props.device, this.props.module, this.props.type);
 
         this.interval = setInterval(() => {
-            this.props.fetchMeasurenData(this.props.device, this.props.module, this.props.type);
+            this.props.fetchMeasureData(this.props.device, this.props.module, this.props.type);
         }, refreshTime);
     }
 
@@ -115,15 +105,15 @@ class NetatmoChartLine extends React.Component {
         return(
             this.props.loading ? (null) : (
                 <AreaChart
-                    width={520}
+                    width={500}
                     height={75}
-                    data={data}
+                    data={this.props.data}
                     syncId="anyId"
-                    margin={{top: 10, right: 0, left: 0, bottom: 0}}
+                    margin={{top: 10, right: 0, left: -30, bottom: 0}}
                 >
                     <CartesianGrid strokeDasharray="1 1"/>
-                    <YAxis/>
-                    <Area type='monotone' dataKey='pv' stroke='#82ca9d' fill='#82ca9d' />
+                    <YAxis tick={{fontSize: '10px'}}/>
+                    <Area type='monotone' dataKey='temp' stroke={this.props.color} fill={this.props.color} />
                 </AreaChart>
                 )
         )
@@ -140,7 +130,7 @@ NetatmoChartLine.propTypes = {
     module: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired,
-    fetchMeasurenData: PropTypes.func.isRequired
+    fetchMeasureData: PropTypes.func.isRequired
 };
 
 

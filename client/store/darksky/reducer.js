@@ -7,7 +7,8 @@ import {
 
 const defaultState = {
     loading: true,
-    data: {},
+    first_fetch: true,
+    data: null,
     updated_at: null,
     errors: undefined
 };
@@ -26,6 +27,7 @@ const reducer = (state = defaultState, action) => {
             stateValue.data = action.data;
             stateValue.updated_at = action.receivedAt;
             stateValue.errors = undefined;
+            stateValue.first_fetch = false;
             state = Object.assign({}, state, stateValue);
             break;
 

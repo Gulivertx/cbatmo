@@ -8,12 +8,7 @@ const mapStateToProps = state => {
         loading_refresh_token: state.netatmo.loading_refresh_token,
         station_data: state.netatmo.station_data,
         station_data_errors: state.netatmo.station_data_errors,
-        isFetchingNAMain: state.netatmo.isFetchingNAMain,
-        isFetchingNAModule1: state.netatmo.isFetchingNAModule1,
-        isFetchingNAModule2: state.netatmo.isFetchingNAModule2,
-        isFetchingNAModule3: state.netatmo.isFetchingNAModule3,
-        isFetchingNAModule4: state.netatmo.isFetchingNAModule4,
-        locale: state.application.locale
+        locale: state.application.user.lang
     }
 };
 

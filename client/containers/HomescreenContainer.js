@@ -7,8 +7,9 @@ const mapStateToProps = state => {
         darkskyData: state.darksky.data,
         netatmoData: state.netatmo.station_data,
         loading: state.darksky.loading,
+        first_fetch: state.darksky.first_fetch,
         info: state.application.info,
-        locale: state.application.locale
+        locale: state.application.user.lang
     }
 };
 

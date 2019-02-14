@@ -54,7 +54,11 @@ class Homescreen extends React.Component {
                         <HomescrrenAppInfo appInfo={this.props.info}/>
                         <HomescreenDateTime locale={this.props.locale}/>
                         <ErrorBoundary>
-                            <HomescreenWeather darkskyData={this.props.darkskyData} netatmoData={this.props.netatmoData} locale={this.props.locale}/>
+                            {
+                                !this.props.first_fetch && (
+                                    <HomescreenWeather darkskyData={this.props.darkskyData} netatmoData={this.props.netatmoData} locale={this.props.locale}/>
+                                )
+                            }
                         </ErrorBoundary>
                     </div>
                 )}
@@ -64,8 +68,10 @@ class Homescreen extends React.Component {
 };
 
 Homescreen.propTypes = {
-    darkskyData: PropTypes.object.isRequired,
+    darkskyData: PropTypes.object,
     netatmoData: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
+    first_fetch: PropTypes.bool.isRequired,
     fetchDarksky: PropTypes.func.isRequired,
     info: PropTypes.object.isRequired,
     locale: PropTypes.string.isRequired,

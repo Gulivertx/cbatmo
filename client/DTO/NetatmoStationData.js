@@ -76,7 +76,7 @@ class NetatmoStationData {
             }
         });
 
-        console.log(this)
+        console.debug(this)
     }
 }
 

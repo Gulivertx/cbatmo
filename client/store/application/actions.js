@@ -72,11 +72,11 @@ export const fetchInfo = () => {
     }
 };
 
-export const LOCALE = '@@application/LOCALE';
+export const USER_INFO = '@@application/USER_INFO';
 
-export const setLocale = (locale) => {
+export const setUserInfo = (user) => {
     return {
-        type: LOCALE,
-        payload: locale
+        type: USER_INFO,
+        payload: user
     }
 };

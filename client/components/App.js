@@ -41,14 +41,14 @@ class App extends React.Component {
     }
 
     _onActive = (e) => {
-        console.log('User is active', e);
-        console.log('Time remaining', this.idleTimer.getRemainingTime());
+        console.debug('User is active', e);
+        console.debug('Time remaining', this.idleTimer.getRemainingTime());
         this.props.homescreenOpen(false);
     };
 
     _onIdle = () => {
-        console.log('User is idle');
-        console.log('Last active', this.idleTimer.getLastActiveTime());
+        console.debug('User is idle');
+        console.debug('Last active', this.idleTimer.getLastActiveTime());
         this.props.homescreenOpen(true);
     };
 
