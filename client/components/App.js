@@ -5,14 +5,11 @@ import IdleTimer from 'react-idle-timer';
 import Transition from 'react-transition-group/Transition';
 
 /** React components **/
-//const HomescreenContainer = loadable(() => import('../containers/HomescreenContainer'));
-//const FirstAppSettingsWelcome = loadable(() => import('./FirstAppSettingsWelcome'));
-//const FirstAppSettingsNetatmoContainer = loadable(() => import('../containers/FirstAppSettingsNetatmoContainer'));
-//const NetatmoContainer = loadable(() => import('../containers/NetatmoContainer'));
-import HomescreenContainer from '../containers/HomescreenContainer';
-import FirstAppSettingsWelcome from './FirstAppSettingsWelcome';
-import FirstAppSettingsNetatmoContainer from '../containers/FirstAppSettingsNetatmoContainer';
-import NetatmoContainer from '../containers/NetatmoContainer';
+const AppStartingContainer = loadable(() => import('../containers/AppStartingContainer'));
+const HomescreenContainer = loadable(() => import('../containers/HomescreenContainer'));
+const FirstAppSettingsWelcome = loadable(() => import('./FirstAppSettingsWelcome'));
+const FirstAppSettingsNetatmoContainer = loadable(() => import('../containers/FirstAppSettingsNetatmoContainer'));
+const NetatmoContainer = loadable(() => import('../containers/NetatmoContainer'));
 import ErrorBoundary from './ErrorBoundary';
 
 const DURATION = 800;
@@ -70,6 +67,13 @@ class App extends React.Component {
                         <div className='full-screen'>
                             <div className='background-img'/>
                             <FirstAppSettingsNetatmoContainer/>
+                        </div>
+                    );
+                case 3:
+                    return (
+                        <div className='full-screen'>
+                            <div className='background-img'/>
+                            <AppStartingContainer/>
                         </div>
                     );
             }

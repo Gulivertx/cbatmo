@@ -1,8 +1,7 @@
 import {
     REQUEST,
     SUCCESS,
-    FAILURE,
-    LAT_LNG
+    FAILURE
 } from "./actions";
 
 const defaultState = {

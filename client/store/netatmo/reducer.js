@@ -19,7 +19,6 @@ import {
     STATION_DATA_REQUEST,
     STATION_DATA_SUCCESS,
     STATION_DATA_FAILURE,
-    STATION_DATA_UPTODATE,
     MEASURE_MAIN_REQUEST,
     MEASURE_MAIN_SUCCESS,
     MEASURE_MAIN_FAILURE,
@@ -49,6 +48,7 @@ const defaultState = {
     station_data_last_updated: 0,
     station_data_errors: undefined,
     station_data: {},
+    first_fetch: true,
 
     // MAIN module history
     loading_main: false,
@@ -139,17 +139,13 @@ const reducer = (state = defaultState, action) => {
             stateValue.station_data = action.payload;
             stateValue.station_data_last_updated = action.receivedAt;
             stateValue.station_data_errors = undefined;
+            stateValue.first_fetch = false;
             state = Object.assign({}, state, stateValue);
             break;
 
         case STATION_DATA_FAILURE:
             stateValue.loading_station_data = false;
             stateValue.station_data_errors = action.error;
-            state = Object.assign({}, state, stateValue);
-            break;
-
-        case STATION_DATA_UPTODATE:
-            stateValue.loading_station_data = false;
             state = Object.assign({}, state, stateValue);
             break;
 

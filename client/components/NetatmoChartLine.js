@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 //import { AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
-const intervalMinutes = 10, refreshTime = intervalMinutes * 60 * 1000;
+const intervalMinutes = 1, refreshTime = intervalMinutes * 60 * 1000;
 
 class NetatmoChartLine extends React.Component {
 

@@ -93,11 +93,12 @@
 
   .current-condition {
     //margin-top: 8px;
+    height: 112px;
 
     .main-icon {
       display: inline-block;
       font-size: 84px;
-      padding-top: 18px;
+      vertical-align: bottom;
     }
 
     .main-temp-box {

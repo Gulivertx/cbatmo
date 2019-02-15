@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {appConfigured, setUserInfo} from "../application/actions";
+import {appConfigured, setUserInfo, settingsStep} from "../application/actions";
 import api from '../../../config/api.json';
 import NetatmoStationData from '../../DTO/NetatmoStationData';
 import NetatmoUserInformation from "../../DTO/NetatmoUserInformation";
@@ -54,9 +54,10 @@ export const fetchAuth = (email, password) => {
             .then(json => {
                 window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
                 window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
-                window.localStorage.setItem('appIsConfigured', 'true');
+                //window.localStorage.setItem('appIsConfigured', 'true');
                 dispatch(successAuth(json));
-                dispatch(appConfigured(true));
+                dispatch(settingsStep(3))
+                //dispatch(appConfigured(true));
             })
             .catch(error => {
                 error.json().then(errorMessage => {
@@ -124,7 +125,6 @@ export const fetchRefreshToken = () => {
 export const STATION_DATA_REQUEST = '@@netatmo/STATION_DATA_REQUEST';
 export const STATION_DATA_SUCCESS = '@@netatmo/STATION_DATA_SUCCESS';
 export const STATION_DATA_FAILURE = '@@netatmo/STATION_DATA_FAILURE';
-export const STATION_DATA_UPTODATE = '@@netatmo/STATION_DATA_UPTODATE';
 
 export const requestStationData = () => {
     return {
@@ -147,20 +147,14 @@ export const failureStationData = (error) => {
     }
 };
 
-export const updateToDateStationData = () => {
-    return {
-        type: STATION_DATA_UPTODATE
-    }
-};
-
 export const fetchStationData = () => {
     return (dispatch, getState) => {
-        dispatch(requestStationData());
-
         // If no access token or refresh token is soon expired
         if (!getState().netatmo.access_token || moment.unix(Number(getState().netatmo.access_token_expire_in)).diff(moment(), 'minute') < 10) {
             // Fetch a new access token from refresh token and then fetch station data
             dispatch(fetchRefreshToken()).then(() => {
+                dispatch(requestStationData());
+
                 return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.access_token}`)
                     .then(response => {
                         if (!response.ok) throw response;
@@ -181,6 +175,8 @@ export const fetchStationData = () => {
         } else {
             // Fetch new data only if last data stored is bigger than 10 minutes
             if (moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+                dispatch(requestStationData());
+
                 return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.access_token}`)
                     .then(response => {
                         if (!response.ok) throw response;
@@ -195,10 +191,7 @@ export const fetchStationData = () => {
                             dispatch(failureStationData(errorMessage))
                         })
                     });
-            } else {
-                dispatch(updateToDateStationData())
             }
-
         }
     }
 };
@@ -232,39 +225,39 @@ export const failureMainMeasure = (error) => {
 
 export const fetchMainMeasure = (device, module, type) => {
     return (dispatch, getState) => {
-        dispatch(requestMainMeasure());
+        // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
+        if (getState().netatmo.measure_main_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+            dispatch(requestMainMeasure());
 
-        const date_begin = moment().subtract(12, 'hours').unix();
-        const date_end = moment().unix();
+            const date_begin = moment().subtract(12, 'hours').unix();
+            const date_end = moment().unix();
 
-        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
-            .then(response => {
-                if (!response.ok) throw response;
-                return response.json()
-            })
-            .then(json => {
-                console.log(json)
-                let beg_time = json.body[0].beg_time;
-                const step_time = json.body[0].step_time;
-
-                let data = [], labels = [];
-
-                json.body[0].value.map(value => {
-                    let label = moment.unix(beg_time).format('HH:mm');
-                    labels = [...labels, label];
-                    data = [...data, value[0]];
-                    //data = [...data, {name: label, temp: value[0]}];
-                    beg_time = beg_time + step_time;
-                });
-
-                console.debug(labels, data);
-                dispatch(successMainMeasure(labels, data))
-            })
-            .catch(error => {
-                error.json().then(errorMessage => {
-                    dispatch(failureMainMeasure(errorMessage))
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
+                .then(response => {
+                    if (!response.ok) throw response;
+                    return response.json()
                 })
-            });
+                .then(json => {
+                    let beg_time = json.body[0].beg_time;
+                    const step_time = json.body[0].step_time;
+
+                    let data = [], labels = [];
+
+                    json.body[0].value.map(value => {
+                        let label = moment.unix(beg_time).format('HH:mm');
+                        labels = [...labels, label];
+                        data = [...data, value[0]];
+                        //data = [...data, {name: label, temp: value[0]}];
+                        beg_time = beg_time + step_time;
+                    });
+                    dispatch(successMainMeasure(labels, data))
+                })
+                .catch(error => {
+                    error.json().then(errorMessage => {
+                        dispatch(failureMainMeasure(errorMessage))
+                    })
+                });
+        }
     }
 };
 
@@ -297,35 +290,38 @@ export const failureOutdoorMeasure = (error) => {
 
 export const fetchoutdoorMeasure = (device, module, type) => {
     return (dispatch, getState) => {
-        dispatch(requestOutdoorMeasure());
+        // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
+        if (getState().netatmo.measure_outdoor_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+            dispatch(requestOutdoorMeasure());
 
-        const date_begin = moment().subtract(12, 'hours').unix();
-        const date_end = moment().unix();
+            const date_begin = moment().subtract(12, 'hours').unix();
+            const date_end = moment().unix();
 
-        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
-            .then(response => {
-                if (!response.ok) throw response;
-                return response.json()
-            })
-            .then(json => {
-                let beg_time = json.body[0].beg_time;
-                const step_time = json.body[0].step_time;
-
-                let data = [], labels = [];
-
-                json.body[0].value.map(value => {
-                    let label = moment.unix(beg_time).format('HH:mm');
-                    labels = [...labels, label];
-                    data = [...data, value[0]];
-                    beg_time = beg_time + step_time;
-                });
-                dispatch(successOutdoorMeasure(labels, data))
-            })
-            .catch(error => {
-                error.json().then(errorMessage => {
-                    dispatch(failureOutdoorMeasure(errorMessage))
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
+                .then(response => {
+                    if (!response.ok) throw response;
+                    return response.json()
                 })
-            });
+                .then(json => {
+                    let beg_time = json.body[0].beg_time;
+                    const step_time = json.body[0].step_time;
+
+                    let data = [], labels = [];
+
+                    json.body[0].value.map(value => {
+                        let label = moment.unix(beg_time).format('HH:mm');
+                        labels = [...labels, label];
+                        data = [...data, value[0]];
+                        beg_time = beg_time + step_time;
+                    });
+                    dispatch(successOutdoorMeasure(labels, data))
+                })
+                .catch(error => {
+                    error.json().then(errorMessage => {
+                        dispatch(failureOutdoorMeasure(errorMessage))
+                    })
+                });
+        }
     }
 };
 
@@ -358,35 +354,38 @@ export const failureWindMeasure = (error) => {
 
 export const fetchWindMeasure = (device, module, type) => {
     return (dispatch, getState) => {
-        dispatch(requestWindMeasure());
+        // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
+        if (getState().netatmo.measure_wind_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+            dispatch(requestWindMeasure());
 
-        const date_begin = moment().subtract(12, 'hours').unix();
-        const date_end = moment().unix();
+            const date_begin = moment().subtract(12, 'hours').unix();
+            const date_end = moment().unix();
 
-        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
-            .then(response => {
-                if (!response.ok) throw response;
-                return response.json()
-            })
-            .then(json => {
-                let beg_time = json.body[0].beg_time;
-                const step_time = json.body[0].step_time;
-
-                let data = [], labels = [];
-
-                json.body[0].value.map(value => {
-                    let label = moment.unix(beg_time).format('HH:mm');
-                    labels = [...labels, label];
-                    data = [...data, value[0]];
-                    beg_time = beg_time + step_time;
-                });
-                dispatch(successWindMeasure(labels, data))
-            })
-            .catch(error => {
-                error.json().then(errorMessage => {
-                    dispatch(failureWindMeasure(errorMessage))
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
+                .then(response => {
+                    if (!response.ok) throw response;
+                    return response.json()
                 })
-            });
+                .then(json => {
+                    let beg_time = json.body[0].beg_time;
+                    const step_time = json.body[0].step_time;
+
+                    let data = [], labels = [];
+
+                    json.body[0].value.map(value => {
+                        let label = moment.unix(beg_time).format('HH:mm');
+                        labels = [...labels, label];
+                        data = [...data, value[0]];
+                        beg_time = beg_time + step_time;
+                    });
+                    dispatch(successWindMeasure(labels, data))
+                })
+                .catch(error => {
+                    error.json().then(errorMessage => {
+                        dispatch(failureWindMeasure(errorMessage))
+                    })
+                });
+        }
     }
 };
 
@@ -419,36 +418,38 @@ export const failureNRainMeasure = (error) => {
 
 export const fetchRainMeasure = (device, module, type) => {
     return (dispatch, getState) => {
-        dispatch(requestRainMeasure());
+        // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
+        if (getState().netatmo.measure_rain_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+            dispatch(requestRainMeasure());
 
-        const date_begin = moment().subtract(12, 'hours').unix();
-        const date_end = moment().unix();
+            const date_begin = moment().subtract(12, 'hours').unix();
+            const date_end = moment().unix();
 
-        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
-            .then(response => {
-                if (!response.ok) throw response;
-                return response.json()
-            })
-            .then(json => {
-                console.debug(json)
-                let beg_time = json.body[0].beg_time;
-                const step_time = json.body[0].step_time;
-
-                let data = [], labels = [];
-
-                json.body[0].value.map(value => {
-                    let label = moment.unix(beg_time).format('HH:mm');
-                    labels = [...labels, label];
-                    data = [...data, value[0]];
-                    beg_time = beg_time + step_time;
-                });
-                dispatch(successRainMeasure(labels, data))
-            })
-            .catch(error => {
-                error.json().then(errorMessage => {
-                    dispatch(failureNRainMeasure(errorMessage))
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
+                .then(response => {
+                    if (!response.ok) throw response;
+                    return response.json()
                 })
-            });
+                .then(json => {
+                    let beg_time = json.body[0].beg_time;
+                    const step_time = json.body[0].step_time;
+
+                    let data = [], labels = [];
+
+                    json.body[0].value.map(value => {
+                        let label = moment.unix(beg_time).format('HH:mm');
+                        labels = [...labels, label];
+                        data = [...data, value[0]];
+                        beg_time = beg_time + step_time;
+                    });
+                    dispatch(successRainMeasure(labels, data))
+                })
+                .catch(error => {
+                    error.json().then(errorMessage => {
+                        dispatch(failureNRainMeasure(errorMessage))
+                    })
+                });
+        }
     }
 };
 
@@ -481,34 +482,37 @@ export const failureIndooMeasure = (error) => {
 
 export const fetchIndoorMeasure = (device, module, type) => {
     return (dispatch, getState) => {
-        dispatch(requestIndoorMeasure());
+        // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
+        if (getState().netatmo.measure_indoor_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+            dispatch(requestIndoorMeasure());
 
-        const date_begin = moment().subtract(12, 'hours').unix();
-        const date_end = moment().unix();
+            const date_begin = moment().subtract(12, 'hours').unix();
+            const date_end = moment().unix();
 
-        return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
-            .then(response => {
-                if (!response.ok) throw response;
-                return response.json()
-            })
-            .then(json => {
-                let beg_time = json.body[0].beg_time;
-                const step_time = json.body[0].step_time;
-
-                let data = [], labels = [];
-
-                json.body[0].value.map(value => {
-                    let label = moment.unix(beg_time).format('HH:mm');
-                    labels = [...labels, label];
-                    data = [...data, value[0]];
-                    beg_time = beg_time + step_time;
-                });
-                dispatch(successIndoorMeasure(labels, data))
-            })
-            .catch(error => {
-                error.json().then(errorMessage => {
-                    dispatch(failureIndooMeasure(errorMessage))
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=true`)
+                .then(response => {
+                    if (!response.ok) throw response;
+                    return response.json()
                 })
-            });
+                .then(json => {
+                    let beg_time = json.body[0].beg_time;
+                    const step_time = json.body[0].step_time;
+
+                    let data = [], labels = [];
+
+                    json.body[0].value.map(value => {
+                        let label = moment.unix(beg_time).format('HH:mm');
+                        labels = [...labels, label];
+                        data = [...data, value[0]];
+                        beg_time = beg_time + step_time;
+                    });
+                    dispatch(successIndoorMeasure(labels, data))
+                })
+                .catch(error => {
+                    error.json().then(errorMessage => {
+                        dispatch(failureIndooMeasure(errorMessage))
+                    })
+                });
+        }
     }
 };

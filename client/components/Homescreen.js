@@ -19,7 +19,7 @@ const transitionStyles = {
     entered: {opacity: 1},
 };
 
-const intervalMinutes = 10, refreshTime = intervalMinutes * 60 * 1000;
+const intervalMinutes = 1, refreshTime = intervalMinutes * 60 * 1000;
 
 class Homescreen extends React.Component {
     constructor(props) {

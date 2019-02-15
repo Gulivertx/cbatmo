@@ -5,7 +5,6 @@ import DarkskyData from '../../DTO/DarkskyData';
 export const REQUEST = '@@darksky/REQUEST';
 export const SUCCESS = '@@darksky/SUCCESS';
 export const FAILURE = '@@darksky/FAILURE';
-export const DATA_UP_TO_DATE = '@@darksky/DATA_UP_TO_DATE';
 
 export const requestData = () => {
     return {
@@ -28,18 +27,10 @@ export const failureData = (error) => {
     }
 };
 
-export const updateToDateData = () => {
-    return {
-        type: DATA_UP_TO_DATE
-    }
-};
-
 export const fetchDarksky = () => {
     return (dispatch, getState) => {
-        dispatch(requestData());
-
         if (getState().darksky.updated_at === null || getState().darksky.updated_at !== null && moment(moment()).diff(getState().darksky.updated_at, 'minute') >= 10) {
-            console.debug('Update Dark sky:', moment(moment()).diff(getState().darksky.updated_at, 'minute'));
+            dispatch(requestData());
 
             // Take latitude and longitude from Netatmo station
             const lat = getState().netatmo.station_data.place.latitude;
@@ -53,7 +44,6 @@ export const fetchDarksky = () => {
                     return response.json()
                 })
                 .then(json => {
-                    console.debug(json)
                     const data = new DarkskyData(json);
                     dispatch(successData(data))
                 })
@@ -63,9 +53,6 @@ export const fetchDarksky = () => {
                         dispatch(failureData(errorMessage))
                     })
                 });
-        } else {
-            console.debug('Dark sky data is up to date', moment(getState().darksky.updated_at).diff(moment(), 'minute'));
-            dispatch(updateToDateData())
         }
     }
 };

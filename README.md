@@ -16,13 +16,19 @@ release I have removed Google Cal API, WebcamTraval API and change Swiss Weather
 API by Dark Sky API.
 
 ## About 2.0.0-dev git branch
-This is the development branch for the next CBatmo version which will rework and include the following features :
+This is the development branch for the next CBatmo version which will rework and include more features.
+
+### What's new in 2.0.0 ?
 * New Redux reducer / actions for a better store and more comprehensive code
 * New Data Transfert Object (DTO) to manage data received from Netatmo and Darksky API
-* Recognizing dynamically which Netatmo modules are present
+* Recognizing dynamically which Netatmo modules are connected to the station
 * Give an UI feedback if a module is unavailable (for instance no battery anymore...)
+* Bind Netatmo user configuration for unit and lang to Darksky API and UI
+* General performance improvements to have better control of React component mount when data did not change
+* Few crashes fix to keep the app alive without the message "Something went wrong" and obligation to reload the all app!!!
 
-This is a work in progress and could not work ! I will tell you when this branch will be ready for test.
+~~This is a work in progress and could not work ! I will tell you when this branch will be ready for test.~~
+There is still some work to do but this version should now work without major issues.
 
 ## Development
 This project is a Web APP write in Javascript with **ReactJS, Redux** for the frontend and **ExpressJS** 

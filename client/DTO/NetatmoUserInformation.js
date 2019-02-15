@@ -35,10 +35,10 @@ class NetatmoUserInformation {
 
         switch (data.administrative.windunit) {
             case 0:
-                this.windunit = 'kph';
+                this.windunit = 'km/h';
                 break;
             case 1:
-                this.windunit = 'mph';
+                this.windunit = 'mp/h';
                 break;
             case 2:
                 this.windunit = 'ms';

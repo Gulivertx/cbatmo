@@ -9,7 +9,8 @@ import {
 } from "./actions";
 
 const defaultState = {
-    isConfigured: !!window.localStorage.getItem('appIsConfigured'),
+    //isConfigured: !!window.localStorage.getItem('appIsConfigured'),
+    isConfigured: false,
     isHomeScreenOpen: false,
     info: {
         name: '',
@@ -26,7 +27,7 @@ const defaultState = {
         unit: 'si',
         windunit: ''
     },
-    settingsStep: 1
+    settingsStep: window.localStorage.getItem('NetatmoRefreshToken') ? 3 : 1 // If now refresh token in localstorage goto login page else directly jump to settings page
 };
 
 const reducer = (state = defaultState, action) => {
