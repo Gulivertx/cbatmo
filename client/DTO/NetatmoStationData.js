@@ -11,6 +11,9 @@ const MODULE_TYPE = {
     WIND: 'NAModule2'
 };
 
+/**
+ * Station Data DTO
+ */
 class NetatmoStationData {
     constructor(data) {
         this.id = data._id;

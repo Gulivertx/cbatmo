@@ -1,16 +1,27 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import cx from 'classnames';
 
-import NetatmoNAMainChartLineContainer from '../containers/NetatmoNAMainChartLineContainer';
-import NetatmoNAModule1ChartLineContainer from '../containers/NetatmoNAModule1ChartLineContainer';
-import NetatmoNAModule3ChartLineContainer from '../containers/NetatmoNAModule3ChartLineContainer';
-import NetatmoNAModule4ChartLineContainer from '../containers/NetatmoNAModule4ChartLineContainer';
+import NetatmoMainModuleChartContainer from '../containers/NetatmoMainModuleChartContainer';
+import NetatmoOutdoorChartContainer from '../containers/NetatmoOutdoorChartContainer';
+import NetatmoRainChartContainer from '../containers/NetatmoRainChartContainer';
+import NetatmoIndoorChartContainer from '../containers/NetatmoIndoorChartContainer';
 import NetatmoTimer from './NetatmoTimer';
 import NetatmoModuleError from './NetatmoModuleError';
 
 const intervalMinutes = 1, refreshTime = intervalMinutes * 60 * 1000;
 
 class Netatmo extends React.Component {
+    state = {
+        main_selected_type: 'Temperature',
+        main_selected_color: '#f9a825',
+        indoor_selected_type: 'Temperature',
+        indoor_selected_color: '#f9a825',
+        outdoor_selected_type: 'Temperature',
+        outdoor_selected_color: '#f9a825',
+        rain_selected_type: 'Rain',
+        rain_selected_color: '#1e88e5'
+    };
 
     componentDidMount() {
         setInterval(() => {
@@ -26,6 +37,34 @@ class Netatmo extends React.Component {
         } else if (value >= 71) {
             return 'text-red';
         }
+    };
+
+    colorSelector = (color) => {
+        switch (color) {
+            case 'yellow':
+                color = '#f9a825';
+                break;
+            case 'blue':
+                color = '#1e88e5';
+                break;
+            case 'red':
+                color = '#ef5350';
+                break;
+            case 'purpule':
+                color = '#e91e63';
+                break;
+            case 'green':
+                color = '#4caf50';
+                break;
+            case 'cyan':
+                color = '#00bcd4';
+                break;
+            case 'white':
+                color = '#c2cbce';
+                break;
+        }
+
+        return color;
     };
 
     batteryStatusQuality = (value) => {
@@ -67,25 +106,48 @@ class Netatmo extends React.Component {
                                         <div className='row'>
                                             <div className='col1'>
                                                 <div className='chart-weather-line'>
-                                                    <NetatmoNAMainChartLineContainer
+                                                    <NetatmoMainModuleChartContainer
                                                         device={this.props.station_data.id}
                                                         module={this.props.station_data.id}
-                                                        type='temperature'
-                                                        color='#ffa000'
-                                                        offsetMin={2}
-                                                        offsetMax={2}
+                                                        data_type={this.props.station_data.data_type}
+                                                        selected_type={this.state.main_selected_type}
+                                                        color={this.state.main_selected_color}
+                                                        width={490}
                                                     />
                                                 </div>
                                             </div>
                                             <div className='col2 weather-padding-left'>
                                                 <div className='card-body-weather-content'>
-                                                    <div className='temperature'><i
-                                                        className='wi wi-thermometer'/> {Math.round(this.props.station_data.data.temperature)}°
+                                                    <div className='temperature' onClick={() => this.setState({
+                                                        main_selected_type: this.props.station_data.data_type[0],
+                                                        main_selected_color: this.colorSelector('yellow')
+                                                    })}>
+                                                        <i className='wi wi-thermometer'/> <span className={cx(this.state.main_selected_type === this.props.station_data.data_type[0] && 'text-glow')}>{this.props.station_data.data.temperature}°</span>
                                                     </div>
-                                                    <div className='hpa'><i className='wi wi-barometer'/> {Math.round(this.props.station_data.data.pressure)}{this.props.user.pressure_unit}</div>
-                                                    <div className='humidity'><i className='wi wi-humidity'/> {this.props.station_data.data.humidity}%</div>
-                                                    <div className='noise'><i className='wi wi-earthquake'/> {this.props.station_data.data.noise}dB</div>
-                                                    <div className='co2'><i className='wi wi-cloud-refresh'/> {this.props.station_data.data.co2}ppm</div>
+                                                    <div className='hpa' onClick={() => this.setState({
+                                                        main_selected_type: this.props.station_data.data_type[4],
+                                                        main_selected_color: this.colorSelector('green')
+                                                    })}>
+                                                        <i className='wi wi-barometer'/> <span className={cx(this.state.main_selected_type === this.props.station_data.data_type[4] && 'text-glow')}>{Math.round(this.props.station_data.data.pressure)}{this.props.user.pressure_unit}</span>
+                                                    </div>
+                                                    <div className='humidity' onClick={() => this.setState({
+                                                        main_selected_type: this.props.station_data.data_type[2],
+                                                        main_selected_color: this.colorSelector('blue')
+                                                    })}>
+                                                        <i className='wi wi-humidity'/> <span className={cx(this.state.main_selected_type === this.props.station_data.data_type[2] && 'text-glow')}>{this.props.station_data.data.humidity}%</span>
+                                                    </div>
+                                                    <div className='noise' onClick={() => this.setState({
+                                                        main_selected_type: this.props.station_data.data_type[3],
+                                                        main_selected_color: this.colorSelector('purpule')
+                                                    })}>
+                                                        <i className='wi wi-earthquake'/> <span className={cx(this.state.main_selected_type === this.props.station_data.data_type[3] && 'text-glow')}>{this.props.station_data.data.noise}dB</span>
+                                                    </div>
+                                                    <div className='co2' onClick={() => this.setState({
+                                                        main_selected_type: this.props.station_data.data_type[1],
+                                                        main_selected_color: this.colorSelector('cyan')
+                                                    })}>
+                                                        <i className='wi wi-cloud-refresh'/> <span className={cx(this.state.main_selected_type === this.props.station_data.data_type[1] && 'text-glow')}>{this.props.station_data.data.co2}ppm</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -119,23 +181,36 @@ class Netatmo extends React.Component {
                                                 <div className='row'>
                                                     <div className='col1'>
                                                         <div className='chart-weather-line'>
-                                                            <NetatmoNAModule4ChartLineContainer
+                                                            <NetatmoIndoorChartContainer
                                                                 device={this.props.station_data.id}
                                                                 module={this.props.station_data.modules.INDOOR.id}
-                                                                type='temperature'
-                                                                color='#ffa000'
-                                                                offsetMin={2}
-                                                                offsetMax={2}
+                                                                data_type={this.props.station_data.modules.INDOOR.data_type}
+                                                                selected_type={this.state.indoor_selected_type}
+                                                                color={this.state.indoor_selected_color}
+                                                                width={250}
                                                             />
                                                         </div>
                                                     </div>
                                                     <div className='col2 weather-padding-left'>
                                                         <div className='card-body-weather-content'>
-                                                            <div className='temperature'><i
-                                                                className='wi wi-thermometer'/> {Math.round(this.props.station_data.modules.INDOOR.data.temperature)}°
+                                                            <div className='temperature' onClick={() => this.setState({
+                                                                indoor_selected_type: this.props.station_data.modules.INDOOR.data_type[0],
+                                                                indoor_selected_color: this.colorSelector('yellow')
+                                                            })}>
+                                                                <i className='wi wi-thermometer'/> <span className={cx(this.state.indoor_selected_type === this.props.station_data.modules.INDOOR.data_type[0] && 'text-glow')}>{this.props.station_data.modules.INDOOR.data.temperature}°</span>
                                                             </div>
-                                                            <div className='humidity'><i className='wi wi-humidity'/> {this.props.station_data.modules.INDOOR.data.humidity}%</div>
-                                                            <div className='co2'><i className='wi wi-cloud-refresh'/> {this.props.station_data.modules.INDOOR.data.co2}ppm</div>
+                                                            <div className='humidity' onClick={() => this.setState({
+                                                                indoor_selected_type: this.props.station_data.modules.INDOOR.data_type[2],
+                                                                indoor_selected_color: this.colorSelector('blue')
+                                                            })}>
+                                                                <i className='wi wi-humidity'/> <span className={cx(this.state.indoor_selected_type === this.props.station_data.modules.INDOOR.data_type[2] && 'text-glow')}>{this.props.station_data.modules.INDOOR.data.humidity}%</span>
+                                                            </div>
+                                                            <div className='co2' onClick={() => this.setState({
+                                                                indoor_selected_type: this.props.station_data.modules.INDOOR.data_type[1],
+                                                                indoor_selected_color: this.colorSelector('cyan')
+                                                            })}>
+                                                                <i className='wi wi-cloud-refresh'/> <span className={cx(this.state.indoor_selected_type === this.props.station_data.modules.INDOOR.data_type[1] && 'text-glow')}>{this.props.station_data.modules.INDOOR.data.co2}ppm</span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -171,20 +246,20 @@ class Netatmo extends React.Component {
                                                 <div className='row'>
                                                     <div className='col1'>
                                                         <div className='chart-weather-line'>
-                                                            <NetatmoNAModule3ChartLineContainer
+                                                            <NetatmoRainChartContainer
                                                                 device={this.props.station_data.id}
                                                                 module={this.props.station_data.modules.RAIN.id}
-                                                                type='rain'
-                                                                color='#1e88e5'
-                                                                offsetMin={0}
-                                                                offsetMax={0.1}
+                                                                data_type={this.props.station_data.modules.RAIN.data_type}
+                                                                selected_type={this.state.rain_selected_type}
+                                                                color={this.state.rain_selected_color}
+                                                                width={160}
                                                             />
                                                         </div>
                                                     </div>
                                                     <div className='col2 weather-padding-left'>
                                                         <div className='card-body-weather-content'>
-                                                            <div className='rain'><i className='wi wi-raindrop'/> {this.props.station_data.modules.RAIN.data.rain.toFixed(1)}
-                                                                <small>mm</small>
+                                                            <div className='rain text-glow'>
+                                                                <i className='wi wi-raindrop'/> {this.props.station_data.modules.RAIN.data.rain.toFixed(1)}<small>mm</small>
                                                             </div>
                                                             <div className='rain24'><i
                                                                 className='wi wi-raindrop'/> {this.props.station_data.modules.RAIN.data.sum_rain_24.toFixed(1)}mm
@@ -224,22 +299,30 @@ class Netatmo extends React.Component {
                                                 <div className='row'>
                                                     <div className='col1'>
                                                         <div className='chart-weather-line'>
-                                                            <NetatmoNAModule1ChartLineContainer
+                                                            <NetatmoOutdoorChartContainer
                                                                 device={this.props.station_data.id}
-                                                                module={this.props.station_data.modules.INDOOR.id}
-                                                                type='temperature'
-                                                                color='#ffa000'
-                                                                offsetMin={2}
-                                                                offsetMax={2}
+                                                                module={this.props.station_data.modules.OUTDOOR.id}
+                                                                data_type={this.props.station_data.modules.OUTDOOR.data_type}
+                                                                selected_type={this.state.outdoor_selected_type}
+                                                                color={this.state.outdoor_selected_color}
+                                                                width={340}
                                                             />
                                                         </div>
                                                     </div>
                                                     <div className='col2 weather-padding-left'>
                                                         <div className='card-body-weather-content'>
-                                                            <div className='temperature'><i
-                                                                className='wi wi-thermometer'/> {Math.round(this.props.station_data.modules.OUTDOOR.data.temperature)}°
+                                                            <div className='temperature' onClick={() => this.setState({
+                                                                outdoor_selected_type: this.props.station_data.modules.OUTDOOR.data_type[0],
+                                                                outdoor_selected_color: this.colorSelector('yellow')
+                                                            })}>
+                                                                <i className='wi wi-thermometer'/> <span className={cx(this.state.outdoor_selected_type === this.props.station_data.modules.OUTDOOR.data_type[0] && 'text-glow')}>{this.props.station_data.modules.OUTDOOR.data.temperature}°</span>
                                                             </div>
-                                                            <div className='humidity'><i className='wi wi-humidity'/> {this.props.station_data.modules.OUTDOOR.data.humidity}%</div>
+                                                            <div className='humidity' onClick={() => this.setState({
+                                                                outdoor_selected_type: this.props.station_data.modules.OUTDOOR.data_type[1],
+                                                                outdoor_selected_color: this.colorSelector('yellow')
+                                                            })}>
+                                                                <i className='wi wi-humidity'/> <span className={cx(this.state.outdoor_selected_type === this.props.station_data.modules.OUTDOOR.data_type[1] && 'text-glow')}>{this.props.station_data.modules.OUTDOOR.data.humidity}%</span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -4,23 +4,22 @@ import NetatmoChartLine from "../components/NetatmoChartLine";
 
 const mapStateToProps = state => {
     return {
-        loading: state.netatmo.loading_outdoor,
-        data: state.netatmo.measure_outdoor_data,
-        labels: state.netatmo.measure_outdoor_labels
+        loading: state.netatmo.loading_main,
+        data: state.netatmo.measure_main_data
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         fetchMeasureData: (device, module, type) => {
-            dispatch(netatmoActions.fetchoutdoorMeasure(device, module, type));
+            dispatch(netatmoActions.fetchMainMeasure(device, module, type));
         }
     }
 };
 
-const NetatmoNAModule1ChartLineContainer = connect(
+const NetatmoMainModuleChartContainer = connect(
     mapStateToProps,
     mapDispatchToProps
 )(NetatmoChartLine);
 
-export default NetatmoNAModule1ChartLineContainer
+export default NetatmoMainModuleChartContainer

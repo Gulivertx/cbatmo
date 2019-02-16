@@ -1,5 +1,5 @@
 /**
- * NAModule4 : Indoor
+ * Main module DTO
  */
 class NetatmoModuleMain {
     constructor(data) {

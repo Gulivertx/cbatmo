@@ -1,5 +1,5 @@
 /**
- * NAModule3 : Rain
+ * Rain module DTO
  */
 class NetatmoModuleRain {
     constructor(data) {

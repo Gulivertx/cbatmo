@@ -1,5 +1,5 @@
 /**
- * NAModule2 : Wind
+ * Wind module DTO
  */
 class NetatmoModuleWind {
     constructor(data) {

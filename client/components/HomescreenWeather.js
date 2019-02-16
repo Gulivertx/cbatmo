@@ -1,19 +1,11 @@
 import React from 'react';
 import WeatherIcon from "./WeatherIcon";
 import HomescreenWeatherDaily from './HomescreenWeatherDaily'
-import moment from "moment/moment";
+import {momentWithLocale} from '../utils/tools'
 import PropTypes from "prop-types";
 
 const HomescreenWaether = ({darkskyData, netatmoData, locale}) => {
-    // Set locale for moment
-    if (locale === 'fr') {
-        console.debug('Set moment to fr');
-        require('moment/locale/fr');
-        moment.locale('fr');
-    } else {
-        moment.locale('en');
-        console.debug('Set moment to en')
-    }
+    let moment = momentWithLocale(locale);
 
     return (
         <div className='homescreen-weather'>
@@ -42,8 +34,8 @@ const HomescreenWaether = ({darkskyData, netatmoData, locale}) => {
                                 <div className='main-temp'>
                                     <i className="zmdi zmdi-alert-triangle text-yellow"/>
                                     <div className='min-max-temp' style={{fontSize: '10px'}}>
-                                        <div className='color-gray'>Ce module ne peut</div>
-                                        <div className='color-gray'>pas joindre la Station</div>
+                                        <div className='color-gray'>This module is</div>
+                                        <div className='color-gray'>unavailable</div>
                                     </div>
                                 </div>
                             )

@@ -54,31 +54,26 @@ const defaultState = {
     loading_main: false,
     measure_main_errors: undefined,
     measure_main_data: [],
-    measure_main_labels: [],
 
     // OUTDOOR module history (namodule1)
     loading_outdoor: false,
     measure_outdoor_errors: undefined,
     measure_outdoor_data: [],
-    measure_outdoor_labels: [],
 
     // WIND module history (namodule2)
     loading_wind: false,
     measure_wind_errors: undefined,
     measure_wind_data: [],
-    measure_wind_labels: [],
 
     // Rain module history (namodule3)
     loading_rain: true,
     measure_rain_errors: undefined,
     measure_rain_data: [],
-    measure_rain_labels: [],
 
     // INDOOR module history (namodule4)
     loading_indoor: true,
     measure_indoor_errors: undefined,
     measure_indoor_data: [],
-    measure_indoor_labels: []
 };
 
 const reducer = (state = defaultState, action) => {
@@ -134,7 +129,6 @@ const reducer = (state = defaultState, action) => {
             break;
 
         case STATION_DATA_SUCCESS:
-            console.debug(action.payload);
             stateValue.loading_station_data = false;
             stateValue.station_data = action.payload;
             stateValue.station_data_last_updated = action.receivedAt;
@@ -157,8 +151,7 @@ const reducer = (state = defaultState, action) => {
 
         case MEASURE_MAIN_SUCCESS:
             stateValue.loading_main = false;
-            stateValue.measure_main_data = action.data;
-            stateValue.measure_main_labels = action.labels;
+            stateValue.measure_main_data = action.payload;
             stateValue.measure_main_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;
@@ -177,8 +170,7 @@ const reducer = (state = defaultState, action) => {
 
         case MEASURE_OUTDOOR_SUCCESS:
             stateValue.loading_outdoor = false;
-            stateValue.measure_outdoor_data = action.data;
-            stateValue.measure_outdoor_labels = action.labels;
+            stateValue.measure_outdoor_data = action.payload;
             stateValue.measure_outdoor_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;
@@ -196,8 +188,7 @@ const reducer = (state = defaultState, action) => {
 
         case MEASURE_WIND_SUCCESS:
             stateValue.loading_wind = false;
-            stateValue.measure_outdoor_data = action.data;
-            stateValue.measure_outdoor_labels = action.labels;
+            stateValue.measure_outdoor_data = action.payload;
             stateValue.measure_wind_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;
@@ -215,8 +206,7 @@ const reducer = (state = defaultState, action) => {
 
         case MEASURE_RAIN_SUCCESS:
             stateValue.loading_rain = false;
-            stateValue.measure_rain_data = action.data;
-            stateValue.measure_rain_labels = action.labels;
+            stateValue.measure_rain_data = action.payload;
             stateValue.measure_rain_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;
@@ -234,8 +224,7 @@ const reducer = (state = defaultState, action) => {
 
         case MEASURE_INDOOR_SUCCESS:
             stateValue.loading_indoor = false;
-            stateValue.measure_indoor_data = action.data;
-            stateValue.measure_indoor_labels = action.labels;
+            stateValue.measure_indoor_data = action.payload;
             stateValue.measure_indoor_errors = undefined;
             state = Object.assign({}, state, stateValue);
             break;

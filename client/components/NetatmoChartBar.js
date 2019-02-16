@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 
-import { AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 const intervalMinutes = 1, refreshTime = intervalMinutes * 60 * 1000;
 
@@ -22,7 +22,7 @@ class NetatmoChartLine extends React.Component {
     render() {
         return(
             this.props.loading ? (null) : (
-                <AreaChart
+                <BarChart
                     width={this.props.width}
                     height={75}
                     data={this.props.data}
@@ -33,8 +33,8 @@ class NetatmoChartLine extends React.Component {
                     <YAxis tick={{fontSize: '10px'}} minTickGap={1} />
                     <XAxis dataKey='name' hide={true} minTickGap={1} />
                     {/*<Tooltip />*/}
-                    <Area type='monotone' dataKey={this.props.selected_type} stroke={this.props.color} fill='rgba(148,159,177,0.2)' strokeWidth={2}/>
-                </AreaChart>
+                    <Bar dataKey={this.props.selected_type} fill={this.props.color} minPointSize={1}/>
+                </BarChart>
                 )
         )
     }

@@ -1,19 +1,19 @@
 # CBatmo
 *A **Netatmo Weather Station** Web-APP for Raspberry Pi &amp; official Raspberry touchscreen.*
 
-![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/master/screenshots/screenshot_005.png)
+![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.0.0-dev/screenshots/screenshot_006.png)
 
-![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/master/screenshots/screenshot_004.png)
+![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.0.0-dev/screenshots/screenshot_008.png)
 
 For my Netatmo Weather Station I was looking for a display information to have a quick look 
 of the measures done by the station. I looked at the WEB to find something but finally did not 
 find what I was really looking for. Then, I decided to use one of my Pi to develop a small touch 
 application and finally share a part of my work.
 
-This is a rewrite of my current APP which include **Netatmo API, Google Calendar API, 
+This is a rewrite of a first version of my APP which included **Netatmo API, Google Calendar API, 
 Swiss Weather forecast API and WebcamTravel API**. For this public 
-release I have removed Google Cal API, WebcamTraval API and change Swiss Weather 
-API by Dark Sky API.
+release I removed Google Calendar API, WebcamTraval API and change Swiss Weather 
+API by Dark Sky API. The first proposal can be found in the [Netatmo forum](https://forum.netatmo.com/viewtopic.php?f=5&t=14458)
 
 ## About 2.0.0-dev git branch
 This is the development branch for the next CBatmo version which will rework and include more features.
@@ -26,6 +26,8 @@ This is the development branch for the next CBatmo version which will rework and
 * Bind Netatmo user configuration for unit and lang to Darksky API and UI
 * General performance improvements to have better control of React component mount when data did not change
 * Few crashes fix to keep the app alive without the message "Something went wrong" and obligation to reload the all app!!!
+* New Charts to display the last 12 hours of data
+* Charts can now be change to see data for other measure (click the value of which you want to see the chart)
 
 ~~This is a work in progress and could not work ! I will tell you when this branch will be ready for test.~~
 There is still some work to do but this version should now work without major issues.
@@ -47,10 +49,6 @@ any intelligence to manage modules, means they are hard coded in the frontend (t
 adapted in the future...).
 
 Currently the app support English and French languages and the configuration of the locale is taken by Netatmo settings. If you're station is in French you will have this app in French, for all other languages the fallback locale is English.
-
-### Next development focus by priorities
-* Dynamically recognize available Netatmo modules
-* Bind Dark sky units from Netatmo settings (latitude / longitude and language now taken from Netatmo)
 
 ## How to try this APP
 First you will need to have [NodeJS](https://nodejs.org/en/) installed and as an option [yarn](https://yarnpkg.com/en/) but this is not mandatory as NodeJS provide npm package manager.

@@ -1,3 +1,6 @@
+/**
+ * Darksky Data DTO
+ */
 class DarkskyData {
     constructor(data) {
         this.last_status_store = data.currently.time;

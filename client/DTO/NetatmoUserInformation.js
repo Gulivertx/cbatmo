@@ -1,4 +1,6 @@
 /**
+ * Netatmo User information DTO
+ *
  * unit : 0 -> metric system, 1 -> imperial system
  * windunit: 0 -> kph, 1 -> mph, 2 -> ms, 3 -> beaufort, 4 -> knot
  * pressureunit: 0 -> mbar, 1 -> inHg, 2 -> mmHg

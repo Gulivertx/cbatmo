@@ -1,5 +1,5 @@
 /**
- * NAModule1 : Outdoor
+ * Outdoor module DTO
  */
 class NetatmoModuleOutdoor {
     constructor(data) {

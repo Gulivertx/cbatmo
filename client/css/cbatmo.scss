@@ -103,6 +103,11 @@ p {
   text-transform: uppercase;
 }
 
+.text-glow {
+  //text-shadow: 0 0 5px $white;
+  font-weight: 600;
+}
+
 *, *:active, *:active, *:hover {
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

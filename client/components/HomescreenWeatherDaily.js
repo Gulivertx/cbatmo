@@ -1,19 +1,11 @@
 import React from 'react';
 import cx from 'classnames';
 import WeatherIcon from "./WeatherIcon";
-import moment from "moment/moment";
+import {momentWithLocale} from '../utils/tools'
 import PropTypes from "prop-types";
 
 const HomescreenWeatherDaily = ({data, day, locale}) => {
-    // Set locale for moment
-    if (locale === 'fr') {
-        console.debug('Set moment to fr');
-        require('moment/locale/fr');
-        moment.locale('fr');
-    } else {
-        moment.locale('en');
-        console.debug('Set moment to en')
-    }
+    let moment = momentWithLocale(locale);
 
     return (
         <div className={cx('col-hourly', day === 5 && 'no-right-border')}>

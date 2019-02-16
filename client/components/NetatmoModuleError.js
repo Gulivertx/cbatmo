@@ -9,8 +9,8 @@ const NetatmoModuleError = ({data}) => {
     return (
         <div className='row'>
             <div style={{float: 'left', height: '85px', width: '100%'}}>
-                <p className='text-center'>Ce module ne peut pas joindre la Station. Vérifiez l'état des piles ou rapprochez-le de la Station.</p>
-                {data.last_seen && <p className='text-center'>Vu pour la dernière fois le : {moment.unix(data.last_seen).format('DD.MM.YYYY HH:mm')}.</p>}
+                <p className='text-center'>This module cannot reach the Station. Check the battery status or bring it closer to the Station</p>
+                {data.last_seen && <p className='text-center'>Last seen : {moment.unix(data.last_seen).format('DD.MM.YYYY HH:mm')}</p>}
             </div>
 
         </div>
