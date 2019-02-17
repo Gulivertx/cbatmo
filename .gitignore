@@ -32,4 +32,4 @@ node_modules/
 Thumbs.db
 views/index.ejs
 
-config/api.json
+#config/api.json
