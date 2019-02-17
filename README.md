@@ -42,7 +42,7 @@ Netatmo settings. If you're station is in French you will have this app in Frenc
 languages the fallback locale is English.
 
 ## How to try this APP
-### Build for development (from a MacoS, Linux or Windows computer)
+### Build for development (from a MacOS, Linux or Windows computer)
 First you will need to have [NodeJS](https://nodejs.org/en/) installed and as an option [yarn](https://yarnpkg.com/en/) but this is not mandatory as NodeJS provide npm package manager.
 
 From your computer, clone the repo, install node_modules dependencies, edit the api.json and 
