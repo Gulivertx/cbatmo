@@ -29,8 +29,7 @@ API by Dark Sky API. The first proposal can be found in the [Netatmo forum](http
 ***The design of the frontend is still not adapted to be responsive and would be done in a next release. Because this, if you want to use another screen resolution or do not have the same module as mine (MAIN, OUTDOOR, INDOOR, RAIN and WIND) you will get mess and have to adapt the CSS code to match with your screen.***
 
 ## Development
-This project is a Web APP write in Javascript with **ReactJS, Redux** for the frontend and **ExpressJS** 
-for the backend.
+This project is a Web APP write in Javascript with **[ReactJS](https://reactjs.org/), [Redux](https://redux.js.org/)** for the frontend and **[ExpressJS](https://expressjs.com/)** for the backend.
 
 The main focus of this app is :
 * Must works well with a Raspberry Pi 3
