@@ -21,6 +21,20 @@ class NetatmoStationData {
         this.last_status_store = data.last_status_store;
         this.module_name = data.module_name;
         this.wifi_status = data.wifi_status;
+
+        // Set Wifi status
+        switch (true) {
+            case (data.wifi_status >= 86):
+                this.wifi = 'bad';
+                break;
+            case (data.wifi_status < 86 && data.wifi_status > 56):
+                this.wifi = 'average';
+                break;
+            case (data.wifi_status <= 56):
+                this.wifi = 'good';
+                break;
+        }
+
         this.reachable = data.reachable;
         this.station_name = data.station_name;
         this.data_type = data.data_type;
@@ -49,6 +63,7 @@ class NetatmoStationData {
             }
         }
 
+        // Set data for all installed modules
         this.available_modules = {
             'OUTDOOR': false,
             'INDOOR': false,

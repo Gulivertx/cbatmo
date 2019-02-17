@@ -31,7 +31,7 @@ class NetatmoChartLine extends React.Component {
                 >
                     <CartesianGrid stroke='rgba(57, 70, 80, 0.4)'/>
                     <YAxis tick={{fontSize: '10px'}} minTickGap={1} />
-                    <XAxis dataKey='name' hide={true} minTickGap={1} />
+                    <XAxis dataKey='name' hide={true} minTickGap={1} interval={0}/>
                     {/*<Tooltip />*/}
                     <Area type='monotone' dataKey={this.props.selected_type} stroke={this.props.color} fill='rgba(148,159,177,0.2)' strokeWidth={2}/>
                 </AreaChart>

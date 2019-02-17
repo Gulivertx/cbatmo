@@ -29,16 +29,6 @@ class Netatmo extends React.Component {
         }, refreshTime);
     }
 
-    radioStatusQuality = (value) => {
-        if (value < 56) {
-            return 'text-green';
-        } else if (value >= 56 && value < 71) {
-            return 'text-yellow';
-        } else if (value >= 71) {
-            return 'text-red';
-        }
-    };
-
     colorSelector = (color) => {
         switch (color) {
             case 'yellow':
@@ -67,17 +57,45 @@ class Netatmo extends React.Component {
         return color;
     };
 
-    batteryStatusQuality = (value) => {
-        if (value > 80) {
-            return 'text-green';
-        } else if (value <= 80 && value > 60) {
-            return 'text-cyan';
-        } else if (value <= 60 && value > 40) {
-            return 'text-blue';
-        } else if (value <= 40 && value > 20) {
-            return 'text-yellow';
-        } else if (value <= 20) {
-            return 'text-red';
+    setWifiStatusIcon = (status) => {
+        switch (status) {
+            case 'bad':
+                return 'header-icon mdi mdi-wifi-strength-1';
+            case 'average':
+                return 'header-icon mdi mdi-wifi-strength-2';
+            case 'good':
+                return 'header-icon mdi mdi-wifi-strength-4'
+        }
+    };
+
+    setRadioStatusIcon = (status) => {
+        switch (status) {
+            case 'very-low':
+                return 'header-icon mdi mdi-network-strength-1';
+            case 'low':
+                return 'header-icon mdi mdi-network-strength-2';
+            case 'medium':
+                return 'header-icon mdi mdi-network-strength-3';
+            case 'high':
+                return 'header-icon mdi mdi-network-strength-4';
+        }
+    };
+
+    setBatteryStatusIcon = (status) => {
+        switch (status) {
+            case 'very-low':
+                return 'header-icon mdi mdi-battery-10';
+            case 'low':
+                return 'header-icon mdi mdi-battery-30';
+            case 'medium':
+                return 'header-icon mdi mdi-battery-50';
+            case 'high':
+                return 'header-icon mdi mdi-battery-70';
+            case 'full':
+                return 'header-icon mdi mdi-battery-90';
+            case 'max':
+                return 'header-icon mdi mdi-battery';
+
         }
     };
 
@@ -97,7 +115,7 @@ class Netatmo extends React.Component {
                         <div className="card">
                             <div className='card__header'>{this.props.station_data.module_name}
                                 <div className='pull-right'>
-                                    <span className={this.radioStatusQuality(this.props.station_data.wifi_status)}><i className="zmdi zmdi-wifi-alt"/></span>
+                                    <span className={this.setWifiStatusIcon(this.props.station_data.wifi)} />
                                 </div>
                             </div>
                             <div className="card-body">
@@ -122,7 +140,7 @@ class Netatmo extends React.Component {
                                                         main_selected_type: this.props.station_data.data_type[0],
                                                         main_selected_color: this.colorSelector('yellow')
                                                     })}>
-                                                        <i className='wi wi-thermometer'/> <span className={cx(this.state.main_selected_type === this.props.station_data.data_type[0] && 'text-glow')}>{this.props.station_data.data.temperature}°</span>
+                                                        <i className='wi wi-thermometer main-card-icon'/> <span className={cx(this.state.main_selected_type === this.props.station_data.data_type[0] && 'text-glow')}>{this.props.station_data.data.temperature}°</span>
                                                     </div>
                                                     <div className='hpa' onClick={() => this.setState({
                                                         main_selected_type: this.props.station_data.data_type[4],
@@ -166,13 +184,8 @@ class Netatmo extends React.Component {
                                 <div className="card">
                                     <div className='card__header'>{this.props.station_data.modules.INDOOR.module_name}
                                         <div className='pull-right'>
-                                                    <span className={this.batteryStatusQuality(this.props.station_data.modules.INDOOR.battery_percent)}>
-                                                        <i className="zmdi zmdi-battery-flash"/>
-                                                    </span>{' '}
-                                            <span className='battery-percent'>{this.props.station_data.modules.INDOOR.battery_percent}%</span>
-                                            <span className={this.radioStatusQuality(this.props.station_data.modules.INDOOR.rf_status)}>
-                                                        <i className="zmdi zmdi-portable-wifi"/>
-                                                    </span>
+                                            <span className={this.setBatteryStatusIcon(this.props.station_data.modules.INDOOR.battery)} style={{paddingRight: '4px'}}/>
+                                            <span className={this.setRadioStatusIcon(this.props.station_data.modules.INDOOR.radio)}/>
                                         </div>
                                     </div>
                                     <div className="card-body">
@@ -197,7 +210,7 @@ class Netatmo extends React.Component {
                                                                 indoor_selected_type: this.props.station_data.modules.INDOOR.data_type[0],
                                                                 indoor_selected_color: this.colorSelector('yellow')
                                                             })}>
-                                                                <i className='wi wi-thermometer'/> <span className={cx(this.state.indoor_selected_type === this.props.station_data.modules.INDOOR.data_type[0] && 'text-glow')}>{this.props.station_data.modules.INDOOR.data.temperature}°</span>
+                                                                <i className='wi wi-thermometer main-card-icon'/> <span className={cx(this.state.indoor_selected_type === this.props.station_data.modules.INDOOR.data_type[0] && 'text-glow')}>{this.props.station_data.modules.INDOOR.data.temperature}°</span>
                                                             </div>
                                                             <div className='humidity' onClick={() => this.setState({
                                                                 indoor_selected_type: this.props.station_data.modules.INDOOR.data_type[2],
@@ -231,13 +244,8 @@ class Netatmo extends React.Component {
                                 <div className="card">
                                     <div className='card__header'>{this.props.station_data.modules.RAIN.module_name}
                                         <div className='pull-right'>
-                                                    <span className={this.batteryStatusQuality(this.props.station_data.modules.RAIN.battery_percent)}>
-                                                        <i className="zmdi zmdi-battery-flash"/>
-                                                    </span>{' '}
-                                            <span className='battery-percent'>{this.props.station_data.modules.RAIN.battery_percent}%</span>
-                                            <span className={this.radioStatusQuality(this.props.station_data.modules.RAIN.rf_status)}>
-                                                        <i className="zmdi zmdi-portable-wifi"/>
-                                                    </span>
+                                            <span className={this.setBatteryStatusIcon(this.props.station_data.modules.RAIN.battery)} style={{paddingRight: '4px'}}/>
+                                            <span className={this.setRadioStatusIcon(this.props.station_data.modules.RAIN.radio)}/>
                                         </div>
                                     </div>
                                     <div className="card-body">
@@ -259,7 +267,7 @@ class Netatmo extends React.Component {
                                                     <div className='col2 weather-padding-left'>
                                                         <div className='card-body-weather-content'>
                                                             <div className='rain text-glow'>
-                                                                <i className='wi wi-raindrop'/> {this.props.station_data.modules.RAIN.data.rain.toFixed(1)}<small>mm</small>
+                                                                <i className='wi wi-raindrop main-card-icon'/> {this.props.station_data.modules.RAIN.data.rain.toFixed(1)}<small>mm</small>
                                                             </div>
                                                             <div className='rain24'><i
                                                                 className='wi wi-raindrop'/> {this.props.station_data.modules.RAIN.data.sum_rain_24.toFixed(1)}mm
@@ -284,13 +292,8 @@ class Netatmo extends React.Component {
                                 <div className="card">
                                     <div className='card__header'>{this.props.station_data.modules.OUTDOOR.module_name}
                                         <div className='pull-right'>
-                                                    <span className={this.batteryStatusQuality(this.props.station_data.modules.OUTDOOR.battery_percent)}>
-                                                        <i className="zmdi zmdi-battery-flash"/>
-                                                    </span>{' '}
-                                            <span className='battery-percent'>{this.props.station_data.modules.OUTDOOR.battery_percent}%</span>
-                                            <span className={this.radioStatusQuality(this.props.station_data.modules.OUTDOOR.rf_status)}>
-                                                        <i className="zmdi zmdi-portable-wifi"/>
-                                                    </span>
+                                            <span className={this.setBatteryStatusIcon(this.props.station_data.modules.OUTDOOR.battery)} style={{paddingRight: '4px'}}/>
+                                            <span className={this.setRadioStatusIcon(this.props.station_data.modules.OUTDOOR.radio)}/>
                                         </div>
                                     </div>
                                     <div className="card-body">
@@ -305,7 +308,7 @@ class Netatmo extends React.Component {
                                                                 data_type={this.props.station_data.modules.OUTDOOR.data_type}
                                                                 selected_type={this.state.outdoor_selected_type}
                                                                 color={this.state.outdoor_selected_color}
-                                                                width={340}
+                                                                width={310}
                                                             />
                                                         </div>
                                                     </div>
@@ -315,11 +318,11 @@ class Netatmo extends React.Component {
                                                                 outdoor_selected_type: this.props.station_data.modules.OUTDOOR.data_type[0],
                                                                 outdoor_selected_color: this.colorSelector('yellow')
                                                             })}>
-                                                                <i className='wi wi-thermometer'/> <span className={cx(this.state.outdoor_selected_type === this.props.station_data.modules.OUTDOOR.data_type[0] && 'text-glow')}>{this.props.station_data.modules.OUTDOOR.data.temperature}°</span>
+                                                                <i className='wi wi-thermometer main-card-icon'/> <span className={cx(this.state.outdoor_selected_type === this.props.station_data.modules.OUTDOOR.data_type[0] && 'text-glow')}>{this.props.station_data.modules.OUTDOOR.data.temperature}°</span>
                                                             </div>
                                                             <div className='humidity' onClick={() => this.setState({
                                                                 outdoor_selected_type: this.props.station_data.modules.OUTDOOR.data_type[1],
-                                                                outdoor_selected_color: this.colorSelector('yellow')
+                                                                outdoor_selected_color: this.colorSelector('blue')
                                                             })}>
                                                                 <i className='wi wi-humidity'/> <span className={cx(this.state.outdoor_selected_type === this.props.station_data.modules.OUTDOOR.data_type[1] && 'text-glow')}>{this.props.station_data.modules.OUTDOOR.data.humidity}%</span>
                                                             </div>
@@ -344,12 +347,8 @@ class Netatmo extends React.Component {
                                 <div className="card">
                                     <div className='card__header'>{this.props.station_data.modules.WIND.module_name}
                                         <div className='pull-right'>
-                                                    <span className={this.batteryStatusQuality(this.props.station_data.modules.WIND.battery_percent)}>
-                                                        <i className="zmdi zmdi-battery-flash"/>
-                                                    </span>{' '}<span className='battery-percent'>{this.props.station_data.modules.WIND.battery_percent}%</span>
-                                            <span className={this.radioStatusQuality(this.props.station_data.modules.WIND.rf_status)}>
-                                                        <i className="zmdi zmdi-portable-wifi"/>
-                                                    </span>
+                                            <span className={this.setBatteryStatusIcon(this.props.station_data.modules.WIND.battery)} style={{paddingRight: '4px'}}/>
+                                            <span className={this.setRadioStatusIcon(this.props.station_data.modules.WIND.radio)}/>
                                         </div>
                                     </div>
                                     <div className="card-body">
@@ -363,8 +362,8 @@ class Netatmo extends React.Component {
                                                     </div>
                                                     <div className='col2 weather-padding-left'>
                                                         <div className='card-body-weather-content'>
-                                                            <div className='temperature'><i
-                                                                className='wi wi-small-craft-advisory'/> {this.props.station_data.modules.WIND.data.wind_strength}{this.props.user.windunit}
+                                                            <div className='temperature text-glow'>
+                                                                <i className='wi wi-small-craft-advisory main-card-icon'/> {this.props.station_data.modules.WIND.data.wind_strength}{this.props.user.windunit}
                                                             </div>
                                                             <div className='humidity'><i className='wi wi-strong-wind'/> {this.props.station_data.modules.WIND.data.gust_strength}{this.props.user.windunit}
                                                             </div>
