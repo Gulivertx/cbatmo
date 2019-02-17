@@ -72,6 +72,7 @@ The steps is the same development build just some the command to build change, b
 git clone https://github.com/Gulivertx/cbatmo.git
 cd cbatmo
 yarn # or npm install
+# Edit config/api.json
 ./deploy.sh
 ```
 
