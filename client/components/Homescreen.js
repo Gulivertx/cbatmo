@@ -19,7 +19,7 @@ const transitionStyles = {
     entered: {opacity: 1},
 };
 
-const intervalMinutes = 10, refreshTime = intervalMinutes * 60 * 1000;
+const intervalMinutes = 1, refreshTime = intervalMinutes * 60 * 1000;
 
 class Homescreen extends React.Component {
     constructor(props) {
@@ -51,15 +51,15 @@ class Homescreen extends React.Component {
             <Transition in={this.state.startAnimation} timeout={duration} appear={true} unmountOnExit={true} mountOnEnter={true}>
                 {(state) => (
                     <div className='full-screen' style={{...defaultStyle, ...transitionStyles[state]}}>
-                        <HomescrrenAppInfo appInfo={this.props.appInfo}/>
+                        <HomescrrenAppInfo appInfo={this.props.info}/>
                         <HomescreenDateTime locale={this.props.locale}/>
-                        {
-                            this.props.darkskyIsFirstFetch || this.props.netatmoIsFirstFetch ? null : (
-                                <ErrorBoundary>
+                        <ErrorBoundary>
+                            {
+                                !this.props.first_fetch && (
                                     <HomescreenWeather darkskyData={this.props.darkskyData} netatmoData={this.props.netatmoData} locale={this.props.locale}/>
-                                </ErrorBoundary>
-                            )
-                        }
+                                )
+                            }
+                        </ErrorBoundary>
                     </div>
                 )}
             </Transition>
@@ -68,12 +68,12 @@ class Homescreen extends React.Component {
 };
 
 Homescreen.propTypes = {
-    darkskyData: PropTypes.object.isRequired,
+    darkskyData: PropTypes.object,
     netatmoData: PropTypes.object.isRequired,
-    darkskyIsFirstFetch: PropTypes.bool.isRequired,
-    netatmoIsFirstFetch: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
+    first_fetch: PropTypes.bool.isRequired,
     fetchDarksky: PropTypes.func.isRequired,
-    appInfo: PropTypes.object.isRequired,
+    info: PropTypes.object.isRequired,
     locale: PropTypes.string.isRequired,
 };
 

@@ -1,8 +1,5 @@
 import React from 'react';
-import moment from "moment/moment";
-import 'moment/locale/fr-ch';
-
-moment.locale('en');
+import {momentWithLocale} from '../utils/tools';
 
 class HomescreenDateTime extends React.Component {
     state = {
@@ -15,16 +12,6 @@ class HomescreenDateTime extends React.Component {
     };
 
     componentDidMount() {
-        // Set locale for moment
-        if (this.props.locale === 'fr') {
-            console.log('Set moment to fr');
-            require('moment/locale/fr');
-            moment.locale('fr');
-        } else {
-            moment.locale('en');
-            console.log('Set moment to en')
-        }
-
         this.clock();
 
         this.interval = setInterval(() => {
@@ -37,6 +24,7 @@ class HomescreenDateTime extends React.Component {
     }
 
     clock = () => {
+        let moment = momentWithLocale(this.props.locale);
         const date = moment();
 
         this.setState({

@@ -1,29 +1,27 @@
 import {connect} from 'react-redux'
-import * as actions from '../actions'
+import * as applicationActions from '../store/application/actions'
 import App from "../components/App"
 
 const mapStateToProps = state => {
     return {
-        isNetatmoAuth: state.main.isNetatmoAuth,
-        isSwissWeatherAuth: state.main.isSwissWeatherAuth,
-        isLoading: state.main.isLoading,
-        isAppConfigured: state.main.isAppConfigured,
-        appSettingsStep: state.main.appSettingsStep,
-        homeScreenOpen: state.main.homeScreenOpen,
-        appInfo: state.main.appInfo
+        loading: state.application.loading,
+        isConfigured: state.application.isConfigured,
+        isHomeScreenOpen: state.application.isHomeScreenOpen,
+        info: state.application.info,
+        settingsStep: state.application.settingsStep
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         initApp: () => {
-            dispatch(actions.fetchAppInfo())
+            dispatch(applicationActions.fetchInfo())
         },
-        changeAppSettingsStep: (step) => {
-            dispatch(actions.changeAppSettingsStep(step))
+        homescreenOpen: (bool) => {
+            dispatch(applicationActions.homescreenOpen(bool))
         },
-        changeHomescreenOpen: (bool) => {
-            dispatch(actions.changeHomescreenOpen(bool))
+        appSettingsStep: (step) => {
+            dispatch(applicationActions.settingsStep(step))
         }
     }
 };

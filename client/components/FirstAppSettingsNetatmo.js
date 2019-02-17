@@ -11,8 +11,8 @@ class FirstAppSettingsNetatmo extends React.Component {
     };
 
     componentDidUpdate(prevProps) {
-        if (this.props.authResult !== prevProps.authResult) {
-            this.props.authResult.error && this.setState({error: this.props.authResult.error})
+        if (this.props.auth_errors !== prevProps.auth_errors) {
+            this.props.auth_errors && this.setState({error: this.props.auth_errors.error})
         }
     }
 
@@ -22,7 +22,7 @@ class FirstAppSettingsNetatmo extends React.Component {
         if (!this.state.nameInput) return this.setState({error: 'Email cannot be blank'});
         if (!this.state.passwordInput) return this.setState({error: 'Password cannot be blank'});
 
-        this.props.fetchNetatmoAuth(this.state.nameInput, this.state.passwordInput);
+        this.props.fetchAuth(this.state.nameInput, this.state.passwordInput);
     };
 
     render() {
@@ -70,9 +70,8 @@ class FirstAppSettingsNetatmo extends React.Component {
 }
 
 FirstAppSettingsNetatmo.propType = {
-    authResult: PropTypes.object,
-    isFetchingAuth: PropTypes.bool.isRequired,
-    fetchNetatmoAuth: PropTypes.func.isRequired,
+    loading_auth: PropTypes.bool.isRequired,
+    fetchAuth: PropTypes.func.isRequired,
 };
 
 export default FirstAppSettingsNetatmo

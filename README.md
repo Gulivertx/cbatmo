@@ -1,19 +1,30 @@
 # CBatmo
 *A **Netatmo Weather Station** Web-APP for Raspberry Pi &amp; official Raspberry touchscreen.*
 
-![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/master/screenshots/screenshot_005.png)
+![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.0.0-dev/screenshots/screenshot_006.png)
 
-![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/master/screenshots/screenshot_004.png)
+![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.0.0-dev/screenshots/screenshot_008.png)
 
 For my Netatmo Weather Station I was looking for a display information to have a quick look 
 of the measures done by the station. I looked at the WEB to find something but finally did not 
 find what I was really looking for. Then, I decided to use one of my Pi to develop a small touch 
 application and finally share a part of my work.
 
-This is a rewrite of my current APP which include **Netatmo API, Google Calendar API, 
+This is a rewrite of a first version of my APP which included **Netatmo API, Google Calendar API, 
 Swiss Weather forecast API and WebcamTravel API**. For this public 
-release I have removed Google Cal API, WebcamTraval API and change Swiss Weather 
-API by Dark Sky API.
+release I removed Google Calendar API, WebcamTraval API and change Swiss Weather 
+API by Dark Sky API. The first proposal can be found in the [Netatmo forum](https://forum.netatmo.com/viewtopic.php?f=5&t=14458)
+
+### What's new in 2.0.0 ?
+* New Redux reducer / actions for a better store and more comprehensive code
+* New Data Transfert Object (DTO) to manage data received from Netatmo and Darksky API
+* Recognizing dynamically which Netatmo modules are connected to the station
+* Give an UI feedback if a module is unavailable (for instance no battery anymore...)
+* Bind Netatmo user configuration for unit and lang to Darksky API and UI
+* General performance improvements to have better control of React component mount when data did not change
+* Few crashes fix to keep the app alive without the message "Something went wrong" and obligation to reload the all app!!!
+* New Charts to display the last 12 hours of data
+* Charts can now be change to see data for other measure (click the value of which you want to see the chart)
 
 ## Development
 This project is a Web APP write in Javascript with **ReactJS, Redux** for the frontend and **ExpressJS** 
@@ -24,18 +35,13 @@ The main focus of this app is :
 * Optimized for a official Raspberry Pi touch monitor 7" (800x480)
 * Design to use 5 Netatmo modules (main, external, second internal, rain and wind)
 
-The design of the frontend is not responsive, if you want to use another screen resolution you will 
-certainly get mess and have to adapt the CSS code to match with your screen.
+The design of the frontend is still not responsive, if you want to use another screen resolution or 
+do not have the same module as mine (MAIN, OUTDOOR, INDOOR, RAIN and WIND) you will certainly get 
+mess and have to adapt the CSS code to match with your screen. 
 
-If you don't have the same modules as mine you will also get mess because currently there is not 
-any intelligence to manage modules, means they are hard coded in the frontend (this part could be 
-adapted in the future...).
-
-Currently the app support English and French languages and the configuration of the locale is taken by Netatmo settings. If you're station is in French you will have this app in French, for all other languages the fallback locale is English.
-
-### Next development focus by priorities
-* Dynamically recognize available Netatmo modules
-* Bind Dark sky units from Netatmo settings (latitude / longitude and language now taken from Netatmo)
+Currently the app support English and French languages and the configuration of the locale is taken by 
+Netatmo settings. If you're station is in French you will have this app in French, for all other 
+languages the fallback locale is English.
 
 ## How to try this APP
 First you will need to have [NodeJS](https://nodejs.org/en/) installed and as an option [yarn](https://yarnpkg.com/en/) but this is not mandatory as NodeJS provide npm package manager.

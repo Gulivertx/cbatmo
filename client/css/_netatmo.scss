@@ -9,6 +9,14 @@
   padding-top: 6px;
 }
 
+.header-icon {
+  font-size: 16px;
+}
+
+.main-card-icon {
+  font-size: 20px !important;
+}
+
 .weather-padding-left {
   padding-left: 12px;
 }
@@ -31,13 +39,13 @@
   font-size: 15px;
 
   .wi {
-    font-size: 16px !important;
+    font-size: 16px;
   }
 
   .temperature {
     position: absolute;
     font-size: 27px;
-    font-weight: 500;
+    //font-weight: 500;
     color: $white;
 
     .wi {
@@ -99,7 +107,6 @@
   .rain {
     position: absolute;
     font-size: 27px;
-    font-weight: 500;
     color: $white;
 
     .wi {
@@ -168,12 +175,12 @@
   width: 58.33333333%;
 
   .col1 {
-    width: 80.66666667%;
+    width: 74.66666667%;
     float: left;
   }
 
   .col2 {
-    width: 19.33333333%;
+    width: 25.33333333%;
     float: left;
   }
 }

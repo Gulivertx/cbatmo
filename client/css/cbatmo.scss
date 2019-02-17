@@ -1,4 +1,4 @@
-@import "~material-design-iconic-font/dist/css/material-design-iconic-font.css";
+@import "~@mdi/font/css/materialdesignicons.css";
 @import "~weather-icons2/css/weather-icons.css";
 @import "~weather-icons2/css/weather-icons-wind.css";
 @import "~reboot.css/dist/reboot.css";
@@ -72,6 +72,7 @@ p {
   height: 100%;
   //width: 754px;
   padding: 15px;
+  width: 100%;
 }
 
 .background {
@@ -100,6 +101,11 @@ p {
 
 .text-uppercase {
   text-transform: uppercase;
+}
+
+.text-glow {
+  //text-shadow: 0 0 5px $white;
+  font-weight: 600;
 }
 
 *, *:active, *:active, *:hover {
