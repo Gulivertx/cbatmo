@@ -15,9 +15,6 @@ Swiss Weather forecast API and WebcamTravel API**. For this public
 release I removed Google Calendar API, WebcamTraval API and change Swiss Weather 
 API by Dark Sky API. The first proposal can be found in the [Netatmo forum](https://forum.netatmo.com/viewtopic.php?f=5&t=14458)
 
-## About 2.0.0-dev git branch
-This is the development branch for the next CBatmo version which will rework and include more features.
-
 ### What's new in 2.0.0 ?
 * New Redux reducer / actions for a better store and more comprehensive code
 * New Data Transfert Object (DTO) to manage data received from Netatmo and Darksky API
@@ -29,9 +26,6 @@ This is the development branch for the next CBatmo version which will rework and
 * New Charts to display the last 12 hours of data
 * Charts can now be change to see data for other measure (click the value of which you want to see the chart)
 
-~~This is a work in progress and could not work ! I will tell you when this branch will be ready for test.~~
-There is still some work to do but this version should now work without major issues.
-
 ## Development
 This project is a Web APP write in Javascript with **ReactJS, Redux** for the frontend and **ExpressJS** 
 for the backend.
@@ -41,14 +35,13 @@ The main focus of this app is :
 * Optimized for a official Raspberry Pi touch monitor 7" (800x480)
 * Design to use 5 Netatmo modules (main, external, second internal, rain and wind)
 
-The design of the frontend is not responsive, if you want to use another screen resolution you will 
-certainly get mess and have to adapt the CSS code to match with your screen.
+The design of the frontend is still not responsive, if you want to use another screen resolution or 
+do not have the same module as mine (MAIN, OUTDOOR, INDOOR, RAIN and WIND) you will certainly get 
+mess and have to adapt the CSS code to match with your screen. 
 
-If you don't have the same modules as mine you will also get mess because currently there is not 
-any intelligence to manage modules, means they are hard coded in the frontend (this part could be 
-adapted in the future...).
-
-Currently the app support English and French languages and the configuration of the locale is taken by Netatmo settings. If you're station is in French you will have this app in French, for all other languages the fallback locale is English.
+Currently the app support English and French languages and the configuration of the locale is taken by 
+Netatmo settings. If you're station is in French you will have this app in French, for all other 
+languages the fallback locale is English.
 
 ## How to try this APP
 First you will need to have [NodeJS](https://nodejs.org/en/) installed and as an option [yarn](https://yarnpkg.com/en/) but this is not mandatory as NodeJS provide npm package manager.
