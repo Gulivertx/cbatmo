@@ -66,7 +66,7 @@ Now you should be able to reach the application from your favorite browser http:
 If you want the correct size of display, from Chrome for instance, open the chrome-dev-tools, 
 set the display to **responsive** and choose a resolution of **800x480**.
 
-### Build for production (from a MacoS, Linux or Windows computer)
+### Build for production (from a MacOS, Linux or Windows computer)
 The steps is the same development build just some the command to build change, but here is the whole steps.
 
 ```bash
