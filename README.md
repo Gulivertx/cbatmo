@@ -1,9 +1,9 @@
 # CBatmo
 *A **Netatmo Weather Station** Web-APP for Raspberry Pi &amp; official Raspberry touchscreen.*
 
-![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.0.0-dev/screenshots/screenshot_006.png)
+![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.0.0-dev/screenshots/screenshot_009.png)
 
-![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.0.0-dev/screenshots/screenshot_008.png)
+![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.0.0-dev/screenshots/screenshot_010.png)
 
 For my Netatmo Weather Station I was looking for a display information to have a quick look 
 of the measures done by the station. I looked at the WEB to find something but finally did not 
@@ -19,7 +19,7 @@ API by Dark Sky API. The first proposal can be found in the [Netatmo forum](http
 * New Redux reducer / actions for a better store and more comprehensive code
 * New Data Transfert Object (DTO) to manage data received from Netatmo and Darksky API
 * Recognizing dynamically which Netatmo modules are connected to the station
-* Give an UI feedback if a module is unavailable (for instance no battery anymore...)
+* Give an UI feedback if a module is unavailable (See this [screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.0.0-dev/screenshots/screenshot_008.png) or [this one](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.0.0-dev/screenshots/screenshot_006.png))
 * Bind Netatmo user configuration for unit and lang to Darksky API and UI
 * General performance improvements to have better control of React component mount when data did not change
 * Few crashes fix to keep the app alive without the message "Something went wrong" and obligation to reload the all app!!!
