@@ -7,6 +7,8 @@ const mapStateToProps = state => {
     return {
         loading_station_data: state.netatmo.loading_station_data,
         station_data_errors: state.netatmo.station_data_errors,
+        info: state.application.info,
+        loading: state.application.loading,
     }
 };
 

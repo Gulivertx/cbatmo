@@ -1,0 +1,12 @@
+{
+  "netatmo": {
+    "api_url": "https://api.netatmo.com/",
+    "client_id": "YOUR_ID",
+    "client_secret": "YOUR_SECRET",
+    "username": "YOUR_USERNAME",
+    "password": "YOUR_PASSWORD"
+  },
+  "dark_sky": {
+    "secret_key": "YOUR_KEY"
+  }
+}

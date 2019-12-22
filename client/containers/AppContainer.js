@@ -4,11 +4,8 @@ import App from "../components/App"
 
 const mapStateToProps = state => {
     return {
-        loading: state.application.loading,
         isConfigured: state.application.isConfigured,
-        isHomeScreenOpen: state.application.isHomeScreenOpen,
         info: state.application.info,
-        settingsStep: state.application.settingsStep
     }
 };
 
@@ -16,12 +13,6 @@ const mapDispatchToProps = dispatch => {
     return {
         initApp: () => {
             dispatch(applicationActions.fetchInfo())
-        },
-        homescreenOpen: (bool) => {
-            dispatch(applicationActions.homescreenOpen(bool))
-        },
-        appSettingsStep: (step) => {
-            dispatch(applicationActions.settingsStep(step))
         }
     }
 };

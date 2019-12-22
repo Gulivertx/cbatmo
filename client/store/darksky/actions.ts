@@ -1,33 +1,34 @@
+import { Action } from 'redux'
+import { ApplicationState } from '../index'
+import { ThunkAction } from 'redux-thunk'
 import moment from "moment";
-
+import { DarkskyActionTypes } from "./types";
 import DarkskyData from '../../DTO/DarkskyData';
-
-export const REQUEST = '@@darksky/REQUEST';
-export const SUCCESS = '@@darksky/SUCCESS';
-export const FAILURE = '@@darksky/FAILURE';
 
 export const requestData = () => {
     return {
-        type: REQUEST
+        type: DarkskyActionTypes.REQUEST
     }
 };
 
-export const successData = (json) => {
+// Todo types
+export const successData = (json: any) => {
     return {
-        type: SUCCESS,
-        data: json,
+        type: DarkskyActionTypes.SUCCESS,
+        payload: json,
         receivedAt: Date.now()
     }
 };
 
-export const failureData = (error) => {
+// Todo types
+export const failureData = (error: any) => {
     return {
-        type: FAILURE,
+        type: DarkskyActionTypes.FAILURE,
         error: error
     }
 };
 
-export const fetchDarksky = () => {
+export const fetchDarksky = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         if (getState().darksky.updated_at === null || getState().darksky.updated_at !== null && moment(moment()).diff(getState().darksky.updated_at, 'minute') >= 10) {
             dispatch(requestData());
@@ -49,7 +50,7 @@ export const fetchDarksky = () => {
                 })
                 .catch(error => {
                     console.error(error)
-                    error.json().then(errorMessage => {
+                    error.json().then((errorMessage: any) => {
                         dispatch(failureData(errorMessage))
                     })
                 });

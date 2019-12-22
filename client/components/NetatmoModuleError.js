@@ -2,23 +2,42 @@ import React from 'react';
 import PropTypes from "prop-types";
 
 import moment from 'moment';
+import {Icon, Intent, Colors} from "@blueprintjs/core";
 
-//TODO translation
-const NetatmoModuleError = ({data}) => {
-
-    return (
-        <div className='row'>
-            <div style={{float: 'left', height: '85px', width: '100%'}}>
-                <p className='text-center'>This module cannot reach the Station. Check the battery status or bring it closer to the Station</p>
-                {data.last_seen && <p className='text-center'>Last seen : {moment.unix(data.last_seen).format('DD.MM.YYYY HH:mm')}</p>}
+const NetatmoModuleError = ({ data, small }) => {
+    if (small) {
+        return (
+            <div className="module-unreachable">
+                <div className="icon">
+                    <Icon icon="warning-sign" iconSize={Icon.SIZE_LARGE} intent={Intent.WARNING} />
+                </div>
+                <div className="description-wrapper">
+                    <div className="description-small" style={{ color: Colors.GRAY3 }}>The module {data.module_name} is unavailable</div>
+                </div>
             </div>
-
-        </div>
-    )
+        )
+    } else {
+        return (
+            <div className="module-unreachable">
+                <div className="icon">
+                    <Icon icon="warning-sign" iconSize={Icon.SIZE_LARGE} intent={Intent.WARNING} />
+                </div>
+                <div className="description-wrapper">
+                    <div className="description" style={{ color: Colors.GRAY3 }}>The module {data.module_name} cannot reach the Station. Check the battery status or bring it closer to the Station</div>
+                    {
+                        data.last_seen && (
+                            <div className="last-seen" style={{ color: Colors.GRAY3 }}>Last seen : {moment.unix(data.last_seen).format('DD.MM.YYYY HH:mm')}</div>
+                        )
+                    }
+                </div>
+            </div>
+        )
+    }
 };
 
 NetatmoModuleError.propTypes = {
     data: PropTypes.object.isRequired,
+    small: PropTypes.bool,
 };
 
 export default NetatmoModuleError;

@@ -3,7 +3,7 @@ import NetatmoModuleIndoor from './NetatmoModuleIndoor';
 import NetatmoModuleRain from './NetatmoModuleRain';
 import NetatmoModuleWind from './NetatmoModuleWind';
 
-const MODULE_TYPE = {
+export const MODULE_TYPE = {
     MAIN: 'NAMain',
     INDOOR: 'NAModule4',
     OUTDOOR: 'NAModule1',

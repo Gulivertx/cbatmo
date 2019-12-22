@@ -1,12 +1,11 @@
 import {connect} from 'react-redux'
 import * as netatmoActions from '../store/netatmo/actions'
-import NetatmoChartLine from "../components/NetatmoChartLine";
+import NetatmoChartsLine from "../components/NetatmoChartsLine";
 
 const mapStateToProps = state => {
     return {
         loading: state.netatmo.loading_indoor,
         data: state.netatmo.measure_indoor_data,
-        labels: state.netatmo.measure_indoor_labels
     }
 };
 
@@ -21,6 +20,6 @@ const mapDispatchToProps = dispatch => {
 const NetatmoIndoorChartContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(NetatmoChartLine);
+)(NetatmoChartsLine);
 
 export default NetatmoIndoorChartContainer

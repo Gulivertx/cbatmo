@@ -1,28 +1,27 @@
 import React from 'react';
+import cx from 'classnames';
 
 const WeatherIcon = ({condition}) => {
-    const defaultClass = 'text-white wi large ';
-
     const setIcon = (condition) => {
         switch (condition) {
-            case 'clear-day': return defaultClass + 'wi-day-sunny';
-            case 'clear-night': return  defaultClass + 'wi-night-clear';
-            case 'rain': return  defaultClass + 'wi-rain';
-            case 'snow': return  defaultClass + 'wi-snow';
-            case 'sleet': return  defaultClass + 'wi-snow';
-            case 'wind': return  defaultClass + 'wi-strong-wind';
-            case 'fog': return  defaultClass + 'wi-fog';
-            case 'cloudy': return  defaultClass + 'wi-day-cloudy';
-            case 'partly-cloudy-day': return  defaultClass + 'wi-day-cloudy';
-            case 'partly-cloudy-night': return  defaultClass + 'wi-night-alt-cloudy';
-            case 'hail': return  defaultClass + 'wi-hail';
-            case 'thunderstorm': return  defaultClass + 'wi-thunderstorm';
-            case 'tornado': return  defaultClass + 'wi-tornado';
+            case 'clear-day': return 'wi-day-sunny';
+            case 'clear-night': return 'wi-night-clear';
+            case 'rain': return 'wi-rain';
+            case 'snow': return 'wi-snow';
+            case 'sleet': return 'wi-snow';
+            case 'wind': return 'wi-strong-wind';
+            case 'fog': return 'wi-fog';
+            case 'cloudy': return 'wi-day-cloudy';
+            case 'partly-cloudy-day': return 'wi-day-cloudy';
+            case 'partly-cloudy-night': return 'wi-night-alt-cloudy';
+            case 'hail': return 'wi-hail';
+            case 'thunderstorm': return 'wi-thunderstorm';
+            case 'tornado': return 'wi-tornado';
         }
     };
 
     return (
-        <i className={setIcon(condition)}/>
+        <i className={cx('wi wi-fw', setIcon(condition))}/>
     )
 };
 

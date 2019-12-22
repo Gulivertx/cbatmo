@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import * as darkskyActions from '../store/darksky/actions'
-import Homescreen from "../components/Homescreen";
+import Info from "../layouts/InfoLayout";
 
 const mapStateToProps = state => {
     return {
@@ -21,9 +21,9 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-const HomescreenContainer = connect(
+const InfoLayoutContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(Homescreen);
+)(Info);
 
-export default HomescreenContainer
+export default InfoLayoutContainer

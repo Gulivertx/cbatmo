@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import * as netatmoActions from '../store/netatmo/actions'
-import NetatmoChartLine from "../components/NetatmoChartLine";
+import NetatmoChartsLine from "../components/NetatmoChartsLine";
 
 const mapStateToProps = state => {
     return {
@@ -20,6 +20,6 @@ const mapDispatchToProps = dispatch => {
 const NetatmoMainModuleChartContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(NetatmoChartLine);
+)(NetatmoChartsLine);
 
 export default NetatmoMainModuleChartContainer

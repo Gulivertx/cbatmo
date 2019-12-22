@@ -14,7 +14,7 @@ const DarkSkyApi = require('dark-sky-api');
 const common = require('./config/common');
 const config = common.config();
 const appInfo = common.info();
-const apiConfig = require('./config/api');
+const apiConfig = require('./client/api');
 
 const app = express();
 
@@ -28,7 +28,7 @@ const logsDir = path.join(__dirname, 'logs');
 // Ensure logs directory exists
 fs.existsSync(logsDir) || fs.mkdirSync(logsDir);
 // Create a rotating write stream
-const accessLogStream = rfs('access.log', {
+const accessLogStream = rfs.createStream('access.log', {
     interval: '1d', // rotate daily
     path: logsDir
 });

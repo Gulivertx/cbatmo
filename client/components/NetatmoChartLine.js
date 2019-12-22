@@ -6,8 +6,7 @@ import { AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 const intervalMinutes = 1, refreshTime = intervalMinutes * 60 * 1000;
 
 class NetatmoChartLine extends React.Component {
-
-    componentWillMount() {
+    componentDidMount() {
         this.props.fetchMeasureData(this.props.device, this.props.module, this.props.data_type);
 
         this.interval = setInterval(() => {
@@ -24,7 +23,7 @@ class NetatmoChartLine extends React.Component {
             this.props.loading ? (null) : (
                 <AreaChart
                     width={this.props.width}
-                    height={75}
+                    height={this.props.height || 75}
                     data={this.props.data}
                     syncId="anyId"
                     margin={{top: 10, right: 0, left: -30, bottom: 0}}
@@ -49,7 +48,8 @@ NetatmoChartLine.propTypes = {
     selected_type: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired,
     fetchMeasureData: PropTypes.func.isRequired,
-    width: PropTypes.number.isRequired
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number
 };
 
 

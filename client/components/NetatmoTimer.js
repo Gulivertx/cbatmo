@@ -1,5 +1,7 @@
 import React from 'react';
-import {momentWithLocale} from '../utils/tools'
+import { Colors } from '@blueprintjs/core';
+
+import { momentWithLocale } from '../utils/tools'
 
 class NetatmoTimer extends React.Component {
     state = {
@@ -27,7 +29,7 @@ class NetatmoTimer extends React.Component {
 
     render() {
         return (
-            <small>{this.state.last_status_store}</small>
+            <div style={{ color: Colors.GRAY3, fontSize: '0.8rem' }}>{this.state.last_status_store}</div>
         )
     }
 }

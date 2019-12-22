@@ -1,4 +1,4 @@
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === 'analyse') {
 
 module.exports = {
     entry: {
-        'bundle': './client/index.js',
+        'bundle': './client/index.tsx',
         //'vendor': ['react', 'react-dom', 'react-redux', 'redux', 'redux-thunk', 'moment']
     },
     /*optimization: {
@@ -43,7 +43,7 @@ module.exports = {
         }
     },*/
     resolve: {
-        extensions: ['.js']
+        extensions: ['.js', '.ts', 'tsx']
     },
     module: {
         rules: [
@@ -99,7 +99,7 @@ module.exports = {
                                 quality: 65
                             },
                             pngquant: {
-                                quality: '65-90',
+                                quality: [0.65, 0.90],
                                 speed: 4
                             },
                             svgo: {
@@ -116,15 +116,9 @@ module.exports = {
                     }
                 ]
             },
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                exclude: /node_modules/
-            },
-            {
-                test: /\.html$/,
-                loader: 'html-loader'
-            }
+            { test: /\.(t|j)sx?$/, use: { loader: 'awesome-typescript-loader' }, exclude: /node_modules/ },
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+            { test: /\.html$/, loader: 'html-loader' }
         ]
     },
     plugins,
