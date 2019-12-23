@@ -13,8 +13,42 @@ DIRECTOY_NAME="${PWD##*/}"
 echo "CBATMO DEPLOY SCRIPT"
 echo "CBATMO VERSION ${VERSION}"
 echo "______________________________________________________"
-echo ""
 
+# Verify if .env file exist
+ENV_FILE=".env"
+if [ ! -f "$ENV_FILE" ]; then
+  echo ""
+  echo "${ENV_FILE} file do not exist!"
+
+  while true; do
+    read -p "Do you want to create a new one? " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit 0;;
+        * ) echo "Please answer yes or no";;
+    esac
+  done
+
+  touch .env
+  echo "APP_ENV=prod" >> $ENV_FILE
+  read -p "Please specify your Darksky secret key: " DARKSKY_SECRET_KEY
+  echo "DARKSKY_SECRET_KEY=${DARKSKY_SECRET_KEY}" >> $ENV_FILE
+  read -p "Please specify your Netatmo client id: " NETATMO_CLIENT_ID
+  echo "NETATMO_CLIENT_ID=${NETATMO_CLIENT_ID}" >> $ENV_FILE
+  read -p "Please specify your Netatmo client secret: " NETATMO_CLIENT_SECRET
+  echo "NETATMO_CLIENT_SECRET=${NETATMO_CLIENT_SECRET}" >> $ENV_FILE
+  read -p "Please specify your Netatmo username: " NETATMO_USERNAME
+  echo "NETATMO_USERNAME=${NETATMO_USERNAME}" >> $ENV_FILE
+  read -p "Please specify your Netatmo password: " NETATMO_PASSWORD
+  echo "NETATMO_PASSWORD=${NETATMO_PASSWORD}" >> $ENV_FILE
+fi
+
+# build for production
+echo ""
+echo "Build cbatmo for production"
+yarn run build
+
+echo ""
 echo "Start packaging version: ${VERSION}"
 
 # Move in the parent directory
@@ -51,7 +85,7 @@ done
 
 read -p "Please specify your Raspberry Pi username: " RPI_USER
 
-echo "Upload $TAR_NAME on your Raspberry Pi $RPI_IP"
+echo "Upload $TAR_NAME on your Raspberry Pi ${RPI_IP}"
 sftp $RPI_USER@$RPI_IP << SFTP_COMMANDS
   put $TAR_NAME
   quit
@@ -67,7 +101,7 @@ while true; do
     esac
 done
 
-echo "Install CBatmo on your Raspberry Pi $RPI_IP"
+echo "Install CBatmo on your Raspberry Pi ${RPI_IP}"
 ssh $RPI_USER@$RPI_IP << SSH_COMMANDS
   rm -Rf cbatmo
   tar xzf $TAR_NAME
@@ -80,3 +114,5 @@ ssh $RPI_USER@$RPI_IP << SSH_COMMANDS
   systemctl status cbatmo.service
   exit
 SSH_COMMANDS
+
+exit 0;
