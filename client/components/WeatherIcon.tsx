@@ -1,8 +1,12 @@
 import React from 'react';
 import cx from 'classnames';
 
-const WeatherIcon = ({condition}) => {
-    const setIcon = (condition) => {
+interface IPropsFromState {
+    condition: string
+}
+
+const WeatherIcon: React.FunctionComponent<IPropsFromState> = ({condition}) => {
+    const setIcon = (condition: string) => {
         switch (condition) {
             case 'clear-day': return 'wi-day-sunny';
             case 'clear-night': return 'wi-night-clear';

@@ -2,7 +2,7 @@ import React from 'react';
 import { Divider } from '@blueprintjs/core';
 
 /** React layouts **/
-import MainLayout from "../layouts/MainLayout";
+import MainLayout from '../layouts/MainLayout';
 
 /** React components **/
 import AppStartingContainer from "../containers/AppStartingContainer";

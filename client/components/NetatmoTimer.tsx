@@ -3,9 +3,20 @@ import { Colors } from '@blueprintjs/core';
 
 import { momentWithLocale } from '../utils/tools'
 
-class NetatmoTimer extends React.Component {
-    state = {
-        last_status_store: null
+interface IPropsFromState {
+    last_status_store: number
+    locale: string
+}
+
+interface IState {
+    last_status_store: string
+}
+
+class NetatmoTimer extends React.Component<IPropsFromState, IState> {
+    private interval: number | undefined;
+
+    public state = {
+        last_status_store: ''
     };
 
     componentDidMount() {

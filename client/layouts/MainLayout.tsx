@@ -1,29 +1,33 @@
 import React from 'react';
-import { Position, Toaster } from "@blueprintjs/core";
+import {Intent, Position, Toaster} from "@blueprintjs/core";
 
-export const ContextMainLayout = React.createContext();
+export const ContextMainLayout = React.createContext(undefined);
 ContextMainLayout.displayName = 'MainLayout';
 
 class MainLayout extends React.Component {
-    setToasterRef = ref => {
-        this.toaster = ref;
+    private toaster: Toaster | undefined;
+
+    private refHandlers = {
+        toaster: (ref: Toaster) => (this.toaster = ref),
     };
 
-    addToast = (icon, msg, intent, timeout = 4000) => {
+    private addToast = (icon: any, msg: string, intent: Intent, timeout: number = 4000) => {
+        // @ts-ignore
         this.toaster.show({icon: icon, message: msg, timeout: timeout, intent: intent});
     };
 
-    render() {
+    public render() {
         return (
             <div className="main-layout">
                 <ContextMainLayout.Provider
+                    // @ts-ignore
                     value={{
                         addToast: this.addToast
                     }}
                 >
                     {this.props.children}
                 </ContextMainLayout.Provider>
-                <Toaster autoFocus={false} usePortal={false} position={Position.TOP} ref={this.setToasterRef} />
+                <Toaster autoFocus={false} usePortal={false} position={Position.TOP} ref={this.refHandlers.toaster} />
             </div>
         );
     }

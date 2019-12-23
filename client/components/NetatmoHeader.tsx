@@ -2,7 +2,12 @@ import React from 'react';
 
 import NetatmoTimer from "./NetatmoTimer";
 
-const NetatmoHeader = ({ data, locale }) => {
+interface IPropsFromState {
+    data: any
+    locale: string
+}
+
+const NetatmoHeader: React.FunctionComponent<IPropsFromState> = ({ data, locale }) => {
     return (
         <div className="netatmo-header">
             <h3>{data.station_name}</h3>

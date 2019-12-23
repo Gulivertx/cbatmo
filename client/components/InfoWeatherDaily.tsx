@@ -1,11 +1,15 @@
 import React from 'react';
-import PropTypes from "prop-types";
-import {Colors} from "@blueprintjs/core";
+import { Colors } from "@blueprintjs/core";
 
 import WeatherIcon from "./WeatherIcon";
 import {momentWithLocale} from '../utils/tools'
 
-const InfoWeatherDaily = ({data, day, locale}) => {
+interface IPropsFromState {
+    data: any
+    locale: string
+}
+
+const InfoWeatherDaily: React.FunctionComponent<IPropsFromState> = ({data, locale}) => {
     let moment = momentWithLocale(locale);
 
     return (
@@ -20,12 +24,6 @@ const InfoWeatherDaily = ({data, day, locale}) => {
             <div className="icon"><WeatherIcon condition={data.icon}/></div>
         </div>
     )
-};
-
-InfoWeatherDaily.propTypes = {
-    data: PropTypes.object.isRequired,
-    day: PropTypes.number.isRequired,
-    locale: PropTypes.string.isRequired,
 };
 
 export default InfoWeatherDaily;

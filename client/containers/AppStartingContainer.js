@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import AppStarting from "../components/AppStarting."
+import AppStarting from "../components/AppStarting"
 import * as netatmoActions from "../store/netatmo/actions";
 import * as applicationActions from "../store/application/actions";
 

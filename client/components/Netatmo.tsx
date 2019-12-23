@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from "prop-types";
 import { Button, ButtonGroup, Alignment, Drawer, Position } from "@blueprintjs/core";
 
 import NetatmoHeader from "./NetatmoHeader";
@@ -8,12 +7,40 @@ import NetatmoModuleNAModule4 from "./NetatmoModuleNAModule4";
 import NetatmoModuleNAModule3 from "./NetatmoModuleNAModule3";
 import NetatmoModuleNAModule1 from "./NetatmoModuleNAModule1";
 import NetatmoModuleNAModule2 from "./NetatmoModuleNAModule2";
-import {MODULE_TYPE} from "../DTO/NetatmoStationData";
+import { MODULE_TYPE } from "../DTO/NetatmoStationData";
+import { ConnectedReduxProps } from "../store";
+import * as netatmoActions from "../store/netatmo/actions";
 
 const INTERVAL_IN_MINUTES = 1, REFRESH_TIME = INTERVAL_IN_MINUTES * 60 * 1000;
 
-class Netatmo extends React.Component {
-    state = {
+// Separate state props + dispatch props to their own interfaces.
+interface IPropsFromState {
+    loading_station_data: boolean
+    loading_refresh_token: boolean
+    station_data: any
+    locale: string
+    user: any
+}
+
+// We can use `typeof` here to map our dispatch types to the props, like so.
+interface IPropsFromDispatch {
+    [key: string]: any
+    fetchStationData: typeof netatmoActions.fetchStationData
+}
+
+// Combine both state + dispatch props - as well as any props we want to pass - in a union type.
+type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
+
+interface IState {
+    mainIsOpen: boolean
+    indoorIsOpen: boolean
+    outdoorIsOpen: boolean
+    rainIsOpen: boolean
+    windIsOpen: boolean
+}
+
+class Netatmo extends React.Component<AllProps, IState> {
+    public state: IState = {
         mainIsOpen: false,
         indoorIsOpen: false,
         outdoorIsOpen: false,
@@ -21,13 +48,13 @@ class Netatmo extends React.Component {
         windIsOpen: false,
     };
 
-    componentDidMount() {
+    public componentDidMount(): void {
         setInterval(() => {
             this.props.fetchStationData();
         }, REFRESH_TIME);
     }
 
-    handleModuleMainOpen = (module) => {
+    private handleModuleMainOpen = (module: string): void => {
         switch (module) {
             case MODULE_TYPE.MAIN:
                 this.setState({ mainIsOpen: true });
@@ -49,7 +76,7 @@ class Netatmo extends React.Component {
         }
     };
 
-    handleClose = (module) => {
+    private handleClose = (module: string): void => {
         switch (module) {
             case MODULE_TYPE.MAIN:
                 this.setState({ mainIsOpen: false });
@@ -71,7 +98,7 @@ class Netatmo extends React.Component {
         }
     };
 
-    render() {
+    public render() {
         const { station_data } = this.props;
 
         return (
@@ -89,7 +116,7 @@ class Netatmo extends React.Component {
                     <Button onClick={() => this.handleModuleMainOpen(station_data.type)}>{station_data.module_name}</Button>
 
                     {
-                        Object.values(station_data.modules).map((module, index) => <Button key={index} onClick={() => this.handleModuleMainOpen(module.type)}>{module.module_name}</Button>)
+                        Object.values(station_data.modules).map((module: any, index) => <Button key={index} onClick={() => this.handleModuleMainOpen(module.type)}>{module.module_name}</Button>)
                     }
                 </ButtonGroup>
 
@@ -127,14 +154,5 @@ class Netatmo extends React.Component {
         )
     }
 }
-
-Netatmo.propTypes = {
-    loading_station_data: PropTypes.bool.isRequired,
-    loading_refresh_token: PropTypes.bool.isRequired,
-    station_data: PropTypes.object.isRequired,
-    fetchStationData: PropTypes.func.isRequired,
-    locale: PropTypes.string.isRequired,
-    user: PropTypes.object.isRequired,
-};
 
 export default Netatmo

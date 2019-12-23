@@ -1,19 +1,20 @@
 import React from 'react';
 
-class ErrorBoundary extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { hasError: false };
-    }
+interface IState {
+    hasError: boolean
+}
 
-    componentDidCatch(error, info) {
+class ErrorBoundary extends React.Component {
+    public state: IState = { hasError: false };
+
+    public componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
         // Display fallback UI
         this.setState({ hasError: true });
         // You can also log the error to an error reporting service
-        console.error(error, info);
+        console.error(error, errorInfo);
     }
 
-    render() {
+    public render() {
         if (this.state.hasError) {
             // You can render any custom fallback UI
             return <div className='text-center'>

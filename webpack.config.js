@@ -29,7 +29,7 @@ module.exports = {
         'bundle': './client/index.tsx',
     },
     resolve: {
-        extensions: ['.js', '.ts', 'tsx']
+        extensions: ['.js', '.ts', '.tsx']
     },
     module: {
         rules: [

@@ -29,7 +29,7 @@ interface IPropsFromDispatch {
 type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 
 class AppStarting extends React.Component<AllProps> {
-    componentDidMount(): void {
+    public componentDidMount(): void {
         if (!this.props.refresh_token) {
             this.props.fetchAuth();
         } else {
@@ -37,7 +37,7 @@ class AppStarting extends React.Component<AllProps> {
         }
     }
 
-    componentDidUpdate(prevProps: Readonly<AllProps>, prevState: Readonly<{}>, snapshot?: any): void {
+    public componentDidUpdate(prevProps: Readonly<AllProps>, prevState: Readonly<{}>, snapshot?: any): void {
         if (prevProps.loading_station_data && prevProps.loading_station_data !== this.props.loading_station_data) {
             if (!this.props.station_data_errors) {
                 this.context.addToast('tick-circle', 'Configured with success, please wait...', Intent.SUCCESS);

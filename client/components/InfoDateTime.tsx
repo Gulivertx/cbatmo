@@ -2,14 +2,29 @@ import React from 'react';
 import { Colors } from '@blueprintjs/core';
 import { momentWithLocale } from '../utils/tools';
 
-class InfoDateTime extends React.Component {
-    state = {
-        hour: null,
-        minutes: null,
-        date: null
+// Separate state props + dispatch props to their own interfaces.
+interface IPropsFromState {
+    locale: string
+}
+
+interface IState {
+    hour: string
+    minutes: string
+    seconds: string
+    date: string
+}
+
+class InfoDateTime extends React.Component<IPropsFromState, IState> {
+    private interval: number | undefined;
+
+    public state: IState = {
+        hour: '00',
+        minutes: '00',
+        seconds: '00',
+        date: ''
     };
 
-    componentDidMount() {
+    public componentDidMount(): void {
         this.clock();
 
         this.interval = setInterval(() => {
@@ -17,11 +32,11 @@ class InfoDateTime extends React.Component {
         }, 1000);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount(): void {
         clearInterval(this.interval);
     }
 
-    clock = () => {
+    private clock = (): void => {
         let moment = momentWithLocale(this.props.locale);
         const date = moment();
 

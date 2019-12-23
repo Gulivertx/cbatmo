@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from "prop-types";
 import { Colors, Divider } from '@blueprintjs/core';
 
 import WeatherIcon from "./WeatherIcon";
@@ -8,7 +7,13 @@ import NetatmoModuleError from "./NetatmoModuleError";
 
 import { momentWithLocale } from '../utils/tools';
 
-const InfoWeather = ({darkskyData, netatmoData, locale}) => {
+interface IPropsFromState {
+    darkskyData: any
+    netatmoData: any
+    locale: string
+}
+
+const InfoWeather: React.FunctionComponent<IPropsFromState> = ({darkskyData, netatmoData, locale}) => {
     let moment = momentWithLocale(locale);
 
     return (
@@ -43,19 +48,14 @@ const InfoWeather = ({darkskyData, netatmoData, locale}) => {
             <Divider />
 
             <div className="weather-days-wrapper">
-                <InfoWeatherDaily data={darkskyData.daily.data[1]} day={1} locale={locale}/>
-                <InfoWeatherDaily data={darkskyData.daily.data[2]} day={2} locale={locale}/>
-                <InfoWeatherDaily data={darkskyData.daily.data[3]} day={3} locale={locale}/>
-                <InfoWeatherDaily data={darkskyData.daily.data[4]} day={4} locale={locale}/>
-                <InfoWeatherDaily data={darkskyData.daily.data[5]} day={5} locale={locale}/>
+                <InfoWeatherDaily data={darkskyData.daily.data[1]} locale={locale}/>
+                <InfoWeatherDaily data={darkskyData.daily.data[2]} locale={locale}/>
+                <InfoWeatherDaily data={darkskyData.daily.data[3]} locale={locale}/>
+                <InfoWeatherDaily data={darkskyData.daily.data[4]} locale={locale}/>
+                <InfoWeatherDaily data={darkskyData.daily.data[5]} locale={locale}/>
             </div>
         </div>
     )
-};
-
-InfoWeather.propTypes = {
-    darkskyData: PropTypes.object.isRequired,
-    netatmoData: PropTypes.object.isRequired,
 };
 
 export default InfoWeather;
