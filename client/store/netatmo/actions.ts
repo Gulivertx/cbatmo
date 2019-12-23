@@ -3,15 +3,14 @@ import { ApplicationState } from '../index'
 import { ThunkAction } from 'redux-thunk'
 import moment from 'moment';
 import { setUserInfo } from "../application/actions";
-import api from '../../api.json';
 import NetatmoStationData from '../../DTO/NetatmoStationData';
 import NetatmoUserInformation from "../../DTO/NetatmoUserInformation";
 import NetatmoModuleChartData from "../../DTO/NetatmoModuleChartData";
 import { NetatmoActionTypes } from "./types";
 
-const NETATMO_API_ROOT_URL = api.netatmo.api_url;
-const NETATMO_API_CLIENT_ID = api.netatmo.client_id;
-const NETATMO_API_CLIENT_SECRET = api.netatmo.client_secret;
+const NETATMO_API_ROOT_URL = "https://api.netatmo.com/";
+
+// TODO : build Express route to query the Netatmo API
 
 export const requestAuth = () => {
     return {
@@ -36,17 +35,19 @@ export const failureAuth = (error: any) => {
     }
 };
 
-export const fetchAuth = (email: string, password: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
-    return (dispatch) => {
+export const fetchAuth = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
+    return (dispatch, getState) => {
         dispatch(requestAuth());
 
+        const { netatmo } = getState();
+
         const params = new URLSearchParams();
-        params.append('client_id', NETATMO_API_CLIENT_ID);
-        params.append('client_secret', NETATMO_API_CLIENT_SECRET);
+        params.append('client_id', netatmo.client_id);
+        params.append('client_secret', netatmo.client_secret);
         params.append('grant_type', 'password');
         params.append('scope', 'read_station');
-        params.append('username', email);
-        params.append('password', password);
+        params.append('username', netatmo.username);
+        params.append('password', netatmo.password);
 
         return fetch(`${NETATMO_API_ROOT_URL}oauth2/token`, {method: 'POST', body: params})
             .then(response => {
@@ -98,10 +99,11 @@ export const fetchRefreshToken = (): ThunkAction<void, ApplicationState, null, A
         dispatch(requestRefreshToken());
 
         const current_refresh_token = window.localStorage.getItem('NetatmoRefreshToken');
+        const { netatmo } = getState();
 
         const params = new URLSearchParams();
-        params.append('client_id', NETATMO_API_CLIENT_ID);
-        params.append('client_secret', NETATMO_API_CLIENT_SECRET);
+        params.append('client_id', netatmo.client_id);
+        params.append('client_secret', netatmo.client_secret);
         params.append('grant_type', 'refresh_token');
         params.append('refresh_token', current_refresh_token ? current_refresh_token : '');
 

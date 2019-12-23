@@ -1,10 +1,5 @@
 export enum ApplicationActionTypes {
     APP_CONFIGURED = '@@application/APP_CONFIGURED',
-
-    INFO_REQUEST = '@@application/INFO_REQUEST',
-    INFO_SUCCESS = '@@application/INFO_SUCCESS',
-    INFO_FAILURE = '@@application/INFO_FAILURE',
-
     USER_INFO = '@@application/USER_INFO'
 }
 

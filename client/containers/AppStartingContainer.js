@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import AppStarting from "../components/AppStarting"
+import AppStarting from "../components/AppStarting."
 import * as netatmoActions from "../store/netatmo/actions";
 import * as applicationActions from "../store/application/actions";
 
@@ -17,8 +17,8 @@ const mapDispatchToProps = dispatch => {
         fetchStationData: () => {
             dispatch(netatmoActions.fetchStationData());
         },
-        appConfigured: () => {
-            dispatch(applicationActions.appConfigured(true))
+        appConfigured: (value) => {
+            dispatch(applicationActions.appConfigured(value))
         }
     }
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Divider } from '@blueprintjs/core';
 
 /** React layouts **/
@@ -10,15 +9,23 @@ import AppStartingContainer from "../containers/AppStartingContainer";
 import NetatmoContainer from "../containers/NetatmoContainer";
 import InfoLayoutContainer from "../containers/InfoLayoutContainer";
 import ErrorBoundary from './ErrorBoundary';
+import { ConnectedReduxProps } from '../store';
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
+// Separate state props + dispatch props to their own interfaces.
+interface IPropsFromState {
+    isConfigured: boolean
+}
 
-        this.props.initApp();
-    }
+// We can use `typeof` here to map our dispatch types to the props, like so.
+interface IPropsFromDispatch {
+    [key: string]: any
+}
 
-    render() {
+// Combine both state + dispatch props - as well as any props we want to pass - in a union type.
+type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
+
+class App extends React.Component<AllProps> {
+    public render() {
         return (
             <MainLayout>
                 {
@@ -36,11 +43,5 @@ class App extends React.Component {
         )
     }
 }
-
-App.propTypes = {
-    isConfigured: PropTypes.bool.isRequired,
-    info: PropTypes.object.isRequired,
-    initApp: PropTypes.func.isRequired,
-};
 
 export default App

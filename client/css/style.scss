@@ -87,7 +87,10 @@ body {
     justify-content: center;
 
     .loader {
+      display: flex;
+      align-items: center;
       padding: 36px;
+      height: 132px;
     }
 
     .title {

@@ -16,5 +16,19 @@
     </div>
 </noscript>
 <div id="app-root"></div>
+
+<script type="application/javascript">
+    window.preloadedState = '<%- JSON.stringify({
+        application: {
+            info: {
+                name: title,
+                description: description,
+                version: version,
+                author: author
+            }
+        },
+        netatmo: netatmo
+    }) %>'
+</script>
 </body>
 </html>

@@ -11,6 +11,11 @@ import moment from 'moment';
 import { INetatmoState, NetatmoActionTypes } from "./types";
 
 const initialState: INetatmoState = {
+    client_id: '',
+    client_secret: '',
+    username: '',
+    password: '',
+
     loading_auth: false,
     loading_refresh_token: false,
     auth_errors: undefined,

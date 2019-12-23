@@ -25,16 +25,6 @@ const reducer: Reducer<IApplicationState> = (state = initialState, action) => {
         case ApplicationActionTypes.APP_CONFIGURED:
             return { ...state, isConfigured: action.payload };
 
-        /** CBSCREEN APP SERVER INFO **/
-        case ApplicationActionTypes.INFO_REQUEST:
-            return { ...state, loading: true };
-
-        case ApplicationActionTypes.INFO_SUCCESS:
-            return { ...state, loading: false, info: action.payload };
-
-        case ApplicationActionTypes.INFO_FAILURE:
-            return { ...state, loading: false };
-
         /** SET user info from Netatmo API **/
         case ApplicationActionTypes.USER_INFO:
             return { ...state, user: action.payload };

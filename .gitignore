@@ -31,5 +31,3 @@ node_modules/
 .DS_Store
 Thumbs.db
 views/index.ejs
-
-config/api.json

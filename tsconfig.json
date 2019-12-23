@@ -25,7 +25,6 @@
     "./client/"
   ],
   "exclude": [
-    "./config/",
     "./logs/",
     "./node_modules/",
     "./public/",
