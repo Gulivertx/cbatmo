@@ -1,6 +1,7 @@
 # SystemD example script
 # This script is used on my RPI installed with ArchLinux
-# Modify the path of cbato folder in WorkingDirectory option
+# Modify the path of cbatmo folder in WorkingDirectory option
+# Modify the User and group with your username and group
 # Don't forget to install yarn on your RPI
 
 [Unit]
