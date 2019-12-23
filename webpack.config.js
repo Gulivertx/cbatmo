@@ -1,16 +1,15 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const helpers = require('./helpers')
-const extractSass = new ExtractTextPlugin({
-    filename: 'css/[name]' + (process.env.NODE_ENV !== 'development' ? '.[hash]' : '') + '.css'
-})
 
 console.log(process.env.NODE_ENV)
 
 const plugins = [
-    extractSass,
+    new MiniCssExtractPlugin({
+        filename: 'css/[name]' + (process.env.NODE_ENV !== 'development' ? '.[hash]' : '') + '.css',
+    }),
 
     new HtmlWebpackPlugin({
         template: '!!raw-loader!./client/index.ejs',
@@ -28,20 +27,7 @@ if (process.env.NODE_ENV === 'analyse') {
 module.exports = {
     entry: {
         'bundle': './client/index.tsx',
-        //'vendor': ['react', 'react-dom', 'react-redux', 'redux', 'redux-thunk', 'moment']
     },
-    /*optimization: {
-        splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    chunks: "initial",
-                    test: 'vendor',
-                    name: "vendor",
-                    enforce: true
-                }
-            }
-        }
-    },*/
     resolve: {
         extensions: ['.js', '.ts', 'tsx']
     },
@@ -60,21 +46,21 @@ module.exports = {
             },
             {
                 test: /\.(css|sass|scss)$/,
-                use: extractSass.extract({
-                    use: [{
-                        loader: 'css-loader',
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader', // translates CSS into CommonJS
                         options: {
                             sourceMap: process.env.NODE_ENV === 'development'
-                        }
-                    }, {
-                        loader: 'sass-loader',
+                        },
+                    },
+                    {
+                        loader: 'sass-loader', // compiles Sass to CSS
                         options: {
                             sourceMap: process.env.NODE_ENV === 'development'
-                        }
-                    }],
-                    // use style-loader in development
-                    fallback: 'style-loader'
-                })
+                        },
+                    },
+                ]
             },
             {
                 test: /\.(png|jpe?g|gif|svg)$/,
