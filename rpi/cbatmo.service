@@ -1,0 +1,27 @@
+# SystemD example script
+# This script is used on my RPI installed with ArchLinux
+# Modify the path of cbato folder in WorkingDirectory option
+# Don't forget to install yarn on your RPI
+
+[Unit]
+Description=CBatmo WEB server
+# Set dependencies to other services (optional)
+#After=mongodb.service
+
+[Service]
+# Start the js-file starting the express server
+ExecStart=/usr/bin/yarn start
+WorkingDirectory=/home/alarm/cbatmo
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=CBatmo
+# Change to a non-root user (optional, but recommended)
+User=alarm
+Group=alarm
+# Set environment options
+Environment=NODE_ENV=production PORT=3000
+
+[Install]
+WantedBy=multi-user.target

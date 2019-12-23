@@ -28,6 +28,7 @@
     "./logs/",
     "./node_modules/",
     "./public/",
+    "./rpi/",
     "./screenshots/",
     "./views/"
   ]
