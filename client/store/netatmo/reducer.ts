@@ -56,6 +56,14 @@ const initialState: INetatmoState = {
 };
 
 const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
+    if (typeof state === 'undefined') {
+        // No preloadedState from server. Use local state.
+        state = { ...initialState }
+    } else {
+        // PreloadedState supplied by the server, but it's not merged with our local initial state yet.
+        state = { ...initialState, ...state }
+    }
+
     switch (action.type) {
         /** NETATMO AUTH **/
         case NetatmoActionTypes.AUTH_REQUEST:
@@ -95,7 +103,7 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
 
         case NetatmoActionTypes.STATION_DATA_SUCCESS:
             return { ...state,
-                loading_station_data: true,
+                loading_station_data: false,
                 station_data: action.payload,
                 station_data_last_updated: action.receivedAt,
                 station_data_errors: undefined,
@@ -103,7 +111,7 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
             };
 
         case NetatmoActionTypes.STATION_DATA_FAILURE:
-            return { ...state, loading_station_data: true, station_data_errors: action.error };
+            return { ...state, loading_station_data: false, station_data_errors: action.error };
 
         /** NETATMO MEASURE DATA **/
         case NetatmoActionTypes.MEASURE_MAIN_REQUEST:

@@ -21,6 +21,14 @@ const initialState: IApplicationState = {
 };
 
 const reducer: Reducer<IApplicationState> = (state = initialState, action) => {
+    if (typeof state === 'undefined') {
+        // No preloadedState from server. Use local state.
+        state = { ...initialState }
+    } else {
+        // PreloadedState supplied by the server, but it's not merged with our local initial state yet.
+        state = { ...initialState, ...state }
+    }
+
     switch (action.type) {
         case ApplicationActionTypes.APP_CONFIGURED:
             return { ...state, isConfigured: action.payload };

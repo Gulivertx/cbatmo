@@ -1,5 +1,4 @@
 import React from 'react';
-import cx from 'classnames';
 import { Colors, Icon, Spinner, Intent } from '@blueprintjs/core';
 
 import { ContextMainLayout } from "../layouts/MainLayout";
@@ -11,14 +10,17 @@ import { IApplicationInfoState } from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
-    loading: boolean
     loading_station_data: boolean
     info: IApplicationInfoState
+    station_data_errors: any
+    refresh_token: string
+    access_token: string
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
 interface IPropsFromDispatch {
     [key: string]: any
+    fetchAuth: typeof netatmoActions.fetchAuth
     fetchStationData: typeof netatmoActions.fetchStationData
     appConfigured: typeof applicationActions.appConfigured
 }
@@ -28,7 +30,11 @@ type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 
 class AppStarting extends React.Component<AllProps> {
     componentDidMount(): void {
-        this.props.fetchStationData();
+        if (!this.props.refresh_token) {
+            this.props.fetchAuth();
+        } else {
+            this.props.fetchStationData();
+        }
     }
 
     componentDidUpdate(prevProps: Readonly<AllProps>, prevState: Readonly<{}>, snapshot?: any): void {
@@ -43,14 +49,14 @@ class AppStarting extends React.Component<AllProps> {
     }
 
     public render() {
-        const { info, loading, station_data_errors } = this.props;
+        const { info, station_data_errors } = this.props;
 
         return (
             <div className="starting-page-layout">
                 <div className="content">
-                    <h1 className={cx("title", loading && "bp3-skeleton")}>{info.name}</h1>
-                    <h4 className={cx(loading && "bp3-skeleton")} style={{ color: Colors.GRAY3 }}>Version {info.version}</h4>
-                    <div className={cx("description", loading && "bp3-skeleton")}>{info.description}</div>
+                    <h1 className="title">{info.name}</h1>
+                    <h4 style={{ color: Colors.GRAY3 }}>Version {info.version}</h4>
+                    <div className="description">{info.description}</div>
 
                     <div className="loader">
                         {
@@ -70,7 +76,7 @@ class AppStarting extends React.Component<AllProps> {
                         )
                     }
                 </div>
-                <div className={cx("footer", loading && "bp3-skeleton")} style={{ color: Colors.GRAY3 }}>
+                <div className="footer" style={{ color: Colors.GRAY3 }}>
                     Created by {info.author}
                 </div>
             </div>

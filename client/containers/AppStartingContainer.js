@@ -7,13 +7,17 @@ const mapStateToProps = state => {
     return {
         loading_station_data: state.netatmo.loading_station_data,
         station_data_errors: state.netatmo.station_data_errors,
+        refresh_token: state.netatmo.refresh_token,
+        access_token: state.netatmo.access_token,
         info: state.application.info,
-        loading: state.application.loading,
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        fetchAuth: () => {
+            dispatch(netatmoActions.fetchAuth());
+        },
         fetchStationData: () => {
             dispatch(netatmoActions.fetchStationData());
         },

@@ -60,6 +60,8 @@ export const fetchAuth = (): ThunkAction<void, ApplicationState, null, Action<st
                 //window.localStorage.setItem('appIsConfigured', 'true');
                 dispatch(successAuth(json));
                 //dispatch(appConfigured(true));
+                console.log('Fetch station data')
+                dispatch(fetchStationData());
             })
             .catch(error => {
                 // Todo types
@@ -116,6 +118,7 @@ export const fetchRefreshToken = (): ThunkAction<void, ApplicationState, null, A
                 window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
                 window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
                 dispatch(successRefreshToken(json));
+                dispatch(fetchStationData());
             })
             .catch(error => {
                 // Todo types
@@ -154,7 +157,10 @@ export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Ac
         // If no access token or refresh token is soon expired
         if (!getState().netatmo.access_token || moment.unix(Number(getState().netatmo.access_token_expire_in)).diff(moment(), 'minute') < 10) {
             // Fetch a new access token from refresh token and then fetch station data
-            dispatch(fetchRefreshToken()).then(() => {
+            dispatch(fetchRefreshToken());
+        } else {
+            // Fetch new data only if last data stored is bigger than 10 minutes
+            if (getState().netatmo.station_data_last_updated === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
                 dispatch(requestStationData());
 
                 return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.access_token}`)
@@ -165,29 +171,8 @@ export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Ac
                     .then(json => {
                         const data = new NetatmoStationData(json.body.devices[0]);
                         const user = new NetatmoUserInformation(json.body.user);
-                        dispatch(successStationData(data));
-                        dispatch(setUserInfo(user));
-                    })
-                    .catch(error => {
-                        // Todo types
-                        error.json().then((errorMessage: any) => {
-                            dispatch(failureStationData(errorMessage))
-                        })
-                    });
-            });
-        } else {
-            // Fetch new data only if last data stored is bigger than 10 minutes
-            if (moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
-                dispatch(requestStationData());
-
-                return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.access_token}`)
-                    .then(response => {
-                        if (!response.ok) throw response;
-                        return response.json()
-                    })
-                    .then(json => {
-                        const data = new NetatmoStationData(json.body.devices[0]);
                         dispatch(successStationData(data))
+                        dispatch(setUserInfo(user))
                     })
                     .catch(error => {
                         // Todo types
