@@ -1,3 +1,5 @@
+import {IDarkskyData} from "../../models/DarkskyData";
+
 export enum DarkskyActionTypes {
     REQUEST = '@@darksky/REQUEST',
     SUCCESS = '@@darksky/SUCCESS',
@@ -8,7 +10,7 @@ export enum DarkskyActionTypes {
 export interface IDarkskyState {
     readonly loading: boolean
     readonly first_fetch: boolean
-    readonly data: any|null
+    readonly data: IDarkskyData|undefined
     readonly updated_at: number
     readonly errors: any|undefined
 }

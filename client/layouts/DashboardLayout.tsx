@@ -1,32 +1,26 @@
-import React from 'react';
-import { Divider } from '@blueprintjs/core';
-
-import InfoWeather from '../components/InfoWeather';
-import ErrorBoundary from '../components/ErrorBoundary';
-import { ConnectedReduxProps } from "../store";
+import React, { ReactNode } from 'react';
 import * as darkskyActions from "../store/darksky/actions";
-
-const INTERVAL_IN_MINUTES = 1, REFRESH_TIME = INTERVAL_IN_MINUTES * 60 * 1000;
+import * as netatmoActions from "../store/netatmo/actions";
+import { ConnectedReduxProps } from "../store";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
-    darkskyData: any
-    netatmoData: any
-    loading: boolean
-    first_fetch: boolean
-    locale: string
+    children: ReactNode
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
 interface IPropsFromDispatch {
     [key: string]: any
     fetchDarksky: typeof darkskyActions.fetchDarksky
+    fetchStationData: typeof netatmoActions.fetchStationData
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
 type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 
-class InfoLayout extends React.Component<AllProps> {
+const INTERVAL_IN_MINUTES = 1, REFRESH_TIME = INTERVAL_IN_MINUTES * 60 * 1000;
+
+class DashboardLayout extends React.Component<AllProps> {
     private interval: number | undefined;
 
     public componentDidMount(): void {
@@ -34,6 +28,7 @@ class InfoLayout extends React.Component<AllProps> {
 
         this.interval = setInterval(() => {
             this.props.fetchDarksky();
+            this.props.fetchStationData();
         }, REFRESH_TIME);
     }
 
@@ -43,18 +38,11 @@ class InfoLayout extends React.Component<AllProps> {
 
     public render() {
         return (
-            <div className="info-layout">
-                <Divider />
-                <ErrorBoundary>
-                    {
-                        !this.props.first_fetch && (
-                            <InfoWeather darkskyData={this.props.darkskyData} netatmoData={this.props.netatmoData} locale={this.props.locale}/>
-                        )
-                    }
-                </ErrorBoundary>
+            <div className="dashboard-layout">
+                {this.props.children}
             </div>
         )
     }
 }
 
-export default InfoLayout;
+export default DashboardLayout;

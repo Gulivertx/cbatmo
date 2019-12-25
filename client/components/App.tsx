@@ -1,14 +1,14 @@
 import React from 'react';
-import { Divider } from '@blueprintjs/core';
 
 /** React layouts **/
 import MainLayout from '../layouts/MainLayout';
+import DashboardLayoutContainer from "../layouts/DashboardLayoutContainer";
 
 /** React components **/
 import AppStartingContainer from "../containers/AppStartingContainer";
-import NetatmoContainer from "../containers/NetatmoContainer";
-import InfoLayoutContainer from "../containers/InfoLayoutContainer";
-import ErrorBoundary from './ErrorBoundary';
+import ModuleDateTimeContainer from "../containers/ModuleDateTimeContainer";
+import ModuleNetatmoNAMainContainer from "../containers/ModuleNetatmoNAMainContainer";
+
 import { ConnectedReduxProps } from '../store';
 
 // Separate state props + dispatch props to their own interfaces.
@@ -29,13 +29,12 @@ class App extends React.Component<AllProps> {
         return (
             <MainLayout>
                 {
-                    this.props.isConfigured ? [
-                        <InfoLayoutContainer key="info" />,
-                        <Divider key="separator" />,
-                        <ErrorBoundary key="content">
-                            <NetatmoContainer />
-                        </ErrorBoundary>
-                    ] : (
+                    this.props.isConfigured ? (
+                        <DashboardLayoutContainer>
+                            <ModuleDateTimeContainer/>
+                            <ModuleNetatmoNAMainContainer />
+                        </DashboardLayoutContainer>
+                    ) : (
                         <AppStartingContainer />
                     )
                 }

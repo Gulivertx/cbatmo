@@ -3,8 +3,8 @@ import { ApplicationState } from '../index'
 import { ThunkAction } from 'redux-thunk'
 import moment from 'moment';
 import { setUserInfo } from "../application/actions";
-import NetatmoStationData from '../../DTO/NetatmoStationData';
-import NetatmoUserInformation from "../../DTO/NetatmoUserInformation";
+import NetatmoNAMain from '../../models/NetatmoNAMain';
+import NetatmoUserInformation from "../../models/NetatmoUserInformation";
 import NetatmoModuleChartData from "../../DTO/NetatmoModuleChartData";
 import { NetatmoActionTypes } from "./types";
 
@@ -160,7 +160,7 @@ export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Ac
             dispatch(fetchRefreshToken());
         } else {
             // Fetch new data only if last data stored is bigger than 10 minutes
-            if (getState().netatmo.station_data_last_updated === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+            if (getState().netatmo.station_data_last_updated === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
                 dispatch(requestStationData());
 
                 return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.access_token}`)
@@ -169,7 +169,7 @@ export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Ac
                         return response.json()
                     })
                     .then(json => {
-                        const data = new NetatmoStationData(json.body.devices[0]);
+                        const data = new NetatmoNAMain(json.body.devices[0]);
                         const user = new NetatmoUserInformation(json.body.user);
                         dispatch(successStationData(data))
                         dispatch(setUserInfo(user))
@@ -180,6 +180,8 @@ export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Ac
                             dispatch(failureStationData(errorMessage))
                         })
                     });
+            } else {
+                console.debug('No new Netatmo station data to fetch')
             }
         }
     }
@@ -211,7 +213,7 @@ export const failureMainMeasure = (error: any) => {
 export const fetchMainMeasure = (device: string, module: string, type: string, hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
-        if (getState().netatmo.measure_main_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+        if (getState().netatmo.measure_main_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
             dispatch(requestMainMeasure());
 
             const date_begin = moment().subtract(hours, 'hours').unix();
@@ -262,7 +264,7 @@ export const failureOutdoorMeasure = (error: any) => {
 export const fetchoutdoorMeasure = (device: string, module: string, type: string, hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
-        if (getState().netatmo.measure_outdoor_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+        if (getState().netatmo.measure_outdoor_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
             dispatch(requestOutdoorMeasure());
 
             const date_begin = moment().subtract(hours, 'hours').unix();
@@ -313,7 +315,7 @@ export const failureWindMeasure = (error: any) => {
 export const fetchWindMeasure = (device: string, module: string, type: string, hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
-        if (getState().netatmo.measure_wind_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+        if (getState().netatmo.measure_wind_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
             dispatch(requestWindMeasure());
 
             const date_begin = moment().subtract(hours, 'hours').unix();
@@ -364,7 +366,7 @@ export const failureNRainMeasure = (error: any) => {
 export const fetchRainMeasure = (device: string, module: string, type: string, hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
-        if (getState().netatmo.measure_rain_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+        if (getState().netatmo.measure_rain_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
             dispatch(requestRainMeasure());
 
             const date_begin = moment().subtract(hours, 'hours').unix();
@@ -415,7 +417,7 @@ export const failureIndooMeasure = (error: any) => {
 export const fetchIndoorMeasure = (device: string, module: string, type: string, hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
-        if (getState().netatmo.measure_indoor_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data.last_status_store)), 'minute') > 10) {
+        if (getState().netatmo.measure_indoor_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
             dispatch(requestIndoorMeasure());
 
             const date_begin = moment().subtract(hours, 'hours').unix();

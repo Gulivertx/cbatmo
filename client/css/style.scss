@@ -4,14 +4,28 @@
 @import "~reboot.css/dist/reboot.css";
 
 @import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "variables";
+
+@font-face {
+  font-family: 'Digital-7';
+  src: url('digital-7 (mono).eot');
+  src: url('digital-7 (mono).eot?#iefix') format('embedded-opentype'),
+  url('digital-7 (mono).woff') format('woff'),
+  url('digital-7 (mono).ttf') format('truetype'),
+  url('digital-7 (mono).svg#Digital-7') format('svg');
+}
 
 body {
   user-select: none;
   overflow: hidden;
+  font-family: 'Digital-7',sans-serif;
+  color: $white;
+  font-size: 1.2rem;
+  line-height: 1.1;
 }
 
 .background {
-  background-color: #262D37;
+  background-color: $dark;
 }
 
 .background-img {
@@ -22,9 +36,43 @@ body {
   z-index: 0;
 }
 
-.text-glow {
-  //text-shadow: 0 0 5px $white;
-  font-weight: 600;
+/** BOX container **/
+.box-container {
+  position: relative;
+  padding: 10px;
+  max-width: 266px;
+
+  .item-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+
+    .label {
+      background-color: $blue;
+      padding: 1px 6px;
+    }
+
+    .horizontal-top-divider {
+      border-top: 1px solid $gray;
+      flex: 1;
+      margin: 0 8px 0 4px;
+    }
+  }
+
+  .vertical-right-divider {
+    position: absolute;
+    top: 4px;
+    right: 0;
+    bottom: 4px;
+    border-right: 1px solid $gray;
+    //margin: 8px 0 8px 0;
+  }
+
+  .sub-label {
+    font-size: 0.9rem;
+  }
 }
 
 /** Layouts **/
@@ -32,42 +80,67 @@ body {
   z-index: 10;
   height: 100vh;
   display: flex;
+}
 
-  .info-layout {
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  //flex: 1;
+
+  .datetime-layout {
     display: flex;
     flex-direction: column;
-    width: 240px;
+    justify-content: center;
+    align-items: center;
 
-    .datetime-layout {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding-bottom: 4px;
+    .time {
+      font-size: 4.8rem;
+      line-height: 0.8;
+      padding-top: 20px;
+      //font-weight: 700;
 
-      .time {
-        font-size: 4rem;
-        font-weight: 700;
-      }
-
-      .date {
-        font-style: italic;
-      }
-      .date::first-letter {
-        text-transform: capitalize;
+      small {
+        margin-left: 4px;
+        font-size: 3rem;
       }
     }
 
-    .weather-layout {
+    .date {
+      //font-size: 1.6rem;
+    }
+
+    .sun {
+      padding-top: 2px;
+      width: 100%;
       display: flex;
-      flex-direction: column;
-      flex: 1;
-      padding: 10px;
+      justify-content: space-evenly;
+
+      .sunrise {
+        font-size: 0.9rem;
+        padding-bottom: 2px;
+      }
+      .sunset {
+        font-size: 0.9rem;
+        padding-bottom: 2px;
+        text-align: right;
+      }
     }
   }
 
-  .netatmo-layout {
-    flex: 1;
+  .namain-layout {
+    display: flex;
+    flex-direction: column;
+    padding-top: 18px;
+    font-size: 2.4rem;
+
+    small {
+      font-size: 1.2rem;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 }
 
@@ -106,151 +179,5 @@ body {
   .footer {
     height: 28px;
     font-size: 0.8rem;
-  }
-}
-
-/** Weather style **/
-.current-weather {
-  display: flex;
-  justify-content: space-between;
-
-  .current-icon {
-    font-size: 3.5rem;
-    min-width: 96px;
-  }
-  .current-temperature-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    align-items: flex-end;
-
-    .current-temperature {
-      font-size: 2.5rem;
-      font-weight: 400;
-      align-items: end;
-    }
-    .current-temperature-min_max {
-      display: flex;
-      justify-content: space-around;
-      font-size: 0.75rem;
-      width: 100%;
-    }
-  }
-}
-
-.weather-days-wrapper {
-  padding: 8px;
-
-  .weather-day-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-
-    .label {
-      font-size: 0.8rem;
-    }
-    .label::first-letter {
-      text-transform: capitalize;
-    }
-    .icon {
-      font-size: 1.8rem;
-    }
-    .temperature-wrapper {
-      display: flex;
-
-      .temperature {
-        width: 44px;
-      }
-    }
-  }
-}
-
-.sunset-sunrise-wrapper {
-  display: flex;
-  justify-content: space-around;
-  font-size: 0.8rem;
-}
-
-
-/** Netatmo **/
-.module-unreachable {
-  display: flex;
-  align-items: center;
-
-  .icon {
-    padding-right: 8px;
-  }
-  .description-wrapper {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.8rem;
-
-    .description-small {
-      font-size: 0.6rem;
-    }
-  }
-}
-
-.module-details-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .values {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-
-    .value {
-      padding-top: 8px;
-      font-weight: 600;
-    }
-  }
-}
-
-.netatmo-wrapper {
-  padding: 10px;
-  display: flex;
-  align-items: start;
-  flex-direction: column;
-  flex: 1;
-
-  .netatmo-header {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-  }
-
-  .netatmo-content {
-    flex: 1;
-  }
-}
-
-/** Blueprint **/
-.card-bg-translucent {
-  background-color: rgba(48, 64, 77, 0.7) !important;
-  padding: 0 !important;
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 12px;
-    border-bottom: 1px solid rgba(16, 22, 26, 0.4);
-
-    .title-and-values {
-      display: flex;
-
-      .title {
-        font-weight: bold;
-        margin-right: 20px;
-      }
-    }
-  }
-
-  .card-body {
-    padding: 8px;
   }
 }

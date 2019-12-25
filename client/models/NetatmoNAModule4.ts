@@ -1,8 +1,43 @@
-/**
- * Indoor moduke DTO
- */
-class NetatmoModuleIndoor {
-    constructor(data) {
+export interface INetatmoNAModule4 {
+    id: string
+    type: string
+    module_name: string
+    data_type: string[]
+    reachable: boolean
+    last_seen: number
+    rf_status: number
+    radio: string
+    battery_vp: number
+    battery: string
+    battery_percent: number
+    data: IData|undefined
+}
+
+export interface IData {
+    temperature: number
+    co2: number
+    humidity: number
+    min_temp: number
+    max_temp: number
+    temp_trend: string
+}
+
+/** Indoor moduke model */
+class NetatmoNAModule4 {
+    id: string;
+    type: string;
+    module_name: string;
+    data_type: string[];
+    reachable: boolean;
+    last_seen: number;
+    rf_status: number;
+    radio: string;
+    battery_vp: number;
+    battery: string;
+    battery_percent: number;
+    data: IData|undefined;
+
+    constructor(data: any) {
         this.id = data._id;
         this.type = data.type;
         this.module_name = data.module_name;
@@ -10,6 +45,10 @@ class NetatmoModuleIndoor {
         this.reachable = data.reachable;
         this.last_seen = data.last_seen;
         this.rf_status = data.rf_status;
+        this.radio = data.radio;
+        this.battery_vp = data.battery_vp;
+        this.battery = data.battery;
+        this.battery_percent = data.battery_percent;
 
         // Set radio status
         switch (true) {
@@ -66,4 +105,4 @@ class NetatmoModuleIndoor {
     }
 }
 
-export default NetatmoModuleIndoor
+export default NetatmoNAModule4

@@ -3,7 +3,7 @@ import { ApplicationState } from '../index'
 import { ThunkAction } from 'redux-thunk'
 import moment from "moment";
 import { DarkskyActionTypes } from "./types";
-import DarkskyData from '../../DTO/DarkskyData';
+import DarkskyData from '../../models/DarkskyData';
 
 export const requestData = () => {
     return {
@@ -34,8 +34,8 @@ export const fetchDarksky = (): ThunkAction<void, ApplicationState, null, Action
             dispatch(requestData());
 
             // Take latitude and longitude from Netatmo station
-            const lat = getState().netatmo.station_data.place.latitude;
-            const lng = getState().netatmo.station_data.place.longitude;
+            const lat = getState().netatmo.station_data?.place.latitude;
+            const lng = getState().netatmo.station_data?.place.longitude;
             const locale = getState().application.user.lang;
             const unit = getState().application.user.unit;
 
@@ -54,6 +54,8 @@ export const fetchDarksky = (): ThunkAction<void, ApplicationState, null, Action
                         dispatch(failureData(errorMessage))
                     })
                 });
+        } else {
+            console.debug('No new Darksky data to fetch')
         }
     }
 };

@@ -1,8 +1,42 @@
-/**
- * Outdoor module DTO
- */
-class NetatmoModuleOutdoor {
-    constructor(data) {
+export interface INetatmoNAModule1 {
+    id: string
+    type: string
+    module_name: string
+    data_type: string[]
+    reachable: boolean
+    last_seen: number
+    rf_status: number
+    radio: string
+    battery_vp: number
+    battery: string
+    battery_percent: number
+    data: IData|undefined
+}
+
+export interface IData {
+    temperature: number
+    humidity: number
+    min_temp: number
+    max_temp: number
+    temp_trend: string
+}
+
+/** Outdoor module model */
+class NetatmoNAModule1 implements INetatmoNAModule1{
+    id: string;
+    type: string;
+    module_name: string;
+    data_type: string[];
+    reachable: boolean;
+    last_seen: number;
+    rf_status: number;
+    radio: string;
+    battery_vp: number;
+    battery: string;
+    battery_percent: number;
+    data: IData|undefined;
+
+    constructor(data: any) {
         this.id = data._id;
         this.type = data.type;
         this.module_name = data.module_name;
@@ -10,6 +44,10 @@ class NetatmoModuleOutdoor {
         this.reachable = data.reachable;
         this.last_seen = data.last_seen;
         this.rf_status = data.rf_status;
+        this.radio = data.radio;
+        this.battery_vp = data.battery_vp;
+        this.battery = data.battery;
+        this.battery_percent = data.battery_percent;
 
         // Set radio status
         switch (true) {
@@ -61,9 +99,8 @@ class NetatmoModuleOutdoor {
                 max_temp: data.dashboard_data.max_temp,
                 temp_trend: data.dashboard_data.temp_trend
             }
-
         }
     }
 }
 
-export default NetatmoModuleOutdoor
+export default NetatmoNAModule1

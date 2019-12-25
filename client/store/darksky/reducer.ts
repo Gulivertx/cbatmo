@@ -4,7 +4,7 @@ import { DarkskyActionTypes, IDarkskyState } from "./types";
 const initialState: IDarkskyState = {
     loading: true,
     first_fetch: true,
-    data: null,
+    data: undefined,
     updated_at: 0,
     errors: undefined
 };

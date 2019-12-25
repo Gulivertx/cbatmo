@@ -3,7 +3,6 @@ import { render } from "react-dom";
 import { Provider } from 'react-redux';
 import AppContainer from './containers/AppContainer';
 
-import 'typeface-roboto';
 import './css/style.scss';
 
 /** Extend window variable with preloadedState */

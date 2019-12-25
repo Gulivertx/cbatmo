@@ -3,7 +3,7 @@ import App from "../components/App"
 
 const mapStateToProps = state => {
     return {
-        isConfigured: state.application.isConfigured,
+        isConfigured: state.application.isConfigured
     }
 };
 

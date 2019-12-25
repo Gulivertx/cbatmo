@@ -26,7 +26,7 @@ const initialState: INetatmoState = {
     loading_station_data: true,
     station_data_last_updated: 0,
     station_data_errors: undefined,
-    station_data: {},
+    station_data: undefined,
     first_fetch: true,
 
     // MAIN module history

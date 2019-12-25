@@ -18,7 +18,7 @@ echo "______________________________________________________"
 ENV_FILE=".env"
 if [ ! -f "$ENV_FILE" ]; then
   echo ""
-  echo "${ENV_FILE} file do not exist!"
+  echo "${ENV_FILE} file does not exist!"
 
   while true; do
     read -p "Do you want to create a new one? " yn

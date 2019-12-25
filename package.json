@@ -1,7 +1,7 @@
 {
   "name": "cbatmo",
   "version": "2.1.0",
-  "description": "A Netatmo Weather Station Web-APP for Raspberry Pi & official Raspberry touchscreen",
+  "description": "A Netatmo Weather Station Web-APP for Raspberry Pi and official Raspberry touchscreen",
   "keywords": [
     "dark sky",
     "netatmo",
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@blueprintjs/core": "^3.22.2",
-    "@mdi/font": "^4.7",
+    "@mdi/font": "^4.7.95",
     "@types/classnames": "^2.2.9",
     "@types/express": "^4.16.1",
     "@types/node": "^12.12",
@@ -67,6 +67,7 @@
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
+    "remove-accents": "^0.4.2",
     "rimraf": "^3.0.0",
     "sass-loader": "^8.0.0",
     "source-map-loader": "^0.2.4",

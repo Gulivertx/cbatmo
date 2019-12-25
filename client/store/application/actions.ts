@@ -1,4 +1,5 @@
-import { ApplicationActionTypes, IUserState } from './types'
+import { ApplicationActionTypes } from './types'
+import {INetatmoUserInformation} from "../../models/NetatmoUserInformation";
 
 /** Application actions **/
 export const appConfigured = (value: boolean) => {
@@ -8,7 +9,7 @@ export const appConfigured = (value: boolean) => {
     }
 };
 
-export const setUserInfo = (user: IUserState) => {
+export const setUserInfo = (user: INetatmoUserInformation) => {
     return {
         type: ApplicationActionTypes.USER_INFO,
         payload: user

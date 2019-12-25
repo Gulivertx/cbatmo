@@ -1,3 +1,6 @@
+import {INetatmoNAMain} from "../../models/NetatmoNAMain";
+import {IDarkskyData} from "../../models/DarkskyData";
+
 export enum NetatmoActionTypes {
     AUTH_REQUEST = '@@netatmo/AUTH_REQUEST',
     AUTH_SUCCESS = '@@netatmo/AUTH_SUCCESS',
@@ -49,7 +52,7 @@ export interface INetatmoState {
     readonly loading_station_data: boolean
     readonly station_data_last_updated: number
     readonly station_data_errors: any|undefined
-    readonly station_data: any
+    readonly station_data: INetatmoNAMain|undefined
     readonly first_fetch: boolean
 
     readonly loading_main: boolean

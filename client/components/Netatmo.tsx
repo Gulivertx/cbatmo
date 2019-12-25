@@ -7,7 +7,7 @@ import NetatmoModuleNAModule4 from "./NetatmoModuleNAModule4";
 import NetatmoModuleNAModule3 from "./NetatmoModuleNAModule3";
 import NetatmoModuleNAModule1 from "./NetatmoModuleNAModule1";
 import NetatmoModuleNAModule2 from "./NetatmoModuleNAModule2";
-import { MODULE_TYPE } from "../DTO/NetatmoStationData";
+import { MODULE_TYPE } from "../models/NetatmoNAMain";
 import { ConnectedReduxProps } from "../store";
 import * as netatmoActions from "../store/netatmo/actions";
 

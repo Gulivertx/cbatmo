@@ -8,8 +8,26 @@
  * reg_locale: user regional preferences (used for displaying date)
  * feel_like: algorithm used to compute feel like temperature, 0 -> humidex, 1 -> heat-index
  */
-class NetatmoUserInformation {
-    constructor(data) {
+
+export interface INetatmoUserInformation {
+    mail: string
+    lang: string
+    locale: string
+    pressure_unit: string
+    unit: string
+    windunit: string
+}
+
+
+class NetatmoUserInformation implements INetatmoUserInformation{
+    mail: string;
+    lang: string;
+    locale: string;
+    pressure_unit: string;
+    unit: string;
+    windunit: string;
+
+    constructor(data: any) {
         this.mail = data.mail;
         this.lang = data.administrative.lang.includes('fr') ? 'fr' : 'en';
         this.locale = data.administrative.reg_locale;
@@ -23,7 +41,10 @@ class NetatmoUserInformation {
                 break;
             case 2:
                 this.pressure_unit = 'mmHg';
-                break
+                break;
+            default:
+                this.pressure_unit = 'mbar';
+                break;
         }
 
         switch (data.administrative.unit) {
@@ -32,6 +53,9 @@ class NetatmoUserInformation {
                 break;
             case 1:
                 this.unit = 'us';
+                break;
+            default:
+                this.unit = 'si';
                 break;
         }
 
@@ -50,6 +74,9 @@ class NetatmoUserInformation {
                 break;
             case 4:
                 this.windunit = 'knot';
+                break;
+            default:
+                this.windunit = 'km/h';
                 break;
         }
 

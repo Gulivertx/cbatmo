@@ -1,4 +1,5 @@
 import React from 'react';
+import removeAccents from 'remove-accents';
 import { Colors, Icon, Spinner, Intent } from '@blueprintjs/core';
 
 import { ContextMainLayout } from "../layouts/MainLayout";
@@ -55,7 +56,7 @@ class AppStarting extends React.Component<AllProps> {
             <div className="starting-page-layout">
                 <div className="content">
                     <h1 className="title">{info.name}</h1>
-                    <h4 style={{ color: Colors.GRAY3 }}>Version {info.version}</h4>
+                    <h4 style={{ color: Colors.GRAY4 }}>Version {info.version}</h4>
                     <div className="description">{info.description}</div>
 
                     <div className="loader">
@@ -63,7 +64,7 @@ class AppStarting extends React.Component<AllProps> {
                             station_data_errors ? (
                                 <Icon icon="error" iconSize={60} intent={Intent.DANGER} />
                             ) : (
-                                <Spinner size={ Spinner.SIZE_STANDARD } />
+                                <Spinner size={ Spinner.SIZE_STANDARD } intent={Intent.PRIMARY} />
                             )
                         }
                     </div>
@@ -76,8 +77,8 @@ class AppStarting extends React.Component<AllProps> {
                         )
                     }
                 </div>
-                <div className="footer" style={{ color: Colors.GRAY3 }}>
-                    Created by {info.author}
+                <div className="footer" style={{ color: Colors.GRAY4 }}>
+                    Created by {removeAccents(info.author)}
                 </div>
             </div>
         )

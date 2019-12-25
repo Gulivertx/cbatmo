@@ -1,8 +1,40 @@
-/**
- * Rain module DTO
- */
-class NetatmoModuleRain {
-    constructor(data) {
+export interface INetatmoNAModule3 {
+    id: string
+    type: string
+    module_name: string
+    data_type: string[]
+    reachable: boolean
+    last_seen: number
+    rf_status: number
+    radio: string
+    battery_vp: number
+    battery: string
+    battery_percent: number
+    data: IData|undefined
+}
+
+export interface IData {
+    rain: number
+    sum_rain_24: number
+    sum_rain_1: number
+}
+
+/** Rain module model */
+class NetatmoNAModule3 implements INetatmoNAModule3 {
+    id: string;
+    type: string;
+    module_name: string;
+    data_type: string[];
+    reachable: boolean;
+    last_seen: number;
+    rf_status: number;
+    radio: string;
+    battery_vp: number;
+    battery: string;
+    battery_percent: number;
+    data: IData|undefined;
+
+    constructor(data: any) {
         this.id = data._id;
         this.type = data.type;
         this.module_name = data.module_name;
@@ -10,6 +42,10 @@ class NetatmoModuleRain {
         this.reachable = data.reachable;
         this.last_seen = data.last_seen;
         this.rf_status = data.rf_status;
+        this.radio = data.radio;
+        this.battery_vp = data.battery_vp;
+        this.battery = data.battery;
+        this.battery_percent = data.battery_percent;
 
         // Set radio status
         switch (true) {
@@ -59,9 +95,8 @@ class NetatmoModuleRain {
                 sum_rain_24: data.dashboard_data.sum_rain_24, // Last 24 hours
                 sum_rain_1: data.dashboard_data.sum_rain_1 // Last hour
             }
-
         }
     }
 }
 
-export default NetatmoModuleRain
+export default NetatmoNAModule3
