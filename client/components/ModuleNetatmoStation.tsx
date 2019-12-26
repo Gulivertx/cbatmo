@@ -1,4 +1,5 @@
 import React from 'react';
+import removeAccents from 'remove-accents';
 import { Colors } from "@blueprintjs/core";
 
 import ModuleLayout from "../layouts/ModuleLayout";
@@ -12,9 +13,9 @@ interface IPropsFromState {
 }
 
 /** Main station */
-const NetatmoModuleNAMain: React.FunctionComponent<IPropsFromState> = (props) => {
+const NetatmoModuleStation: React.FunctionComponent<IPropsFromState> = (props) => {
     return (
-        <ModuleLayout label={props.station_data? props.station_data.module_name : ''}>
+        <ModuleLayout label={props.station_data? removeAccents(props.station_data.module_name) : ''}>
             <div className="namain-layout">
                 <div className="row">
                     <div className="temperature">
@@ -41,4 +42,4 @@ const NetatmoModuleNAMain: React.FunctionComponent<IPropsFromState> = (props) =>
     )
 };
 
-export default NetatmoModuleNAMain
+export default NetatmoModuleStation

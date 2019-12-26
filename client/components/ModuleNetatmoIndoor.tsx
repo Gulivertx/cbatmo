@@ -1,0 +1,34 @@
+import React from 'react';
+import removeAccents from 'remove-accents';
+import { Colors } from "@blueprintjs/core";
+
+import ModuleLayout from "../layouts/ModuleLayout";
+
+import { INetatmoNAModule1 } from "../models/NetatmoNAModule1";
+
+// Separate state props + dispatch props to their own interfaces.
+interface IPropsFromState {
+    module_data: INetatmoNAModule1|undefined
+}
+
+/** Outdoor module */
+const NetatmoModuleIndoor: React.FunctionComponent<IPropsFromState> = (props) => {
+    return (
+        <ModuleLayout label={props.module_data? removeAccents(props.module_data.module_name) : ''}>
+            <div className="namain-layout">
+                <div className="row">
+                    <div className="temperature">
+                        <div className="sub-label" style={{ color: Colors.GRAY4 }}>Temperature</div>
+                        {props.module_data?.data?.temperature}<small>°C</small>
+                    </div>
+                    <div className="humidity">
+                        <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>Humidity</div>
+                        {props.module_data?.data?.humidity}<small>%</small>
+                    </div>
+                </div>
+            </div>
+        </ModuleLayout>
+    )
+};
+
+export default NetatmoModuleIndoor

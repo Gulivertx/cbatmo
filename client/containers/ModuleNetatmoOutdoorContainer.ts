@@ -1,19 +1,19 @@
 import { connect } from 'react-redux'
 import { ThunkDispatch} from "redux-thunk";
 import { ApplicationState } from "../store";
-import ModuleNetatmoNAMain from "../components/ModuleNetatmoNAMain"
+import ModuleNetatmoOurdoor from "../components/ModuleNetatmoOurdoor"
 
 const mapStateToProps = ({ netatmo}: ApplicationState) => ({
-    station_data: netatmo.station_data
+    module_data: netatmo.station_data?.modules.INDOOR
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
 
 });
 
-const ModuleNetatmoNAMainContainer = connect(
+const ModuleNetatmoOutdoorContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(ModuleNetatmoNAMain);
+)(ModuleNetatmoOurdoor);
 
-export default ModuleNetatmoNAMainContainer
+export default ModuleNetatmoOutdoorContainer

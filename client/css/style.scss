@@ -21,7 +21,7 @@ body {
   font-family: 'Digital-7',sans-serif;
   color: $white;
   font-size: 1.2rem;
-  line-height: 1.1;
+  line-height: 1;
 }
 
 .background {
@@ -41,6 +41,7 @@ body {
   position: relative;
   padding: 10px;
   max-width: 266px;
+  min-width: 240px;
 
   .item-label {
     position: absolute;
@@ -85,6 +86,7 @@ body {
 .dashboard-layout {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   //flex: 1;
 
   .datetime-layout {
@@ -131,7 +133,7 @@ body {
     display: flex;
     flex-direction: column;
     padding-top: 18px;
-    font-size: 2.4rem;
+    font-size: 2.8rem;
 
     small {
       font-size: 1.2rem;

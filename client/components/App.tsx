@@ -7,7 +7,9 @@ import DashboardLayoutContainer from "../layouts/DashboardLayoutContainer";
 /** React components **/
 import AppStartingContainer from "../containers/AppStartingContainer";
 import ModuleDateTimeContainer from "../containers/ModuleDateTimeContainer";
-import ModuleNetatmoNAMainContainer from "../containers/ModuleNetatmoNAMainContainer";
+import ModuleNetatmoStationContainer from "../containers/ModuleNetatmoStationContainer";
+import ModuleNetatmoIndoorContainer from "../containers/ModuleNetatmoIndoorContainer";
+import ModuleNetatmoOutdoorContainer from "../containers/ModuleNetatmoOutdoorContainer";
 
 import { ConnectedReduxProps } from '../store';
 
@@ -32,7 +34,9 @@ class App extends React.Component<AllProps> {
                     this.props.isConfigured ? (
                         <DashboardLayoutContainer>
                             <ModuleDateTimeContainer/>
-                            <ModuleNetatmoNAMainContainer />
+                            <ModuleNetatmoStationContainer />
+                            <ModuleNetatmoIndoorContainer />
+                            <ModuleNetatmoOutdoorContainer />
                         </DashboardLayoutContainer>
                     ) : (
                         <AppStartingContainer />
