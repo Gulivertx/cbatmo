@@ -20,7 +20,7 @@ API by Dark Sky API. The first proposal can be found in the [Netatmo forum](http
 * New webpack configuration which is more easy to handle and would be the same commands in Windows / MacOS / Linux
 * New application design with only one unique view (I also try to have an adaptable layout for different users configuration of modules abailable)
 
-If you want to try this version, or maybe help me to develop it, you can try it by following the updated information bellow
+If you want to try this version, or maybe help me to develop it, you can try it by following the updated information [bellow](https://github.com/Gulivertx/cbatmo/tree/2.1.x#how-to-try-this-app)
 
 ### What's new in 2.0.0 ?
 * New Redux reducer / actions for a better store and more comprehensive code
