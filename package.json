@@ -14,10 +14,9 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "NODE_ENV=production node server.js",
-    "dev:start": "NODE_ENV=development concurrently -k \"webpack --watch --mode development\" \"node server.js\"",
-    "dev:analyse": "rimraf app && NODE_ENV=analyse webpack --mode production",
-    "build": "rimraf public/* && NODE_ENV=production webpack --progress --profile --bail -p --mode production"
+    "start": "node server.js",
+    "build": "webpack",
+    "watch": "webpack --watch"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -72,12 +71,12 @@
     "sass-loader": "^8.0.0",
     "source-map-loader": "^0.2.4",
     "style-loader": "^1.0.1",
-    "typeface-roboto": "^0.0.75",
     "typescript": "^3.7.3",
     "url-loader": "^3.0.0",
     "weather-icons2": "^2.0.10",
     "webpack": "^4.29.4",
     "webpack-bundle-analyzer": "^3.0.4",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.2.3",
+    "webpack-shell-plugin": "^0.5.0"
   }
 }

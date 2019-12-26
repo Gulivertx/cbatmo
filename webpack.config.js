@@ -1,10 +1,14 @@
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const helpers = require('./helpers')
+const path = require('path');
+const webpack = require('webpack');
+const WebpackShellPlugin = require('webpack-shell-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+require('dotenv').config();
 
-console.log(process.env.NODE_ENV)
+process.env.APP_ENV === 'dev' ? process.env.NODE_ENV = 'development' : process.env.NODE_ENV = 'production';
+
+console.log('Webpack run as ' + process.env.NODE_ENV);
 
 const plugins = [
     new MiniCssExtractPlugin({
@@ -13,18 +17,23 @@ const plugins = [
 
     new HtmlWebpackPlugin({
         template: '!!raw-loader!./client/index.ejs',
-        filename: helpers.root('views/index.ejs'),
+        filename: path.resolve(__dirname, 'views/index.ejs'),
         inject: 'body'
     }),
     // Ignore Moment Locales
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-]
+];
+
+if (process.env.NODE_ENV === 'development') {
+    plugins.push(new WebpackShellPlugin({onBuildEnd: ['node server.js']}));
+}
 
 if (process.env.NODE_ENV === 'analyse') {
     plugins.push(new BundleAnalyzerPlugin())
 }
 
 module.exports = {
+    mode: process.env.NODE_ENV,
     entry: {
         'bundle': './client/index.tsx',
     },
@@ -113,16 +122,7 @@ module.exports = {
 
     output: {
         publicPath: '/',
-        path: helpers.root('public/'),
-        filename: '[name]' + (process.env.NODE_ENV !== "development" ? '.[hash]' : '') + '.js',
-        //chunkFilename: '[id]' + (process.env.NODE_ENV !== "development" ? '.[hash]' : '') + '.chunk.js'
-    },
-
-    devServer: {
-        historyApiFallback: true,
-        stats: 'minimal',
-        contentBase: helpers.root('public/'),
-        compress: false,
-        port: 9000
+        path: path.resolve(__dirname, 'public'),
+        filename: '[name]' + (process.env.NODE_ENV !== "development" ? '.[hash]' : '') + '.js'
     }
-}
+};

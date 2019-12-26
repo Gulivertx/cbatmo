@@ -10,9 +10,11 @@ const path = require('path');
 const rfs = require('rotating-file-stream');
 const DarkSkyApi = require('dark-sky-api');
 const pjson = require('./package.json');
+require('dotenv').config();
+
+process.env.APP_ENV === 'dev' ? process.env.NODE_ENV = 'development' : process.env.NODE_ENV = 'production';
 
 const app = express();
-require('dotenv').config();
 
 /** Configure DarkSkyApi **/
 DarkSkyApi.apiKey = process.env.DARKSKY_SECRET_KEY;
@@ -32,7 +34,6 @@ const accessLogStream = rfs.createStream('access.log', {
 /** View engine setup **/
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
 
 /** Express configuration **/
 app.use(compression());
@@ -105,5 +106,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000')
+    console.log('Server running on http://localhost:3000 as ' + process.env.NODE_ENV)
 });
