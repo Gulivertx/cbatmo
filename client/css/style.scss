@@ -36,8 +36,8 @@ body {
   z-index: 0;
 }
 
-/** BOX container **/
-.box-container {
+/** Module container **/
+.module-container {
   position: relative;
   padding: 10px;
   max-width: 266px;
@@ -72,7 +72,35 @@ body {
   }
 
   .sub-label {
-    font-size: 0.9rem;
+    font-size: 1rem;
+  }
+}
+
+/** Modules **/
+.module-unreachable {
+  display: flex;
+  align-items: center;
+  padding-top: 12px;
+
+  .description {
+    font-size: 1rem;
+    margin-left: 12px;
+  }
+}
+
+.modules-layout {
+  display: flex;
+  flex-direction: column;
+  padding-top: 18px;
+  font-size: 2.8rem;
+
+  small {
+    font-size: 1.2rem;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
   }
 }
 
@@ -118,30 +146,14 @@ body {
       justify-content: space-evenly;
 
       .sunrise {
-        font-size: 0.9rem;
+        font-size: 1rem;
         padding-bottom: 2px;
       }
       .sunset {
-        font-size: 0.9rem;
+        font-size: 1rem;
         padding-bottom: 2px;
         text-align: right;
       }
-    }
-  }
-
-  .namain-layout {
-    display: flex;
-    flex-direction: column;
-    padding-top: 18px;
-    font-size: 2.8rem;
-
-    small {
-      font-size: 1.2rem;
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
     }
   }
 }
@@ -180,6 +192,6 @@ body {
 
   .footer {
     height: 28px;
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 }

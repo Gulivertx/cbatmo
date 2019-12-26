@@ -15,8 +15,11 @@ interface IPropsFromState {
 /** Main station */
 const NetatmoModuleStation: React.FunctionComponent<IPropsFromState> = (props) => {
     return (
-        <ModuleLayout label={props.station_data? removeAccents(props.station_data.module_name) : ''}>
-            <div className="namain-layout">
+        <ModuleLayout
+            label={props.station_data ? removeAccents(props.station_data.module_name) : ''}
+            reachable={props.station_data?.reachable}
+        >
+            <div className="modules-layout">
                 <div className="row">
                     <div className="temperature">
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>Temperature</div>

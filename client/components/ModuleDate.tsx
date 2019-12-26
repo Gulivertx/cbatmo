@@ -54,7 +54,7 @@ class ModuleDate extends React.Component<IPropsFromState, IState> {
 
     render() {
         return (
-            <ModuleLayout label='Date'>
+            <ModuleLayout label='Date' reachable={true}>
                 <div className="datetime-layout">
                     <div className="date">{ removeAccents(this.state.date) }</div>
                     <div className="date">{ this.state.day }</div>
