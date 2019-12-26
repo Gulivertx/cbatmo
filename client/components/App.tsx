@@ -10,6 +10,8 @@ import ModuleDateTimeContainer from "../containers/ModuleDateTimeContainer";
 import ModuleNetatmoStationContainer from "../containers/ModuleNetatmoStationContainer";
 import ModuleNetatmoIndoorContainer from "../containers/ModuleNetatmoIndoorContainer";
 import ModuleNetatmoOutdoorContainer from "../containers/ModuleNetatmoOutdoorContainer";
+import ModuleNetatmoBarometerContainer from "../containers/ModuleNetatmoBarometerContainer";
+import ModuleForecastContainer from "../containers/ModuleForecastContainer";
 
 import { ConnectedReduxProps } from '../store';
 
@@ -37,6 +39,8 @@ class App extends React.Component<AllProps> {
                             <ModuleNetatmoStationContainer />
                             <ModuleNetatmoIndoorContainer />
                             <ModuleNetatmoOutdoorContainer />
+                            <ModuleNetatmoBarometerContainer />
+                            <ModuleForecastContainer />
                         </DashboardLayoutContainer>
                     ) : (
                         <AppStartingContainer />

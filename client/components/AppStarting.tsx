@@ -14,8 +14,8 @@ interface IPropsFromState {
     loading_station_data: boolean
     info: IApplicationInfoState
     station_data_errors: any
-    refresh_token: string
-    access_token: string
+    refresh_token: string|null
+    access_token: string|null
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.

@@ -51,7 +51,7 @@ export interface INetatmoState {
 
     readonly loading_station_data: boolean
     readonly station_data_last_updated: number
-    readonly station_data_errors: any|undefined
+    readonly station_data_errors: any
     readonly station_data: INetatmoNAMain|undefined
     readonly first_fetch: boolean
 

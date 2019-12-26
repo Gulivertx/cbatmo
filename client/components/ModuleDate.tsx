@@ -1,5 +1,4 @@
 import React from 'react';
-import { Colors } from '@blueprintjs/core';
 import removeAccents from 'remove-accents';
 import { momentWithLocale } from '../utils/tools';
 

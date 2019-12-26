@@ -2,11 +2,12 @@ import React from 'react';
 import cx from 'classnames';
 
 interface IPropsFromState {
-    condition: string
+    condition?: string
+    size?: number
 }
 
-const WeatherIcon: React.FunctionComponent<IPropsFromState> = ({condition}) => {
-    const setIcon = (condition: string) => {
+const WeatherIcon: React.FunctionComponent<IPropsFromState> = ({condition, size = 1}) => {
+    const setIcon = (condition?: string) => {
         switch (condition) {
             case 'clear-day': return 'wi-day-sunny';
             case 'clear-night': return 'wi-night-clear';
@@ -21,11 +22,12 @@ const WeatherIcon: React.FunctionComponent<IPropsFromState> = ({condition}) => {
             case 'hail': return 'wi-hail';
             case 'thunderstorm': return 'wi-thunderstorm';
             case 'tornado': return 'wi-tornado';
+            default: return '';
         }
     };
 
     return (
-        <i className={cx('wi wi-fw', setIcon(condition))}/>
+        <i className={cx('wi wi-fw', setIcon(condition))} style={{fontSize: `${size}rem`, lineHeight: size / 3}} />
     )
 };
 
