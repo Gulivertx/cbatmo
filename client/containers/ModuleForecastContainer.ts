@@ -3,8 +3,9 @@ import { ThunkDispatch} from "redux-thunk";
 import { ApplicationState } from "../store";
 import ModuleForecast from "../components/ModuleForecast"
 
-const mapStateToProps = ({ darksky}: ApplicationState) => ({
-    darksky: darksky
+const mapStateToProps = ({ darksky, application}: ApplicationState) => ({
+    darksky: darksky,
+    locale: application.user.lang
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({

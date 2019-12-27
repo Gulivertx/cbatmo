@@ -1,5 +1,6 @@
 import React from 'react';
 import { Colors } from '@blueprintjs/core';
+import cx from 'classnames';
 import removeAccents from 'remove-accents';
 import { momentWithLocale } from '../utils/tools';
 
@@ -62,11 +63,11 @@ class ModuleDateTime extends React.Component<IPropsFromState, IState> {
                     <div className="time">{ this.state.hour }:{ this.state.minutes }<small>{this.state.seconds}</small></div>
                     <div className="date" style={{ color: Colors.GRAY5 }}>{ removeAccents(this.state.date) }</div>
                     <div className="sun">
-                        <div>
+                        <div className={cx(!this.props.sunrise_time && 'bp3-skeleton')}>
                             <div className="sunrise" style={{ color: Colors.GRAY4 }}>Sunrise</div>
                             <i className='wi wi-sunrise' style={{ color: Colors.GOLD4 }}/> {moment.unix(this.props.sunrise_time ? this.props.sunrise_time : 0).format('HH:mm')}
                         </div>
-                        <div>
+                        <div className={cx(!this.props.sunset_time && 'bp3-skeleton')}>
                             <div className="sunset" style={{ color: Colors.GRAY4 }}>Sunset</div>
                             <i className='wi wi-sunset' style={{ color: Colors.GOLD4 }}/> {moment.unix(this.props.sunset_time ? this.props.sunset_time : 0).format('HH:mm')}
                         </div>

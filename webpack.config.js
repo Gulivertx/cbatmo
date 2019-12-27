@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 require('dotenv').config();
 
@@ -22,6 +23,15 @@ const plugins = [
     }),
     // Ignore Moment Locales
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new WebpackPwaManifest({
+        name: 'CBatmo',
+        short_name: 'CBatmo',
+        description: 'A Netatmo Weather Station Web-APP for Raspberry Pi and official Raspberry touchscreen',
+        background_color: '#1E1E1E',
+        crossorigin: null,
+        display: 'fullscreen',
+        orientation: 'landscape'
+    })
 ];
 
 if (process.env.NODE_ENV === 'development') {

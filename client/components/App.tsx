@@ -10,6 +10,7 @@ import ModuleDateTimeContainer from "../containers/ModuleDateTimeContainer";
 import ModuleNetatmoStationContainer from "../containers/ModuleNetatmoStationContainer";
 import ModuleNetatmoIndoorContainer from "../containers/ModuleNetatmoIndoorContainer";
 import ModuleNetatmoOutdoorContainer from "../containers/ModuleNetatmoOutdoorContainer";
+import ModuleNetatmoRainContainer from "../containers/ModuleNetatmoRainContainer";
 import ModuleNetatmoBarometerContainer from "../containers/ModuleNetatmoBarometerContainer";
 import ModuleForecastContainer from "../containers/ModuleForecastContainer";
 
@@ -40,6 +41,7 @@ class App extends React.Component<AllProps> {
                             <ModuleNetatmoIndoorContainer />
                             <ModuleNetatmoOutdoorContainer />
                             <ModuleNetatmoBarometerContainer />
+                            <ModuleNetatmoRainContainer />
                             <ModuleForecastContainer />
                         </DashboardLayoutContainer>
                     ) : (

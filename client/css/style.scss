@@ -72,7 +72,7 @@ body {
   }
 
   .sub-label {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 }
 
@@ -107,8 +107,28 @@ body {
 
 .module-forecast {
   display: flex;
-  justify-content: center;
+  //justify-content: center;
   align-items: center;
+  padding-top: 16px;
+
+  .module-forecast-daily {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 6px;
+    width: 82px;
+
+    .daily-temperatures {
+      display: flex;
+      justify-content: space-around;
+      padding-top: 4px;
+      width: 100%;
+    }
+
+    .icon {
+      padding-top: 12px;
+    }
+  }
 }
 
 /** Layouts **/
@@ -131,19 +151,19 @@ body {
     align-items: center;
 
     .time {
-      font-size: 4.8rem;
+      font-size: 5.8rem;
       line-height: 0.8;
       padding-top: 20px;
       //font-weight: 700;
 
       small {
         margin-left: 4px;
-        font-size: 3rem;
+        font-size: 2.9rem;
       }
     }
 
     .date {
-      //font-size: 1.6rem;
+      font-size: 1.4rem;
     }
 
     .sun {
