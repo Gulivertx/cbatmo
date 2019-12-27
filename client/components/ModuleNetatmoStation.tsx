@@ -16,6 +16,7 @@ const NetatmoModuleStation: React.FunctionComponent<IPropsFromState> = (props) =
         <ModuleLayout
             label={props.station_data?.module_name}
             reachable={props.station_data?.reachable}
+            vertical_divider={true}
         >
             <div className="modules-layout">
                 <div className="row">

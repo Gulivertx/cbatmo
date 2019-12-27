@@ -40,8 +40,8 @@ class ModuleNetatmoRainGraph extends React.Component<AllProps> {
     render() {
         return(
             <BarChart
-                width={140}
-                height={100}
+                width={170}
+                height={108}
                 data={this.props.data}
                 syncId="anyId"
                 margin={{top: 10, right: 0, left: -30, bottom: 0}}

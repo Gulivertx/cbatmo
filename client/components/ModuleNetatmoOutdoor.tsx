@@ -17,6 +17,7 @@ const NetatmoModuleOutdoor: React.FunctionComponent<IPropsFromState> = (props) =
             label={props.module_data?.module_name}
             reachable={props.module_data?.reachable}
             last_seen={props.module_data?.last_seen}
+            vertical_divider={true}
         >
             <div className="modules-layout">
                 <div className="row">

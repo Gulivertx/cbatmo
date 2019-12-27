@@ -58,7 +58,7 @@ class ModuleDateTime extends React.Component<IPropsFromState, IState> {
         let moment = momentWithLocale(this.props.locale);
 
         return (
-            <ModuleLayout label='Time' reachable={true}>
+            <ModuleLayout label='Time' reachable={true} vertical_divider={true}>
                 <div className="module-datetime">
                     <div className="time">{ this.state.hour }:{ this.state.minutes }<small>{this.state.seconds}</small></div>
                     <div className="date" style={{ color: Colors.GRAY5 }}>{ removeAccents(this.state.date) }</div>

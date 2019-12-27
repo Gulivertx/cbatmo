@@ -16,7 +16,6 @@ const NetatmoModuleRain: React.FunctionComponent<IPropsFromState> = (props) => {
         <ModuleLayout
             label={props.module_data?.module_name}
             reachable={props.module_data?.reachable}
-            fill={true}
         >
             <div className="modules-layout">
                 <div className="row">

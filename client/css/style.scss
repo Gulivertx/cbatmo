@@ -206,10 +206,11 @@ body {
 
   .second-column {
     display: grid;
-    grid-template-rows: 130px 140px 182px 28px;
+    grid-template-rows: 130px 144px 178px 28px;
 
-    .row {
-      display: flex;
+    .row-grid {
+      display: grid;
+      grid-template-columns: 220px 300px;
     }
   }
 }

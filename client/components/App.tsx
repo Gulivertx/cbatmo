@@ -47,11 +47,11 @@ class App extends React.Component<AllProps> {
                             </div>
                             <div className="second-column">
                                 <ModuleForecastContainer />
-                                <div className="row">
+                                <div className="row-grid">
                                     <ModuleNetatmoIndoorContainer />
                                     <ModuleNetatmoRainContainer />
                                 </div>
-                                <div className="row">
+                                <div className="row-grid">
                                     <ModuleNetatmoWindContainer />
                                     <ModuleNetatmoGraph />
                                 </div>

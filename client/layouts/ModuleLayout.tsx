@@ -9,6 +9,7 @@ interface IPropsFromState {
     reachable?: boolean
     last_seen?: number
     fill?: boolean
+    vertical_divider?: boolean
 }
 
 const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
@@ -25,7 +26,11 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
                     <ModuleNetatmoNotReachable last_seen={props.last_seen} />
                 )
             }
-            <div className="vertical-right-divider" />
+            {
+                props.vertical_divider && (
+                    <div className="vertical-right-divider" />
+                )
+            }
         </div>
     )
 };

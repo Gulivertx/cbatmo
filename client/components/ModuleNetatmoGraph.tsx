@@ -14,7 +14,6 @@ const NetatmoModuleGraph: React.FunctionComponent<IPropsFromState> = (props) => 
         <ModuleLayout
             label="Graph"
             reachable={true}
-            fill={true}
         >
             <div className="modules-layout">
                 <div style={{width: '300px'}} />
