@@ -59,7 +59,7 @@ class ModuleDateTime extends React.Component<IPropsFromState, IState> {
 
         return (
             <ModuleLayout label='Time' reachable={true}>
-                <div className="datetime-layout">
+                <div className="module-datetime">
                     <div className="time">{ this.state.hour }:{ this.state.minutes }<small>{this.state.seconds}</small></div>
                     <div className="date" style={{ color: Colors.GRAY5 }}>{ removeAccents(this.state.date) }</div>
                     <div className="sun">

@@ -1,7 +1,6 @@
 import React from 'react';
-import removeAccents from 'remove-accents';
 import { Colors } from "@blueprintjs/core";
-
+import ModuleNetatmoRainGraphContainer from "../containers/ModuleNetatmoRainGraphContainer";
 import ModuleLayout from "../layouts/ModuleLayout";
 
 import { INetatmoNAModule3 } from "../models/NetatmoNAModule3";
@@ -15,18 +14,18 @@ interface IPropsFromState {
 const NetatmoModuleRain: React.FunctionComponent<IPropsFromState> = (props) => {
     return (
         <ModuleLayout
-            label={props.module_data ? removeAccents(props.module_data.module_name) : ''}
+            label={props.module_data?.module_name}
             reachable={props.module_data?.reachable}
+            fill={true}
         >
             <div className="modules-layout">
                 <div className="row">
-                    <div className="rain-12">
-                        <div className="sub-label" style={{ color: Colors.GRAY4 }}>Hourly</div>
-                        {props.module_data?.data?.sum_rain_1 ? props.module_data?.data?.sum_rain_1.toFixed(1) : '-'}<small>mm</small>
+                    <div className="graph">
+                        <ModuleNetatmoRainGraphContainer />
                     </div>
                     <div className="rain-24">
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>Daily</div>
-                        {props.module_data?.data?.sum_rain_24 ? props.module_data?.data?.sum_rain_24.toFixed(1) : '-'}<small>mm</small>
+                        {props.module_data?.data?.sum_rain_24 ? props.module_data?.data?.sum_rain_24.toFixed(1) : '0'}<small>mm</small>
                     </div>
                 </div>
             </div>

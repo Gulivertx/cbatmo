@@ -6,13 +6,16 @@ import DashboardLayoutContainer from "../layouts/DashboardLayoutContainer";
 
 /** React components **/
 import AppStartingContainer from "../containers/AppStartingContainer";
+import ModuleNetatmoInformationContainer from "../containers/ModuleNetatmoInformationContainer";
 import ModuleDateTimeContainer from "../containers/ModuleDateTimeContainer";
 import ModuleNetatmoStationContainer from "../containers/ModuleNetatmoStationContainer";
-import ModuleNetatmoIndoorContainer from "../containers/ModuleNetatmoIndoorContainer";
 import ModuleNetatmoOutdoorContainer from "../containers/ModuleNetatmoOutdoorContainer";
+import ModuleNetatmoIndoorContainer from "../containers/ModuleNetatmoIndoorContainer";
 import ModuleNetatmoRainContainer from "../containers/ModuleNetatmoRainContainer";
+import ModuleNetatmoWindContainer from "../containers/ModuleNetatmoWindContainer";
 import ModuleNetatmoBarometerContainer from "../containers/ModuleNetatmoBarometerContainer";
 import ModuleForecastContainer from "../containers/ModuleForecastContainer";
+import ModuleNetatmoGraph from "../components/ModuleNetatmoGraph";
 
 import { ConnectedReduxProps } from '../store';
 
@@ -36,13 +39,24 @@ class App extends React.Component<AllProps> {
                 {
                     this.props.isConfigured ? (
                         <DashboardLayoutContainer>
-                            <ModuleDateTimeContainer/>
-                            <ModuleNetatmoStationContainer />
-                            <ModuleNetatmoIndoorContainer />
-                            <ModuleNetatmoOutdoorContainer />
-                            <ModuleNetatmoBarometerContainer />
-                            <ModuleNetatmoRainContainer />
-                            <ModuleForecastContainer />
+                            <div className="first-column">
+                                <ModuleDateTimeContainer/>
+                                <ModuleNetatmoStationContainer />
+                                <ModuleNetatmoOutdoorContainer />
+                                <ModuleNetatmoBarometerContainer />
+                            </div>
+                            <div className="second-column">
+                                <ModuleForecastContainer />
+                                <div className="row">
+                                    <ModuleNetatmoIndoorContainer />
+                                    <ModuleNetatmoRainContainer />
+                                </div>
+                                <div className="row">
+                                    <ModuleNetatmoWindContainer />
+                                    <ModuleNetatmoGraph />
+                                </div>
+                                <ModuleNetatmoInformationContainer />
+                            </div>
                         </DashboardLayoutContainer>
                     ) : (
                         <AppStartingContainer />

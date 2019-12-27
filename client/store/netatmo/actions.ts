@@ -5,7 +5,7 @@ import moment from 'moment';
 import { setUserInfo } from "../application/actions";
 import NetatmoNAMain from '../../models/NetatmoNAMain';
 import NetatmoUserInformation from "../../models/NetatmoUserInformation";
-import NetatmoModuleChartData from "../../DTO/NetatmoModuleChartData";
+import NetatmoChartsData from "../../models/NetatmoChartsData";
 import { NetatmoActionTypes } from "./types";
 
 const NETATMO_API_ROOT_URL = "https://api.netatmo.com/";
@@ -225,8 +225,8 @@ export const fetchMainMeasure = (device: string, module: string, type: string, h
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoModuleChartData(json.body, type)
-                    dispatch(successMainMeasure(dataChart.data))
+                    // const dataChart = new NetatmoModuleChartData(json.body, type)
+                    // dispatch(successMainMeasure(dataChart.data))
                 })
                 .catch(error => {
                     // Todo types
@@ -276,8 +276,8 @@ export const fetchoutdoorMeasure = (device: string, module: string, type: string
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoModuleChartData(json.body, type)
-                    dispatch(successOutdoorMeasure(dataChart.data))
+                    // const dataChart = new NetatmoModuleChartData(json.body, type)
+                    // dispatch(successOutdoorMeasure(dataChart.data))
                 })
                 .catch(error => {
                     // Todo types
@@ -327,8 +327,8 @@ export const fetchWindMeasure = (device: string, module: string, type: string, h
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoModuleChartData(json.body, type)
-                    dispatch(successWindMeasure(dataChart.data))
+                    // const dataChart = new NetatmoModuleChartData(json.body, type)
+                    // dispatch(successWindMeasure(dataChart.data))
                 })
                 .catch(error => {
                     // Todo types
@@ -363,7 +363,7 @@ export const failureNRainMeasure = (error: any) => {
     }
 };
 
-export const fetchRainMeasure = (device: string, module: string, type: string, hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchRainMeasure = (device: string, module: string, type: string, hours = 24): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if (getState().netatmo.measure_rain_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
@@ -378,7 +378,7 @@ export const fetchRainMeasure = (device: string, module: string, type: string, h
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoModuleChartData(json.body, type)
+                    const dataChart = new NetatmoChartsData(json.body, type)
                     dispatch(successRainMeasure(dataChart.data))
                 })
                 .catch(error => {
@@ -429,8 +429,8 @@ export const fetchIndoorMeasure = (device: string, module: string, type: string,
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoModuleChartData(json.body, type)
-                    dispatch(successIndoorMeasure(dataChart.data))
+                    // const dataChart = new NetatmoModuleChartData(json.body, type)
+                    // dispatch(successIndoorMeasure(dataChart.data))
                 })
                 .catch(error => {
                     // Todo types

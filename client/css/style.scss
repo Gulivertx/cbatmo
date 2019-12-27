@@ -39,9 +39,9 @@ body {
 /** Module container **/
 .module-container {
   position: relative;
-  padding: 10px;
+  padding: 5px 10px;
   //max-width: 266px;
-  min-width: 240px;
+  //min-width: 180px;
 
   .item-label {
     position: absolute;
@@ -80,7 +80,7 @@ body {
 .modules-layout {
   display: flex;
   flex-direction: column;
-  padding-top: 18px;
+  padding-top: 22px;
   font-size: 2.8rem;
 
   small {
@@ -97,11 +97,52 @@ body {
 .module-unreachable {
   display: flex;
   align-items: center;
-  padding-top: 12px;
+  padding-top: 22px;
 
   .description {
-    font-size: 1rem;
+    font-size: 0.8rem;
     margin-left: 12px;
+  }
+}
+
+.module-datetime {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 4px;
+
+  .time {
+    font-size: 5.8rem;
+    line-height: 0.8;
+    padding-top: 20px;
+    //font-weight: 700;
+
+    small {
+      margin-left: 4px;
+      font-size: 2.9rem;
+    }
+  }
+
+  .date {
+    font-size: 1.4rem;
+  }
+
+  .sun {
+    padding-top: 2px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+
+    .sunrise {
+      font-size: 1rem;
+      padding-bottom: 2px;
+    }
+    .sunset {
+      font-size: 1rem;
+      padding-bottom: 2px;
+      text-align: right;
+    }
   }
 }
 
@@ -109,7 +150,7 @@ body {
   display: flex;
   //justify-content: center;
   align-items: center;
-  padding-top: 16px;
+  padding-top: 20px;
 
   .module-forecast-daily {
     display: flex;
@@ -131,6 +172,21 @@ body {
   }
 }
 
+.module-netatmo-information {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  .station-name {
+    margin-right: 12px;
+    font-size: 1.8rem;
+  }
+  .last-update {
+    margin-right: 12px;
+    font-size: 1rem;
+  }
+}
+
 /** Layouts **/
 .main-layout {
   z-index: 10;
@@ -138,51 +194,31 @@ body {
   display: flex;
 }
 
+/** Layout for all modules **/
+.dashboard-grid-layout {
+  display: grid;
+  grid-template-columns: 280px 520px;
+
+  .first-column {
+    display: grid;
+    grid-template-rows: 176px 145px 85px 74px;
+  }
+
+  .second-column {
+    display: grid;
+    grid-template-rows: 130px 140px 182px 28px;
+
+    .row {
+      display: flex;
+    }
+  }
+}
+
 .dashboard-layout {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   //flex: 1;
-
-  .datetime-layout {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    .time {
-      font-size: 5.8rem;
-      line-height: 0.8;
-      padding-top: 20px;
-      //font-weight: 700;
-
-      small {
-        margin-left: 4px;
-        font-size: 2.9rem;
-      }
-    }
-
-    .date {
-      font-size: 1.4rem;
-    }
-
-    .sun {
-      padding-top: 2px;
-      width: 100%;
-      display: flex;
-      justify-content: space-evenly;
-
-      .sunrise {
-        font-size: 1rem;
-        padding-bottom: 2px;
-      }
-      .sunset {
-        font-size: 1rem;
-        padding-bottom: 2px;
-        text-align: right;
-      }
-    }
-  }
 }
 
 /** Starting page **/

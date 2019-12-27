@@ -1,4 +1,5 @@
 import React from 'react';
+import removeAccents from 'remove-accents';
 
 import ModuleNetatmoNotReachable from '../components/ModuleNetatmoNotReachable';
 
@@ -7,13 +8,14 @@ interface IPropsFromState {
     label?: string
     reachable?: boolean
     last_seen?: number
+    fill?: boolean
 }
 
 const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
     return (
-        <div className="module-container">
+        <div className="module-container" style={props.fill ? {flex: 1} : {minWidth: '180px'}}>
             <div className="item-label">
-                <div className="label">{props.label}</div>
+                <div className="label">{removeAccents(props.label? props.label : '')}</div>
                 <div className="horizontal-top-divider" />
             </div>
             {

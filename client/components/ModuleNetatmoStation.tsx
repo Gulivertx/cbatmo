@@ -1,11 +1,9 @@
 import React from 'react';
-import removeAccents from 'remove-accents';
 import { Colors } from "@blueprintjs/core";
 
 import ModuleLayout from "../layouts/ModuleLayout";
 
 import { INetatmoNAMain } from "../models/NetatmoNAMain";
-import { setWifiStatusIcon } from "../utils/tools";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -16,7 +14,7 @@ interface IPropsFromState {
 const NetatmoModuleStation: React.FunctionComponent<IPropsFromState> = (props) => {
     return (
         <ModuleLayout
-            label={props.station_data ? removeAccents(props.station_data.module_name) : ''}
+            label={props.station_data?.module_name}
             reachable={props.station_data?.reachable}
         >
             <div className="modules-layout">

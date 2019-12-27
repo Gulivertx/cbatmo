@@ -11,9 +11,9 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
 
 });
 
-const ModuleNetatmoNAMainContainer = connect(
+const ModuleNetatmoStationContainer = connect(
     mapStateToProps,
     mapDispatchToProps
 )(ModuleNetatmoStation);
 
-export default ModuleNetatmoNAMainContainer
+export default ModuleNetatmoStationContainer
