@@ -8,13 +8,13 @@ export interface INetatmoChartData {
 class NetatmoModuleChartData implements INetatmoChartData{
     data = [];
 
-    constructor(data: any, type: string) {
+    constructor(data: any, type: string[]) {
         this.data = [];
 
         Object.entries(data).map((obj: any) => {
             const formatedObject: any = {name: moment.unix(Number.parseInt(obj[0])).format('HH:mm')};
 
-            type.split(',').map((label, index) => {
+            type.map((label, index) => {
                 formatedObject[label] = obj[1][index];
             });
 

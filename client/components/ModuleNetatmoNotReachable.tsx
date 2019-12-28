@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import {Icon, Intent, Colors} from "@blueprintjs/core";
+import {Icon, Intent} from "@blueprintjs/core";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {

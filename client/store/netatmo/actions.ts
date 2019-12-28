@@ -210,7 +210,7 @@ export const failureMainMeasure = (error: any) => {
     }
 };
 
-export const fetchMainMeasure = (device: string, module: string, type: string, hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchMainMeasure = (device: string, module: string, type: string[], hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if (getState().netatmo.measure_main_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
@@ -219,14 +219,14 @@ export const fetchMainMeasure = (device: string, module: string, type: string, h
             const date_begin = moment().subtract(hours, 'hours').unix();
             const date_end = moment().unix();
 
-            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=1hour&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
                 .then(response => {
                     if (!response.ok) throw response;
                     return response.json()
                 })
                 .then(json => {
-                    // const dataChart = new NetatmoModuleChartData(json.body, type)
-                    // dispatch(successMainMeasure(dataChart.data))
+                    const dataChart = new NetatmoChartsData(json.body, type)
+                    dispatch(successMainMeasure(dataChart.data))
                 })
                 .catch(error => {
                     // Todo types
@@ -234,6 +234,8 @@ export const fetchMainMeasure = (device: string, module: string, type: string, h
                         dispatch(failureMainMeasure(errorMessage))
                     })
                 });
+        } else {
+            console.debug('No new Netatmo main measure data to fetch')
         }
     }
 };
@@ -261,7 +263,7 @@ export const failureOutdoorMeasure = (error: any) => {
     }
 };
 
-export const fetchoutdoorMeasure = (device: string, module: string, type: string, hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchOutdoorMeasure = (device: string, module: string, type: string[], hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if (getState().netatmo.measure_outdoor_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
@@ -270,14 +272,14 @@ export const fetchoutdoorMeasure = (device: string, module: string, type: string
             const date_begin = moment().subtract(hours, 'hours').unix();
             const date_end = moment().unix();
 
-            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=1hour&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
                 .then(response => {
                     if (!response.ok) throw response;
                     return response.json()
                 })
                 .then(json => {
-                    // const dataChart = new NetatmoModuleChartData(json.body, type)
-                    // dispatch(successOutdoorMeasure(dataChart.data))
+                    const dataChart = new NetatmoChartsData(json.body, type)
+                    dispatch(successOutdoorMeasure(dataChart.data))
                 })
                 .catch(error => {
                     // Todo types
@@ -285,6 +287,8 @@ export const fetchoutdoorMeasure = (device: string, module: string, type: string
                         dispatch(failureOutdoorMeasure(errorMessage))
                     })
                 });
+        } else {
+            console.debug('No new Netatmo outdoor measure data to fetch')
         }
     }
 };
@@ -312,7 +316,7 @@ export const failureWindMeasure = (error: any) => {
     }
 };
 
-export const fetchWindMeasure = (device: string, module: string, type: string, hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchWindMeasure = (device: string, module: string, type: string[], hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if (getState().netatmo.measure_wind_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
@@ -321,14 +325,14 @@ export const fetchWindMeasure = (device: string, module: string, type: string, h
             const date_begin = moment().subtract(hours, 'hours').unix();
             const date_end = moment().unix();
 
-            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=1hour&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
                 .then(response => {
                     if (!response.ok) throw response;
                     return response.json()
                 })
                 .then(json => {
-                    // const dataChart = new NetatmoModuleChartData(json.body, type)
-                    // dispatch(successWindMeasure(dataChart.data))
+                    const dataChart = new NetatmoChartsData(json.body, type);
+                    dispatch(successWindMeasure(dataChart.data))
                 })
                 .catch(error => {
                     // Todo types
@@ -336,6 +340,8 @@ export const fetchWindMeasure = (device: string, module: string, type: string, h
                         dispatch(failureWindMeasure(errorMessage))
                     })
                 });
+        } else {
+            console.debug('No new Netatmo wind measure data to fetch')
         }
     }
 };
@@ -363,22 +369,22 @@ export const failureNRainMeasure = (error: any) => {
     }
 };
 
-export const fetchRainMeasure = (device: string, module: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchRainMeasure = (device: string, module: string, type: string[], hours = 23): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if (getState().netatmo.measure_rain_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
             dispatch(requestRainMeasure());
 
-            const date_begin = moment().subtract(23, 'hours').unix();
+            const date_begin = moment().subtract(hours, 'hours').unix();
             const date_end = moment().unix();
 
-            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=1hour&type=Rain&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=1hour&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
                 .then(response => {
                     if (!response.ok) throw response;
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoChartsData(json.body, 'Rain');
+                    const dataChart = new NetatmoChartsData(json.body, ['Rain']);
                     dispatch(successRainMeasure(dataChart.data))
                 })
                 .catch(error => {
@@ -387,6 +393,8 @@ export const fetchRainMeasure = (device: string, module: string): ThunkAction<vo
                         dispatch(failureNRainMeasure(errorMessage))
                     })
                 });
+        } else {
+            console.debug('No new Netatmo rain measure data to fetch')
         }
     }
 };
@@ -414,7 +422,7 @@ export const failureIndooMeasure = (error: any) => {
     }
 };
 
-export const fetchIndoorMeasure = (device: string, module: string, type: string, hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchIndoorMeasure = (device: string, module: string, type: string[], hours = 12): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if (getState().netatmo.measure_indoor_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
@@ -423,14 +431,14 @@ export const fetchIndoorMeasure = (device: string, module: string, type: string,
             const date_begin = moment().subtract(hours, 'hours').unix();
             const date_end = moment().unix();
 
-            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=30min&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=1hour&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
                 .then(response => {
                     if (!response.ok) throw response;
                     return response.json()
                 })
                 .then(json => {
-                    // const dataChart = new NetatmoModuleChartData(json.body, type)
-                    // dispatch(successIndoorMeasure(dataChart.data))
+                    const dataChart = new NetatmoChartsData(json.body, type);
+                    dispatch(successIndoorMeasure(dataChart.data))
                 })
                 .catch(error => {
                     // Todo types
@@ -438,6 +446,8 @@ export const fetchIndoorMeasure = (device: string, module: string, type: string,
                         dispatch(failureIndooMeasure(errorMessage))
                     })
                 });
+        } else {
+            console.debug('No new Netatmo indoor measure data to fetch')
         }
     }
 };

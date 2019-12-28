@@ -40,6 +40,7 @@ body {
 .module-container {
   position: relative;
   padding: 5px 10px;
+  flex: 1;
   //max-width: 266px;
   //min-width: 180px;
 
@@ -215,6 +216,10 @@ body {
   .second-column {
     display: grid;
     grid-template-rows: 130px 144px 178px 28px;
+
+    .row {
+      display: flex;
+    }
 
     .row-grid {
       display: grid;

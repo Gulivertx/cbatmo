@@ -1,12 +1,14 @@
 import { connect } from 'react-redux'
 import { ThunkDispatch } from "redux-thunk";
-import ModuleNetatmoRainGraph from "../components/ModuleNetatmoRainGraph";
+import ModuleNetatmoGraph from "../components/ModuleNetatmoGraph";
 import {ApplicationState} from "../store";
 
 const mapStateToProps = ({ netatmo}: ApplicationState) => ({
-    device: netatmo.station_data?.id,
-    module: netatmo.station_data?.modules.RAIN?.id,
-    data: netatmo.measure_rain_data
+    data_main: netatmo.measure_main_data,
+    data_indoor: netatmo.measure_indoor_data,
+    data_outdoor: netatmo.measure_outdoor_data,
+    data_rain: netatmo.measure_rain_data,
+    data_wind: netatmo.measure_wind_data
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
@@ -16,6 +18,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
 const ModuleNetatmoRainGraphContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(ModuleNetatmoRainGraph);
+)(ModuleNetatmoGraph);
 
 export default ModuleNetatmoRainGraphContainer
