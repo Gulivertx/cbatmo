@@ -21,19 +21,18 @@ const NetatmoModuleWind: React.FunctionComponent<IPropsFromState> = (props) => {
         >
             <div className="modules-layout">
                 <div className="row">
-                    <div className="strength">
+                    <div className="wind-strength">
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>Wind strength</div>
                         {props.module_data?.data?.wind_strength}<small>{props.unit}</small>
                     </div>
-                    <div className="max">
+                    <div className="wind-max">
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>Max day</div>
                         {props.module_data?.data?.max_wind_str}<small>{props.unit}</small>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="gust">
-                        <div className="sub-label" style={{ color: Colors.GRAY4}}>Gust</div>
-                        {props.module_data?.data?.gust_strength}<small>{props.unit}</small>
+                    <div className="wind-orientation">
+                        <i className={'wind-icon wi wi-wind from-' + props.module_data?.data?.wind_angle + '-deg'}/>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,4 @@
 import {INetatmoNAMain} from "../../models/NetatmoNAMain";
-import {IDarkskyData} from "../../models/DarkskyData";
 
 export enum NetatmoActionTypes {
     AUTH_REQUEST = '@@netatmo/AUTH_REQUEST',

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {Colors} from "@blueprintjs/core";
 import { BarChart, Bar, YAxis, CartesianGrid } from 'recharts';
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
@@ -26,10 +26,10 @@ class ModuleNetatmoRainGraph extends React.Component<AllProps> {
     private interval: number | undefined;
 
     public componentDidMount(): void {
-        this.props.fetchRainMeasure(this.props.device as string, this.props.module as string, 'Rain');
+        this.props.fetchRainMeasure(this.props.device as string, this.props.module as string);
 
         this.interval = setInterval(() => {
-            this.props.fetchRainMeasure(this.props.device as string, this.props.module as string, 'Rain');
+            this.props.fetchRainMeasure(this.props.device as string, this.props.module as string);
         }, REFRESH_TIME);
     }
 
@@ -46,9 +46,9 @@ class ModuleNetatmoRainGraph extends React.Component<AllProps> {
                 syncId="anyId"
                 margin={{top: 10, right: 0, left: -30, bottom: 0}}
             >
-                <CartesianGrid stroke='rgba(57, 70, 80, 0.4)' vertical={false}/>
-                <YAxis tick={{fontSize: '10px'}} minTickGap={1} />
-                <Bar dataKey='Rain' fill='#1e88e5' minPointSize={1}/>
+                <CartesianGrid stroke={Colors.GRAY1} vertical={false}/>
+                <YAxis tick={{fontSize: '10px'}} stroke={Colors.GRAY4} minTickGap={1} />
+                <Bar dataKey='Rain' fill='#1e88e5' minPointSize={1} isAnimationActive={false}/>
             </BarChart>
         )
     }

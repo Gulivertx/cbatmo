@@ -11,7 +11,7 @@ const mapStateToProps = ({ netatmo}: ApplicationState) => ({
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
-    fetchRainMeasure: (device: string, module: string, type: string) => dispatch(netatmoActions.fetchRainMeasure(device, module, type))
+    fetchRainMeasure: (device: string, module: string) => dispatch(netatmoActions.fetchRainMeasure(device, module))
 });
 
 const ModuleNetatmoRainGraphContainer = connect(

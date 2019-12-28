@@ -363,22 +363,22 @@ export const failureNRainMeasure = (error: any) => {
     }
 };
 
-export const fetchRainMeasure = (device: string, module: string, type: string, hours = 24): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchRainMeasure = (device: string, module: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if (getState().netatmo.measure_rain_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
             dispatch(requestRainMeasure());
 
-            const date_begin = moment().subtract(hours, 'hours').unix();
+            const date_begin = moment().subtract(23, 'hours').unix();
             const date_end = moment().unix();
 
-            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=1hour&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
+            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=1hour&type=Rain&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
                 .then(response => {
                     if (!response.ok) throw response;
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoChartsData(json.body, type)
+                    const dataChart = new NetatmoChartsData(json.body, 'Rain');
                     dispatch(successRainMeasure(dataChart.data))
                 })
                 .catch(error => {

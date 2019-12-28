@@ -58,15 +58,15 @@ body {
     .horizontal-top-divider {
       border-top: 1px solid $gray;
       flex: 1;
-      margin: 0 8px 0 4px;
+      margin: 0 0 0 4px;
     }
   }
 
   .vertical-right-divider {
     position: absolute;
-    top: 4px;
+    top: 0;
     right: 0;
-    bottom: 4px;
+    bottom: 0;
     border-right: 1px solid $gray;
     //margin: 8px 0 8px 0;
   }
@@ -91,6 +91,14 @@ body {
   .row {
     display: flex;
     justify-content: space-between;
+
+    .wind-orientation {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 5rem;
+    }
   }
 }
 
