@@ -3,11 +3,14 @@ import * as darkskyActions from "../store/darksky/actions";
 import * as netatmoActions from "../store/netatmo/actions";
 import { ConnectedReduxProps } from "../store";
 import { INetatmoNAMain } from "../models/NetatmoNAMain";
+import {Types} from "../models/NetatmoChartsData";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     children: ReactNode
     station_data: INetatmoNAMain|undefined
+    selected_module: string
+    selected_types: Types[]
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -15,11 +18,8 @@ interface IPropsFromDispatch {
     [key: string]: any
     fetchDarksky: typeof darkskyActions.fetchDarksky
     fetchStationData: typeof netatmoActions.fetchStationData
-    fetchMainMeasure: typeof netatmoActions.fetchMainMeasure
-    fetchIndoorMeasure: typeof netatmoActions.fetchIndoorMeasure
-    fetchOutdoorMeasure: typeof netatmoActions.fetchOutdoorMeasure
+    fetchMeasure: typeof netatmoActions.fetchMeasure
     fetchRainMeasure: typeof netatmoActions.fetchRainMeasure
-    fetchWindMeasure: typeof netatmoActions.fetchWindMeasure
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -32,7 +32,14 @@ class DashboardLayout extends React.Component<AllProps> {
 
     public componentDidMount(): void {
         this.props.fetchDarksky();
-        this.fetchNetatmoModulesMeasures();
+
+        // Fetch on app load the temperature measure of Indoor module
+        this.props.fetchMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.OUTDOOR?.id as string, ['Temperature']);
+
+        // Fetch on app load the rain measure
+        if (this.props.station_data?.available_modules.RAIN) {
+            this.props.fetchRainMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.RAIN?.id as string);
+        }
 
         this.interval = setInterval(() => {
             this.props.fetchDarksky();
@@ -46,22 +53,10 @@ class DashboardLayout extends React.Component<AllProps> {
     }
 
     private fetchNetatmoModulesMeasures = (): void => {
-        // @ts-ignore
-        this.props.fetchMainMeasure(this.props.station_data?.id as string, this.props.station_data?.id as string, this.props.station_data?.data_type);
-
-        if (this.props.station_data?.available_modules.INDOOR) {
-            // @ts-ignore
-            this.props.fetchIndoorMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.INDOOR?.id as string, this.props.station_data?.modules.INDOOR?.data_type);
-        }
-
-        if (this.props.station_data?.available_modules.OUTDOOR) {
-            // @ts-ignore
-            this.props.fetchOutdoorMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.OUTDOOR?.id as string, this.props.station_data?.modules.OUTDOOR?.data_type);
-        }
+        this.props.fetchMeasure(this.props.station_data?.id as string, this.props.selected_module as string, this.props.selected_types);
 
         if (this.props.station_data?.available_modules.RAIN) {
-            // @ts-ignore
-            this.props.fetchRainMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.RAIN?.id as string, this.props.station_data?.modules.RAIN?.data_type);
+            this.props.fetchRainMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.RAIN?.id as string);
         }
     };
 

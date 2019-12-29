@@ -1,4 +1,5 @@
 import {INetatmoNAMain} from "../../models/NetatmoNAMain";
+import {Types} from "../../models/NetatmoChartsData";
 
 export enum NetatmoActionTypes {
     AUTH_REQUEST = '@@netatmo/AUTH_REQUEST',
@@ -13,25 +14,13 @@ export enum NetatmoActionTypes {
     STATION_DATA_SUCCESS = '@@netatmo/STATION_DATA_SUCCESS',
     STATION_DATA_FAILURE = '@@netatmo/STATION_DATA_FAILURE',
 
-    MEASURE_MAIN_REQUEST = '@@netatmo/MEASURE_MAIN_REQUEST',
-    MEASURE_MAIN_SUCCESS = '@@netatmo/MEASURE_MAIN_SUCCESS',
-    MEASURE_MAIN_FAILURE = '@@netatmo/MEASURE_MAIN_FAILURE',
-
-    MEASURE_OUTDOOR_REQUEST = '@@netatmo/MEASURE_OUTDOOR_REQUEST',
-    MEASURE_OUTDOOR_SUCCESS = '@@netatmo/MEASURE_OUTDOOR_SUCCESS',
-    MEASURE_OUTDOOR_FAILURE = '@@netatmo/MEASURE_OUTDOOR_FAILURE',
-
-    MEASURE_WIND_REQUEST = '@@netatmo/MEASURE_WIND_REQUEST',
-    MEASURE_WIND_SUCCESS = '@@netatmo/MEASURE_WIND_SUCCESS',
-    MEASURE_WIND_FAILURE = '@@netatmo/MEASURE_WIND_FAILURE',
+    MEASURE_REQUEST = '@@netatmo/MEASURE_REQUEST',
+    MEASURE_SUCCESS = '@@netatmo/MEASURE_SUCCESS',
+    MEASURE_FAILURE = '@@netatmo/MEASURE_FAILURE',
 
     MEASURE_RAIN_REQUEST = '@@netatmo/MEASURE_RAIN_REQUEST',
     MEASURE_RAIN_SUCCESS = '@@netatmo/MEASURE_RAIN_SUCCESS',
     MEASURE_RAIN_FAILURE = '@@netatmo/MEASURE_RAIN_FAILURE',
-
-    MEASURE_INDOOR_REQUEST = '@@netatmo/MEASURE_INDOOR_REQUEST',
-    MEASURE_INDOOR_SUCCESS = '@@netatmo/MEASURE_INDOOR_SUCCESS',
-    MEASURE_INDOOR_FAILURE = '@@netatmo/MEASURE_INDOOR_FAILURE',
 }
 
 // The complete state for the store
@@ -54,23 +43,13 @@ export interface INetatmoState {
     readonly station_data: INetatmoNAMain|undefined
     readonly first_fetch: boolean
 
-    readonly loading_main: boolean
-    readonly measure_main_data: []
-    readonly measure_main_errors: any|undefined
+    readonly loading_measure: boolean
+    readonly measure_data: []
+    readonly measure_errors: any|undefined
+    readonly selected_module: string
+    readonly selected_types: Types[]
 
-    readonly loading_outdoor: boolean
-    readonly measure_outdoor_data: []
-    readonly measure_outdoor_errors: any|undefined
-
-    readonly loading_wind: boolean
-    readonly measure_wind_data: []
-    readonly measure_wind_errors: any|undefined
-
-    readonly loading_rain: boolean
+    readonly loading_rain_measure: boolean
     readonly measure_rain_data: []
     readonly measure_rain_errors: any|undefined
-
-    readonly loading_indoor: boolean
-    readonly measure_indoor_data: []
-    readonly measure_indoor_errors: any|undefined
 }

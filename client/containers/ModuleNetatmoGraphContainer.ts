@@ -4,11 +4,10 @@ import ModuleNetatmoGraph from "../components/ModuleNetatmoGraph";
 import {ApplicationState} from "../store";
 
 const mapStateToProps = ({ netatmo}: ApplicationState) => ({
-    data_main: netatmo.measure_main_data,
-    data_indoor: netatmo.measure_indoor_data,
-    data_outdoor: netatmo.measure_outdoor_data,
-    data_rain: netatmo.measure_rain_data,
-    data_wind: netatmo.measure_wind_data
+    measure_data: netatmo.measure_data,
+    selected_types: netatmo.selected_types,
+    selected_module: netatmo.selected_module,
+    station_data: netatmo.station_data
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({

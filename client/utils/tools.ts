@@ -1,4 +1,6 @@
 import moment from "moment";
+import {Types} from "../models/NetatmoChartsData";
+import {Colors} from "@blueprintjs/core";
 
 /**
  * Set locale for momentjs
@@ -20,6 +22,24 @@ export const momentWithLocale = (locale: string) => {
     }
 
     return moment;
+};
+
+/**
+ * @param type
+ */
+export const colorChooser = (type: Types): string => {
+    switch (type) {
+        case 'Temperature':
+            return Colors.GOLD5;
+        case 'Humidity':
+            return Colors.BLUE5;
+        case 'CO2':
+            return Colors.GREEN5;
+        case 'Noise':
+            return Colors.RED5;
+        case 'Pressure':
+            return Colors.COBALT5;
+    }
 };
 
 /**

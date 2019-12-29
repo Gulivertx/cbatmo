@@ -4,6 +4,9 @@ export interface INetatmoChartData {
     data: any[]
 }
 
+export type Scale = '30min'|'1hour'|'3hours'|'1day'|'1week'|'1month';
+export type Types = 'Temperature'|'CO2'|'Humidity'|'Noise'|'Pressure';
+
 /** Netatmo Charts Data DTO */
 class NetatmoModuleChartData implements INetatmoChartData{
     data = [];
