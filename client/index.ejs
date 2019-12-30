@@ -9,12 +9,26 @@
     <meta name="keywords" content="<%= keywords %>">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
 </head>
-<body>
+<body class="bp3-dark background background-img">
 <noscript>
     <div>
         You need to enable JavaScript to run this app.
     </div>
 </noscript>
 <div id="app-root"></div>
+
+<script type="application/javascript">
+    window.preloadedState = '<%- JSON.stringify({
+        application: {
+            info: {
+                name: title,
+                description: description,
+                version: version,
+                author: author
+            }
+        },
+        netatmo: netatmo
+    }) %>'
+</script>
 </body>
 </html>

@@ -8,18 +8,16 @@ const logger = require('morgan');
 const fs = require('fs');
 const path = require('path');
 const rfs = require('rotating-file-stream');
-const os = require('os');
 const DarkSkyApi = require('dark-sky-api');
+const pjson = require('./package.json');
+require('dotenv').config();
 
-const common = require('./config/common');
-const config = common.config();
-const appInfo = common.info();
-const apiConfig = require('./config/api');
+process.env.APP_ENV === 'dev' ? process.env.NODE_ENV = 'development' : process.env.NODE_ENV = 'production';
 
 const app = express();
 
 /** Configure DarkSkyApi **/
-DarkSkyApi.apiKey = apiConfig.dark_sky.secret_key;
+DarkSkyApi.apiKey = process.env.DARKSKY_SECRET_KEY;
 DarkSkyApi.proxy = true;
 
 /** Logs configuration **/
@@ -28,7 +26,7 @@ const logsDir = path.join(__dirname, 'logs');
 // Ensure logs directory exists
 fs.existsSync(logsDir) || fs.mkdirSync(logsDir);
 // Create a rotating write stream
-const accessLogStream = rfs('access.log', {
+const accessLogStream = rfs.createStream('access.log', {
     interval: '1d', // rotate daily
     path: logsDir
 });
@@ -37,47 +35,38 @@ const accessLogStream = rfs('access.log', {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
 /** Express configuration **/
 app.use(compression());
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(logger(config.log, config.log === 'dev' ? null : {stream: accessLogStream}));
+app.use(logger(
+    process.env.APP_ENV === 'dev' ? process.env.APP_ENV : 'combined',
+    process.env.APP_ENV === 'dev' ? null : {stream: accessLogStream}
+    ));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res, next) => {
+    let keywords = '';
+
+    pjson.keywords.map((keyword, index) => keywords += index !== 0 ? `, ${keyword}` : keyword);
+
     res.render('index', {
-        title: appInfo.name,
-        description: appInfo.description,
-        version: appInfo.version,
-        author: appInfo.author,
-        keywords: appInfo.keywords
-    });
-});
-
-app.get('/info', (req, res, next) => {
-    res.json({
-        name: appInfo.name,
-        description: appInfo.description,
-        version: appInfo.version,
-        author: appInfo.author,
-        process: {
-            platform: os.platform(),
-            arch: os.arch(),
-            release: os.release(),
-            hostname: os.hostname(),
-            type: os.type(),
-            cpuload: os.loadavg(),
-            usedmem: Math.round((os.totalmem() - os.freemem()) / 1024 / 1024),
-            totalmem: Math.round(os.totalmem() / 1024 / 1024),
-            uptime: getTimeString(os.uptime() * 1000)
-
+        title: pjson.name,
+        description: pjson.description,
+        version: pjson.version,
+        author: pjson.author,
+        keywords: keywords,
+        netatmo: {
+            client_id: process.env.NETATMO_CLIENT_ID,
+            client_secret: process.env.NETATMO_CLIENT_SECRET,
+            username: process.env.NETATMO_USERNAME,
+            password: process.env.NETATMO_PASSWORD
         }
-    })
+    });
 });
 
 app.get('/darksky/:latitude/:longitude/:lang/:units', (req, res, next) => {
@@ -116,20 +105,6 @@ app.use((err, req, res, next) => {
     res.render('error');
 });
 
-
 app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000')
+    console.log('Server running on http://localhost:3000 as ' + process.env.NODE_ENV)
 });
-
-const getTimeString = (milli) => {
-    let d, h, m, s, ms;
-    s = Math.floor(milli / 1000);
-    m = Math.floor(s / 60);
-    s = s % 60; s = s < 10 ? '0' + s : s;
-    h = Math.floor(m / 60);
-    m = m % 60; m = m < 10 ? '0' + m : m;
-    d = Math.floor(h / 24);
-    h = h % 24; h = h < 10 ? '0' + h : h;
-    ms = Math.floor((milli % 1000) * 1000) / 1000;
-    return `${d}d ${h}:${m}:${s}`;
-};

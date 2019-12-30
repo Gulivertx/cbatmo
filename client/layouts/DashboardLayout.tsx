@@ -1,0 +1,72 @@
+import React, { ReactNode } from 'react';
+import * as darkskyActions from "../store/darksky/actions";
+import * as netatmoActions from "../store/netatmo/actions";
+import { ConnectedReduxProps } from "../store";
+import { INetatmoNAMain } from "../models/NetatmoNAMain";
+import {Types} from "../models/NetatmoChartsData";
+
+// Separate state props + dispatch props to their own interfaces.
+interface IPropsFromState {
+    children: ReactNode
+    station_data: INetatmoNAMain|undefined
+    selected_module: string
+    selected_types: Types[]
+}
+
+// We can use `typeof` here to map our dispatch types to the props, like so.
+interface IPropsFromDispatch {
+    [key: string]: any
+    fetchDarksky: typeof darkskyActions.fetchDarksky
+    fetchStationData: typeof netatmoActions.fetchStationData
+    fetchMeasure: typeof netatmoActions.fetchMeasure
+    fetchRainMeasure: typeof netatmoActions.fetchRainMeasure
+}
+
+// Combine both state + dispatch props - as well as any props we want to pass - in a union type.
+type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
+
+const INTERVAL_IN_MINUTES = 1, REFRESH_TIME = INTERVAL_IN_MINUTES * 60 * 1000;
+
+class DashboardLayout extends React.Component<AllProps> {
+    private interval: number | undefined;
+
+    public componentDidMount(): void {
+        this.props.fetchDarksky();
+
+        // Fetch on app load the temperature measure of Indoor module
+        this.props.fetchMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.OUTDOOR?.id as string, ['Temperature']);
+
+        // Fetch on app load the rain measure
+        if (this.props.station_data?.available_modules.RAIN) {
+            this.props.fetchRainMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.RAIN?.id as string);
+        }
+
+        this.interval = setInterval(() => {
+            this.props.fetchDarksky();
+            this.props.fetchStationData();
+            this.fetchNetatmoModulesMeasures();
+        }, REFRESH_TIME);
+    }
+
+    public componentWillUnmount(): void {
+        clearInterval(this.interval);
+    }
+
+    private fetchNetatmoModulesMeasures = (): void => {
+        this.props.fetchMeasure(this.props.station_data?.id as string, this.props.selected_module as string, this.props.selected_types);
+
+        if (this.props.station_data?.available_modules.RAIN) {
+            this.props.fetchRainMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.RAIN?.id as string);
+        }
+    };
+
+    public render() {
+        return (
+            <div className="dashboard-grid-layout">
+                {this.props.children}
+            </div>
+        )
+    }
+}
+
+export default DashboardLayout;

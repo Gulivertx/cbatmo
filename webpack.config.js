@@ -1,49 +1,54 @@
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const helpers = require('./helpers')
-const extractSass = new ExtractTextPlugin({
-    filename: 'css/[name]' + (process.env.NODE_ENV !== 'development' ? '.[hash]' : '') + '.css'
-})
+const path = require('path');
+const webpack = require('webpack');
+const WebpackShellPlugin = require('webpack-shell-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+require('dotenv').config();
 
-console.log(process.env.NODE_ENV)
+process.env.APP_ENV === 'dev' ? process.env.NODE_ENV = 'development' : process.env.NODE_ENV = 'production';
+
+console.log('Webpack run as ' + process.env.NODE_ENV);
 
 const plugins = [
-    extractSass,
+    new MiniCssExtractPlugin({
+        filename: 'css/[name]' + (process.env.NODE_ENV !== 'development' ? '.[hash]' : '') + '.css',
+    }),
 
     new HtmlWebpackPlugin({
         template: '!!raw-loader!./client/index.ejs',
-        filename: helpers.root('views/index.ejs'),
+        filename: path.resolve(__dirname, 'views/index.ejs'),
         inject: 'body'
     }),
     // Ignore Moment Locales
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-]
+    new WebpackPwaManifest({
+        name: 'CBatmo',
+        short_name: 'CBatmo',
+        description: 'A Netatmo Weather Station Web-APP for Raspberry Pi and official Raspberry touchscreen',
+        background_color: '#1E1E1E',
+        crossorigin: null,
+        display: 'fullscreen',
+        orientation: 'landscape'
+    })
+];
+
+if (process.env.NODE_ENV === 'development') {
+    plugins.push(new WebpackShellPlugin({onBuildEnd: ['node server.js']}));
+}
 
 if (process.env.NODE_ENV === 'analyse') {
     plugins.push(new BundleAnalyzerPlugin())
 }
 
 module.exports = {
+    mode: process.env.NODE_ENV,
     entry: {
-        'bundle': './client/index.js',
-        //'vendor': ['react', 'react-dom', 'react-redux', 'redux', 'redux-thunk', 'moment']
+        'bundle': './client/index.tsx',
     },
-    /*optimization: {
-        splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    chunks: "initial",
-                    test: 'vendor',
-                    name: "vendor",
-                    enforce: true
-                }
-            }
-        }
-    },*/
     resolve: {
-        extensions: ['.js']
+        extensions: ['.js', '.ts', '.tsx']
     },
     module: {
         rules: [
@@ -60,21 +65,21 @@ module.exports = {
             },
             {
                 test: /\.(css|sass|scss)$/,
-                use: extractSass.extract({
-                    use: [{
-                        loader: 'css-loader',
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader', // translates CSS into CommonJS
                         options: {
                             sourceMap: process.env.NODE_ENV === 'development'
-                        }
-                    }, {
-                        loader: 'sass-loader',
+                        },
+                    },
+                    {
+                        loader: 'sass-loader', // compiles Sass to CSS
                         options: {
                             sourceMap: process.env.NODE_ENV === 'development'
-                        }
-                    }],
-                    // use style-loader in development
-                    fallback: 'style-loader'
-                })
+                        },
+                    },
+                ]
             },
             {
                 test: /\.(png|jpe?g|gif|svg)$/,
@@ -99,7 +104,7 @@ module.exports = {
                                 quality: 65
                             },
                             pngquant: {
-                                quality: '65-90',
+                                quality: [0.65, 0.90],
                                 speed: 4
                             },
                             svgo: {
@@ -116,15 +121,9 @@ module.exports = {
                     }
                 ]
             },
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                exclude: /node_modules/
-            },
-            {
-                test: /\.html$/,
-                loader: 'html-loader'
-            }
+            { test: /\.(t|j)sx?$/, use: { loader: 'awesome-typescript-loader' }, exclude: /node_modules/ },
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+            { test: /\.html$/, loader: 'html-loader' }
         ]
     },
     plugins,
@@ -133,16 +132,7 @@ module.exports = {
 
     output: {
         publicPath: '/',
-        path: helpers.root('public/'),
-        filename: '[name]' + (process.env.NODE_ENV !== "development" ? '.[hash]' : '') + '.js',
-        //chunkFilename: '[id]' + (process.env.NODE_ENV !== "development" ? '.[hash]' : '') + '.chunk.js'
-    },
-
-    devServer: {
-        historyApiFallback: true,
-        stats: 'minimal',
-        contentBase: helpers.root('public/'),
-        compress: false,
-        port: 9000
+        path: path.resolve(__dirname, 'public'),
+        filename: '[name]' + (process.env.NODE_ENV !== "development" ? '.[hash]' : '') + '.js'
     }
-}
+};

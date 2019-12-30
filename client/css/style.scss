@@ -1,0 +1,274 @@
+@import "~@mdi/font/css/materialdesignicons.css";
+@import "~weather-icons2/css/weather-icons.css";
+@import "~weather-icons2/css/weather-icons-wind.css";
+@import "~reboot.css/dist/reboot.css";
+
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "variables";
+
+@font-face {
+  font-family: 'Digital-7';
+  src: url('digital-7 (mono).eot');
+  src: url('digital-7 (mono).eot?#iefix') format('embedded-opentype'),
+  url('digital-7 (mono).woff') format('woff'),
+  url('digital-7 (mono).ttf') format('truetype'),
+  url('digital-7 (mono).svg#Digital-7') format('svg');
+}
+
+body {
+  user-select: none;
+  overflow: hidden;
+  font-family: 'Digital-7',sans-serif;
+  color: $white;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.background {
+  background-color: $dark;
+}
+
+.background-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('../img/world_map_point.png');
+  z-index: 0;
+}
+
+/** Module container **/
+.module-container {
+  position: relative;
+  padding: 5px 10px;
+  flex: 1;
+  //max-width: 266px;
+  //min-width: 180px;
+
+  .item-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+
+    .label {
+      background-color: $blue;
+      padding: 1px 6px;
+    }
+
+    .horizontal-top-divider {
+      border-top: 1px solid $gray;
+      flex: 1;
+      margin: 0 0 0 4px;
+    }
+  }
+
+  .vertical-right-divider {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-right: 1px solid $gray;
+    //margin: 8px 0 8px 0;
+  }
+
+  .sub-label {
+    font-size: 0.9rem;
+  }
+}
+
+/** Modules **/
+.modules-layout {
+  display: flex;
+  flex-direction: column;
+  padding-top: 22px;
+  font-size: 2.8rem;
+
+  small {
+    font-size: 1.2rem;
+    margin-left: 4px;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+
+    .wind-orientation {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 5rem;
+    }
+  }
+}
+
+.module-unreachable {
+  display: flex;
+  align-items: center;
+  padding-top: 22px;
+
+  .description {
+    font-size: 0.8rem;
+    margin-left: 12px;
+  }
+}
+
+.module-datetime {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 4px;
+
+  .time {
+    font-size: 5.8rem;
+    line-height: 0.8;
+    padding-top: 20px;
+    //font-weight: 700;
+
+    small {
+      margin-left: 4px;
+      font-size: 2.9rem;
+    }
+  }
+
+  .date {
+    font-size: 1.4rem;
+  }
+
+  .sun {
+    padding-top: 2px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+
+    .sunrise {
+      font-size: 1rem;
+      padding-bottom: 2px;
+    }
+    .sunset {
+      font-size: 1rem;
+      padding-bottom: 2px;
+      text-align: right;
+    }
+  }
+}
+
+.module-forecast {
+  display: flex;
+  //justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+
+  .module-forecast-daily {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 6px;
+    width: 82px;
+
+    .daily-temperatures {
+      display: flex;
+      justify-content: space-around;
+      padding-top: 4px;
+      width: 100%;
+    }
+
+    .icon {
+      padding-top: 12px;
+    }
+  }
+}
+
+.module-netatmo-information {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  .station-name {
+    margin-right: 12px;
+    font-size: 1.8rem;
+  }
+  .last-update {
+    margin-right: 12px;
+    font-size: 1rem;
+  }
+}
+
+/** Layouts **/
+.main-layout {
+  z-index: 10;
+  height: 100vh;
+  display: flex;
+}
+
+/** Layout for all modules **/
+.dashboard-grid-layout {
+  display: grid;
+  grid-template-columns: 280px 520px;
+
+  .first-column {
+    display: grid;
+    grid-template-rows: 176px 145px 85px 74px;
+  }
+
+  .second-column {
+    display: grid;
+    grid-template-rows: 130px 144px 178px 28px;
+
+    .row {
+      display: flex;
+    }
+
+    .row-grid {
+      display: grid;
+      grid-template-columns: 220px 300px;
+    }
+  }
+}
+
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  //flex: 1;
+}
+
+/** Starting page **/
+.starting-page-layout {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+
+    .loader {
+      display: flex;
+      align-items: center;
+      padding: 36px;
+      height: 132px;
+    }
+
+    .title {
+      text-transform: uppercase;
+    }
+
+    .description {
+      width: 400px;
+      text-align: center;
+    }
+  }
+
+  .footer {
+    height: 28px;
+    font-size: 1rem;
+  }
+}
