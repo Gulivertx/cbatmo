@@ -4,15 +4,27 @@ import { Colors } from "@blueprintjs/core";
 import ModuleLayout from "../layouts/ModuleLayout";
 
 import { INetatmoNAModule2 } from "../models/NetatmoNAModule2";
+import * as netatmoActions from "../store/netatmo/actions";
+import {ConnectedReduxProps} from "../store";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     module_data: INetatmoNAModule2|undefined
+    device_id: string|undefined
     unit: string
 }
 
+// We can use `typeof` here to map our dispatch types to the props, like so.
+interface IPropsFromDispatch {
+    [key: string]: any
+    fetchMeasure: typeof netatmoActions.fetchMeasure
+}
+
+// Combine both state + dispatch props - as well as any props we want to pass - in a union type.
+type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
+
 /** Rain module */
-const NetatmoModuleWind: React.FunctionComponent<IPropsFromState> = (props) => {
+const NetatmoModuleWind: React.FunctionComponent<AllProps> = (props) => {
     return (
         <ModuleLayout
             label={props.module_data?.module_name}
@@ -21,7 +33,7 @@ const NetatmoModuleWind: React.FunctionComponent<IPropsFromState> = (props) => {
         >
             <div className="modules-layout">
                 <div className="row">
-                    <div className="wind-strength">
+                    <div className="wind-strength" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['windStrength'])}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>Wind strength</div>
                         {props.module_data?.data?.wind_strength}<small>{props.unit}</small>
                     </div>

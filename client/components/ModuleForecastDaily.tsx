@@ -1,4 +1,5 @@
 import React from 'react';
+import removeAccents from 'remove-accents';
 import { Colors } from "@blueprintjs/core";
 import cx from 'classnames';
 
@@ -19,13 +20,19 @@ const ModuleForecastDaily: React.FunctionComponent<IPropsFromState> = ({data, lo
             <div className={cx('label', !data && 'bp3-skeleton')}>
                 { data ? (moment.unix(data.time).format('dddd')) : 'Monday' }
             </div>
+            <div className="row">
+                <div
+                    className={cx('sub-label', !data && 'bp3-skeleton')}
+                    style={{ color: Colors.GRAY4 }}
+                >
+                    {data && removeAccents(momentWithLocale(locale).unix(data?.time).format('DD MMM'))}
+                </div>
+            </div>
             <div className="daily-temperatures">
                 <div className={cx(!data && 'bp3-skeleton')}>
-                    <div className="sub-label" style={{ color: Colors.GRAY4 }}>Min</div>
                     { data ? data.temperature_low.toFixed(0) : '0.0'}°
                 </div>
                 <div className={cx(!data && 'bp3-skeleton')}>
-                    <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>Max</div>
                     {data ? data.temperature_high.toFixed(0) : '0.0'}°
                 </div>
             </div>
