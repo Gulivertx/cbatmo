@@ -1,7 +1,7 @@
 # CBatmo
 *A **Netatmo Weather Station** Web-APP for Raspberry Pi &amp; official Raspberry touchscreen.*
 
-![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.1.x/screenshots/screenshot_011.png)
+![screenshot](https://raw.githubusercontent.com/Gulivertx/cbatmo/master/screenshots/screenshot_011.png)
 
 For my Netatmo Weather Station I was looking for a display information to have a quick look 
 of the measures done by the station. I looked at the WEB to find something but finally did not 
@@ -41,7 +41,7 @@ First you will need to have [NodeJS](https://nodejs.org/en/) and [yarn](https://
 
 #### Clone and install yarn dependencies
 ```bash
-git clone -b 2.1.x https://github.com/Gulivertx/cbatmo.git
+git clone https://github.com/Gulivertx/cbatmo.git
 cd cbatmo
 yarn
 ```
@@ -67,7 +67,7 @@ If the repo is not already cloned do th same steps as development.
 
 #### Clone and install yarn dependencies
 ```bash
-git clone -b 2.1.x https://github.com/Gulivertx/cbatmo.git
+git clone https://github.com/Gulivertx/cbatmo.git
 cd cbatmo
 yarn
 ```
@@ -94,7 +94,7 @@ cd rpi
 ./deploy.sh
 ````
 
-![deploy](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.1.x/screenshots/cbatmo_deploy.gif)
+![deploy](https://raw.githubusercontent.com/Gulivertx/cbatmo/master/screenshots/cbatmo_deploy.gif)
 
 Follow the steps asked by the script and at the end you should have a working instance of CBatmo deployed to your Raspberry and running.
 
@@ -125,7 +125,7 @@ The best way to transfer the app to your Raspberry is to create an archive. Crea
 * server.js
 * yarn.lock
 
-** Do not add the node_modules folder !!**. Clients, logs, and screenshots is not necessary to run the app on your Pi.
+**Do not add the node_modules folder !!**. Clients, logs, and screenshots is not necessary to run the app on your Pi.
 
 ##### Transfer the archive cbatmo.zip to the Pi
 To transfer the archive, you can just copy and paste it with an USB key, or if your are comfortable with ssh/sftp just use it.
