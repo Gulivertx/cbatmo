@@ -48,6 +48,7 @@ export interface INetatmoState {
     readonly measure_errors: any|undefined
     readonly selected_module: string
     readonly selected_types: Types[]
+    readonly selected_timelapse: '12h'|'1d'|'1m'
 
     readonly loading_rain_measure: boolean
     readonly measure_rain_data: []

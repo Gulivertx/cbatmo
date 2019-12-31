@@ -11,6 +11,7 @@ import {ConnectedReduxProps} from "../store";
 interface IPropsFromState {
     module_data: INetatmoNAModule1|undefined
     device_id: string|undefined
+    selected_timelapse: '12h'|'1d'|'1m'
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -33,11 +34,11 @@ const NetatmoModuleOutdoor: React.FunctionComponent<AllProps> = (props) => {
         >
             <div className="modules-layout">
                 <div className="row">
-                    <div className="temperature" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Temperature'])}>
+                    <div className="temperature" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Temperature'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>Temperature</div>
                         {props.module_data?.data?.temperature}<small>°C</small>
                     </div>
-                    <div className="humidity" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Humidity'])}>
+                    <div className="humidity" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Humidity'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>Humidity</div>
                         {props.module_data?.data?.humidity}<small>%</small>
                     </div>

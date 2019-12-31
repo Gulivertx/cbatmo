@@ -12,6 +12,7 @@ interface IPropsFromState {
     module_data: INetatmoNAModule2|undefined
     device_id: string|undefined
     unit: string
+    selected_timelapse: '12h'|'1d'|'1m'
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -33,7 +34,7 @@ const NetatmoModuleWind: React.FunctionComponent<AllProps> = (props) => {
         >
             <div className="modules-layout">
                 <div className="row">
-                    <div className="wind-strength" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['windStrength'])}>
+                    <div className="wind-strength" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['windStrength'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>Wind strength</div>
                         {props.module_data?.data?.wind_strength}<small>{props.unit}</small>
                     </div>

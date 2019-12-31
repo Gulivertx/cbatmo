@@ -44,6 +44,12 @@ body {
   //max-width: 266px;
   //min-width: 180px;
 
+  .toolbar {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+  }
+
   .item-label {
     position: absolute;
     top: 0;

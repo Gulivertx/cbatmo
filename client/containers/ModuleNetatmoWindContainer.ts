@@ -8,11 +8,12 @@ import {Scale} from "../models/NetatmoChartsData";
 const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     module_data: netatmo.station_data?.modules.WIND,
     device_id: netatmo.station_data?.id,
-    unit: application.user.windunit
+    unit: application.user.windunit,
+    selected_timelapse: netatmo.selected_timelapse
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
-    fetchMeasure: (device: string, module: string, type: string[], hours?: number, scale?: Scale) => dispatch(netatmoActions.fetchMeasure(device, module, type, hours, scale))
+    fetchMeasure: (device: string, module: string, type: string[], timelapse: '12h'|'1d'|'1m') => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse))
 });
 
 const ModuleNetatmoWindContainer = connect(
