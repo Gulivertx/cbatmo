@@ -11,6 +11,7 @@ interface IPropsFromState {
     station_data: INetatmoNAMain|undefined
     selected_module: string
     selected_types: Types[]
+    selected_timelapse: '12h'|'1d'|'1m'
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -34,7 +35,7 @@ class DashboardLayout extends React.Component<AllProps> {
         this.props.fetchDarksky();
 
         // Fetch on app load the temperature measure of Indoor module
-        this.props.fetchMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.OUTDOOR?.id as string, ['Temperature']);
+        this.props.fetchMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.OUTDOOR?.id as string, ['Temperature'], this.props.selected_timelapse);
 
         // Fetch on app load the rain measure
         if (this.props.station_data?.available_modules.RAIN) {
@@ -53,7 +54,7 @@ class DashboardLayout extends React.Component<AllProps> {
     }
 
     private fetchNetatmoModulesMeasures = (): void => {
-        this.props.fetchMeasure(this.props.station_data?.id as string, this.props.selected_module as string, this.props.selected_types);
+        this.props.fetchMeasure(this.props.station_data?.id as string, this.props.selected_module as string, this.props.selected_types, this.props.selected_timelapse);
 
         if (this.props.station_data?.available_modules.RAIN) {
             this.props.fetchRainMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.RAIN?.id as string);

@@ -34,6 +34,7 @@ const initialState: INetatmoState = {
     measure_data: [],
     selected_module: '',
     selected_types: [],
+    selected_timelapse: '12h',
 
     loading_rain_measure: false,
     measure_rain_errors: undefined,
@@ -108,6 +109,7 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
                 measure_data: action.payload,
                 selected_module: action.module,
                 selected_types: action.types,
+                selected_timelapse: action.timelapse,
                 measure_errors: undefined
             };
 

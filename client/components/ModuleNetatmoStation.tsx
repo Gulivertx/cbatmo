@@ -11,6 +11,7 @@ import {ConnectedReduxProps} from "../store";
 interface IPropsFromState {
     station_data: INetatmoNAMain|undefined
     device_id: string|undefined
+    selected_timelapse: '12h'|'1d'|'1m'
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -32,21 +33,21 @@ const NetatmoModuleStation: React.FunctionComponent<AllProps> = (props) => {
         >
             <div className="modules-layout">
                 <div className="row">
-                    <div className="temperature" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Temperature'])}>
+                    <div className="temperature" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Temperature'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>Temperature</div>
                         {props.station_data?.data?.temperature}<small>°C</small>
                     </div>
-                    <div className="humidity" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Humidity'])}>
+                    <div className="humidity" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Humidity'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>Humidity</div>
                         {props.station_data?.data?.humidity}<small>%</small>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="co2" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['CO2'])}>
+                    <div className="co2" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['CO2'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>co2</div>
                         {props.station_data?.data?.co2}<small>ppm</small>
                     </div>
-                    <div className="noise" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Noise'])}>
+                    <div className="noise" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Noise'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>Noise</div>
                         {props.station_data?.data?.noise}<small>dB</small>
                     </div>

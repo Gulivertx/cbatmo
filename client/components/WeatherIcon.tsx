@@ -13,7 +13,7 @@ const WeatherIcon: React.FunctionComponent<IPropsFromState> = ({condition, size 
             case 'clear-night': return 'wi-night-clear';
             case 'rain': return 'wi-rain';
             case 'snow': return 'wi-snow';
-            case 'sleet': return 'wi-snow';
+            case 'sleet': return 'wi-sleet';
             case 'wind': return 'wi-strong-wind';
             case 'fog': return 'wi-fog';
             case 'cloudy': return 'wi-day-cloudy';

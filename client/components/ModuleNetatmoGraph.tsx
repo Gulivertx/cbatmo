@@ -1,22 +1,34 @@
 import React from 'react';
-import { Colors } from "@blueprintjs/core";
+import { Alignment, Button, ButtonGroup, Colors } from "@blueprintjs/core";
 import { AreaChart, Area, CartesianGrid, XAxis, YAxis } from 'recharts';
 import removeAccents from 'remove-accents';
 import ModuleLayout from "../layouts/ModuleLayout";
 import {Types} from "../models/NetatmoChartsData";
 import {colorChooser} from "../utils/tools";
 import {INetatmoNAMain} from "../models/NetatmoNAMain";
+import * as netatmoActions from "../store/netatmo/actions";
+import {ConnectedReduxProps} from "../store";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     measure_data: []
     selected_types: Types[]
-    selected_module: string,
+    selected_module: string
+    selected_timelapse: '12h'|'1d'|'1m'
     station_data: INetatmoNAMain|undefined
 }
 
+// We can use `typeof` here to map our dispatch types to the props, like so.
+interface IPropsFromDispatch {
+    [key: string]: any
+    fetchMeasure: typeof netatmoActions.fetchMeasure
+}
+
+// Combine both state + dispatch props - as well as any props we want to pass - in a union type.
+type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
+
 /** Rain module */
-class NetatmoModuleGraph extends React.Component<IPropsFromState> {
+class NetatmoModuleGraph extends React.Component<AllProps> {
 
     private findModuleName = (module_id: string) => {
         // @ts-ignore
@@ -37,6 +49,10 @@ class NetatmoModuleGraph extends React.Component<IPropsFromState> {
         }
     };
 
+    private handleOnclick = (timelapse: '12h'|'1d'|'1m'): void => {
+        this.props.fetchMeasure(this.props.station_data?.id as string, this.props.selected_module, this.props.selected_types, timelapse);
+    };
+
     public render() {
         return (
             <ModuleLayout
@@ -44,11 +60,25 @@ class NetatmoModuleGraph extends React.Component<IPropsFromState> {
                 reachable={true}
             >
                 <div className="modules-layout">
+                    <ButtonGroup className="toolbar" alignText={Alignment.CENTER} minimal={true}>
+                        <Button
+                            active={this.props.selected_timelapse === '12h'}
+                            onClick={() => this.handleOnclick('12h')}
+                        >12h</Button>
+                        <Button
+                            active={this.props.selected_timelapse === '1d'}
+                            onClick={() => this.handleOnclick('1d')}
+                        >1 day</Button>
+                        <Button
+                            active={this.props.selected_timelapse === '1m'}
+                            onClick={() => this.handleOnclick('1m')}
+                        >1 month</Button>
+                    </ButtonGroup>
                     <AreaChart
                         width={270}
-                        height={130}
+                        height={132}
                         data={this.props.measure_data}
-                        margin={{top: 10, right: 0, left: -30, bottom: 8}}
+                        margin={{top: 14, right: 0, left: -30, bottom: 8}}
                     >
                         <CartesianGrid stroke={Colors.GRAY1} />
                         <YAxis tick={{fontSize: '10px'}} stroke={Colors.GRAY4} minTickGap={1} />

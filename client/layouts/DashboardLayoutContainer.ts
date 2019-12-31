@@ -8,13 +8,14 @@ import { ApplicationState } from "../store";
 const mapStateToProps = ({ netatmo}: ApplicationState) => ({
     station_data: netatmo.station_data,
     selected_module: netatmo.selected_module,
-    selected_types: netatmo.selected_types
+    selected_types: netatmo.selected_types,
+    selected_timelapse: netatmo.selected_timelapse
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
     fetchDarksky: () => dispatch(darkskyActions.fetchDarksky()),
     fetchStationData: () => dispatch(netatmoActions.fetchStationData()),
-    fetchMeasure: (device: string, module: string, type: string[]) => dispatch(netatmoActions.fetchMeasure(device, module, type)),
+    fetchMeasure: (device: string, module: string, type: string[], timelapse: '12h'|'1d'|'1m') => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse)),
     fetchRainMeasure: (device: string, module: string) => dispatch(netatmoActions.fetchRainMeasure(device, module)),
 });
 

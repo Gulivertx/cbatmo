@@ -195,12 +195,13 @@ export const requestMeasure = () => {
 };
 
 // Todo types
-export const successMeasure = (data: any, module: string, types: string[]) => {
+export const successMeasure = (data: any, module: string, types: string[], timelapse: '12h'|'1d'|'1m') => {
     return {
         type: NetatmoActionTypes.MEASURE_SUCCESS,
         payload: data,
         module: module,
         types: types,
+        timelapse: timelapse,
         receivedAt: Date.now()
     }
 };
@@ -213,13 +214,33 @@ export const failureMeasure = (error: any) => {
     }
 };
 
-export const fetchMeasure = (device: string, module: string, type: string[], hours: number = 12, scale: Scale = '1hour'): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchMeasure = (device: string, module: string, type: string[], timelapse: '12h'|'1d'|'1m'): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
-        if (getState().netatmo.measure_data.length === 0 || (getState().netatmo.selected_types[0] !== type[0] || getState().netatmo.selected_module !== module) || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
+        if (getState().netatmo.measure_data.length === 0 ||
+            (getState().netatmo.selected_types[0] !== type[0] || getState().netatmo.selected_module !== module) ||
+            getState().netatmo.selected_timelapse !== timelapse ||
+            moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
             dispatch(requestMeasure());
 
-            const date_begin = moment().subtract(hours, 'hours').unix();
+            let date_begin;
+            let scale;
+
+            switch (timelapse) {
+                case "12h":
+                    date_begin = moment().subtract(11, 'hours').unix();
+                    scale = '30min';
+                    break;
+                case "1d":
+                    date_begin = moment().subtract(23, 'hours').unix();
+                    scale = '1hour';
+                    break;
+                case "1m":
+                    date_begin = moment().subtract(1, 'months').unix();
+                    scale = '1day';
+                    break;
+            }
+
             const date_end = moment().unix();
 
             return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=${scale}&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
@@ -229,7 +250,7 @@ export const fetchMeasure = (device: string, module: string, type: string[], hou
                 })
                 .then(json => {
                     const dataChart = new NetatmoChartsData(json.body, type);
-                    dispatch(successMeasure(dataChart.data, module, type))
+                    dispatch(successMeasure(dataChart.data, module, type, timelapse))
                 })
                 .catch(error => {
                     // Todo types
