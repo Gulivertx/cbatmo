@@ -12,6 +12,7 @@ interface IPropsFromState {
     station_data: INetatmoNAMain|undefined
     device_id: string|undefined
     selected_timelapse: '12h'|'1d'|'1m'
+    temperature_ratio: string
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -35,7 +36,7 @@ const NetatmoModuleStation: React.FunctionComponent<AllProps> = (props) => {
                 <div className="row">
                     <div className="temperature" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Temperature'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>Temperature</div>
-                        {props.station_data?.data?.temperature}<small>°C</small>
+                        {Math.round(eval(props.station_data?.data?.temperature + '*' + props.temperature_ratio) * 10) / 10}<small>°C</small>
                     </div>
                     <div className="humidity" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Humidity'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>Humidity</div>

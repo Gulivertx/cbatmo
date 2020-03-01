@@ -11,6 +11,7 @@ interface IPropsFromState {
     unit: string
     device_id: string|undefined
     selected_timelapse: '12h'|'1d'|'1m'
+    pressure_ratio: number
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -33,7 +34,7 @@ const NetatmoModuleBarmometer: React.FunctionComponent<AllProps> = (props) => {
             <div className="modules-layout">
                 <div className="row">
                     <div className="pressure" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Pressure'], props.selected_timelapse)}>
-                        {props.pressure}<small>{props.unit}</small>
+                        {Math.round(props.pressure as number * props.pressure_ratio * 10) / 10}<small>{props.unit}</small>
                     </div>
                 </div>
             </div>

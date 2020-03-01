@@ -14,8 +14,11 @@ const initialState: IApplicationState = {
         lang: 'en',
         locale: '',
         pressure_unit: '',
-        unit: 'si',
-        windunit: ''
+        unit: '',
+        windunit: '',
+        temperature_ratio: '',
+        pressure_ratio: 1,
+        wind_ratio: 1
     },
     loading: true
 };

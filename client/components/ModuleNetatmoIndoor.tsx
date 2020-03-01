@@ -18,6 +18,7 @@ interface IPropsFromState {
 interface IPropsFromDispatch {
     [key: string]: any
     fetchMeasure: typeof netatmoActions.fetchMeasure
+    temperature_ratio: string
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -36,7 +37,7 @@ const NetatmoModuleIndoor: React.FunctionComponent<AllProps> = (props) => {
                 <div className="row">
                     <div className="temperature" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Temperature'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>Temperature</div>
-                        {props.module_data?.data?.temperature}<small>°C</small>
+                        {Math.round(eval(props.module_data?.data?.temperature + '*' + props.temperature_ratio) * 10) / 10}<small>°C</small>
                     </div>
                     <div className="humidity" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Humidity'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>Humidity</div>
