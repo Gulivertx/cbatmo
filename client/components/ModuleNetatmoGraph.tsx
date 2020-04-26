@@ -81,7 +81,7 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
                         margin={{top: 14, right: 0, left: -30, bottom: 8}}
                     >
                         <CartesianGrid stroke={Colors.GRAY1} />
-                        <YAxis tick={{fontSize: '10px'}} stroke={Colors.GRAY4} minTickGap={1} />
+                        <YAxis tick={{fontSize: '10px'}} minTickGap={1} />
                         <XAxis dataKey='name' hide={true} minTickGap={1} interval={0}/>
                         <Area
                             type='monotone'

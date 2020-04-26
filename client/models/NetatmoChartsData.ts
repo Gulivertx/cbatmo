@@ -25,7 +25,7 @@ class NetatmoModuleChartData implements INetatmoChartData{
             this.data.push(formatedObject)
         });
 
-        console.log(this)
+        console.debug(this)
     }
 }
 

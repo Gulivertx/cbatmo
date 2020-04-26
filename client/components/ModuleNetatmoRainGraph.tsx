@@ -19,7 +19,7 @@ const ModuleNetatmoRainGraph: React.FunctionComponent<IPropsFromState> = (props)
             margin={{top: 10, right: 0, left: -30, bottom: 0}}
         >
             <CartesianGrid stroke={Colors.GRAY1} vertical={false}/>
-            <YAxis tick={{fontSize: '10px'}} stroke={Colors.GRAY4} minTickGap={1} />
+            <YAxis tick={{fontSize: '10px'}} minTickGap={1} />
             <Bar dataKey='Rain' fill={Colors.BLUE5} minPointSize={1} isAnimationActive={false}/>
         </BarChart>
     )

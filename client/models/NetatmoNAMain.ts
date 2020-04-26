@@ -52,6 +52,8 @@ export interface IData {
 export interface IAvailableModules {
     OUTDOOR: boolean
     INDOOR: boolean
+    INDOOR_SECOND: boolean
+    INDOOR_THIRD: boolean
     RAIN: boolean
     WIND: boolean
 }
@@ -59,6 +61,8 @@ export interface IAvailableModules {
 export interface IModule {
     OUTDOOR: INetatmoNAModule1|undefined,
     INDOOR: INetatmoNAModule4|undefined,
+    INDOOR_SECOND: INetatmoNAModule4|undefined,
+    INDOOR_THIRD: INetatmoNAModule4|undefined,
     RAIN: INetatmoNAModule3|undefined,
     WIND: INetatmoNAModule2|undefined
 }
@@ -136,17 +140,22 @@ class NetatmoNAMain implements INetatmoNAMain {
         this.available_modules = {
             OUTDOOR: false,
             INDOOR: false,
+            INDOOR_SECOND: false,
+            INDOOR_THIRD: false,
             RAIN: false,
             WIND: false
         };
         this.modules = {
             OUTDOOR: undefined,
             INDOOR: undefined,
+            INDOOR_SECOND: undefined,
+            INDOOR_THIRD: undefined,
             RAIN: undefined,
             WIND: undefined,
         };
 
         // Handle modules
+        let indoor_module_counter = 0;
         data.modules.map((module: any) => {
             switch (module.type) {
                 case MODULE_TYPE.OUTDOOR:
@@ -154,8 +163,18 @@ class NetatmoNAMain implements INetatmoNAMain {
                     this.available_modules['OUTDOOR'] = true;
                     break;
                 case MODULE_TYPE.INDOOR:
-                    this.modules['INDOOR'] = new NetatmoNAModule4(module);
-                    this.available_modules['INDOOR'] = true;
+                    // A maximum of 3 indoor modules can be available
+                    if (indoor_module_counter === 0) {
+                        this.modules['INDOOR'] = new NetatmoNAModule4(module);
+                        this.available_modules['INDOOR'] = true;
+                    } else if (indoor_module_counter === 1) {
+                        this.modules['INDOOR_SECOND'] = new NetatmoNAModule4(module);
+                        this.available_modules['INDOOR_SECOND'] = true;
+                    } else if (indoor_module_counter === 1) {
+                        this.modules['INDOOR_THIRD'] = new NetatmoNAModule4(module);
+                        this.available_modules['INDOOR_THIRD'] = true;
+                    }
+                    indoor_module_counter++;
                     break;
                 case MODULE_TYPE.RAIN:
                     this.modules['RAIN'] = new NetatmoNAModule3(module);
