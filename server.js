@@ -10,6 +10,7 @@ const path = require('path');
 const rfs = require('rotating-file-stream');
 const DarkSkyApi = require('dark-sky-api');
 const pjson = require('./package.json');
+const request = require('request');
 require('dotenv').config();
 
 process.env.APP_ENV === 'dev' ? process.env.NODE_ENV = 'development' : process.env.NODE_ENV = 'production';
@@ -19,6 +20,9 @@ const app = express();
 /** Configure DarkSkyApi **/
 DarkSkyApi.apiKey = process.env.DARKSKY_SECRET_KEY;
 DarkSkyApi.proxy = true;
+
+/** Configure OpenWeather **/
+const openWeatherApiKey = process.env.OPENWEATHER_API_KEY;
 
 /** Logs configuration **/
 // Set logs directory
@@ -70,23 +74,41 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/darksky/:latitude/:longitude/:lang/:units', (req, res, next) => {
-    if (!req.params.latitude ||
-        !req.params.longitude ||
-        !req.params.lang ||
-        !req.params.units) return res.status(400).json({status: 'error', msg: 'Bad request'});
+    // We want to verify that each needed parameters are set in the request
+    const {latitude, longitude, units, lang} = req.params;
 
-    DarkSkyApi.units = req.params.units; // default 'us'
-    DarkSkyApi.language = req.params.lang; // default 'en'
+    if (!latitude || !longitude || !lang || !units) return res.status(400).json({status: 'error', msg: 'Bad request'});
+
+    DarkSkyApi.units = units; // default 'us'
+    DarkSkyApi.language = lang; // default 'en'
 
     const position = {
-        latitude: req.params.latitude,
-        longitude: req.params.longitude
+        latitude: latitude,
+        longitude: longitude
     };
 
     DarkSkyApi.loadItAll('hourly,flags', position)
         .then(result => {
             res.json(result)
             })
+});
+
+app.get('/openweather/:latitude/:longitude/:lang/:units', (req, res, next) => {
+    // We want to verify that each needed parameters are set in the request
+    const {latitude, longitude, units, lang} = req.params;
+
+    if (!latitude || !longitude || !lang || !units) return res.status(400).json({status: 'error', msg: 'Bad request'});
+
+    request.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=${units}&lang=${lang}&appid=${openWeatherApiKey}`, (error, result) => {
+        if (error) return next(error);
+
+        // If no error we still want to check the status code
+        if (result.statusCode !== 200) {
+            const exception = JSON.parse(result.body);
+            return res.status(result.statusCode).json({status: 'error', msg: exception.message});
+        }
+        res.json(JSON.parse(result.body))
+    })
 });
 
 /** Catch 404 and forward to error handler **/

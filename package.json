@@ -31,6 +31,7 @@
     "http-errors": "^1.7.1",
     "morgan": "^1.9.1",
     "remove": "^0.1.5",
+    "request": "^2.88.2",
     "rotating-file-stream": "^2.0.0"
   },
   "devDependencies": {
