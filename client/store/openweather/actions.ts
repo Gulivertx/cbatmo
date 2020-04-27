@@ -2,18 +2,18 @@ import { Action } from 'redux'
 import { ApplicationState } from '../index'
 import { ThunkAction } from 'redux-thunk'
 import moment from "moment";
-import { DarkskyActionTypes } from "./types";
-import DarkskyData from '../../models/DarkskyData';
+import { OpenWeatherActionTypes } from "./types";
+import OpenWeatherData from '../../models/OpenWeatherData';
 
 export const requestData = () => {
     return {
-        type: DarkskyActionTypes.REQUEST
+        type: OpenWeatherActionTypes.REQUEST
     }
 };
 
 export const successData = (json: any) => {
     return {
-        type: DarkskyActionTypes.SUCCESS,
+        type: OpenWeatherActionTypes.SUCCESS,
         payload: json,
         receivedAt: Date.now()
     }
@@ -21,14 +21,14 @@ export const successData = (json: any) => {
 
 export const failureData = (error: any) => {
     return {
-        type: DarkskyActionTypes.FAILURE,
+        type: OpenWeatherActionTypes.FAILURE,
         error: error
     }
 };
 
-export const fetchDarksky = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchOpenWeather = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
-        if (getState().darksky.updated_at === null || getState().darksky.updated_at !== null && moment(moment()).diff(getState().darksky.updated_at, 'minute') >= 10) {
+        if (getState().openweather.updated_at === null || getState().openweather.updated_at !== null && moment(moment()).diff(getState().openweather.updated_at, 'minute') >= 10) {
             dispatch(requestData());
 
             // Take latitude and longitude from Netatmo station
@@ -37,13 +37,13 @@ export const fetchDarksky = (): ThunkAction<void, ApplicationState, null, Action
             const locale = getState().application.user.lang;
             const unit = getState().application.user.unit;
 
-            return fetch(`/darksky/${lat}/${lng}/${locale}/${unit}`)
+            return fetch(`/openweather/${lat}/${lng}/${locale}/${unit}`)
                 .then(response => {
                     if (!response.ok) throw response;
                     return response.json()
                 })
                 .then(json => {
-                    const data = new DarkskyData(json);
+                    const data = new OpenWeatherData(json);
                     dispatch(successData(data))
                 })
                 .catch(error => {
@@ -53,7 +53,7 @@ export const fetchDarksky = (): ThunkAction<void, ApplicationState, null, Action
                     })
                 });
         } else {
-            console.debug('No new Darksky data to fetch')
+            console.debug('No new OpenWeather data to fetch')
         }
     }
 };

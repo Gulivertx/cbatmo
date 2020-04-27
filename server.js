@@ -95,9 +95,16 @@ app.get('/darksky/:latitude/:longitude/:lang/:units', (req, res, next) => {
 
 app.get('/openweather/:latitude/:longitude/:lang/:units', (req, res, next) => {
     // We want to verify that each needed parameters are set in the request
-    const {latitude, longitude, units, lang} = req.params;
+    let {latitude, longitude, units, lang} = req.params;
 
     if (!latitude || !longitude || !lang || !units) return res.status(400).json({status: 'error', msg: 'Bad request'});
+
+    // Bind netatmo unit to openweather unit
+    if (units === 'si') {
+        units = 'metric'
+    } else {
+        units = 'imperial'
+    }
 
     request.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=${units}&lang=${lang}&appid=${openWeatherApiKey}`, (error, result) => {
         if (error) return next(error);

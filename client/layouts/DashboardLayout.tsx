@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import * as darkskyActions from "../store/darksky/actions";
+import * as openweatherActions from "../store/openweather/actions";
 import * as netatmoActions from "../store/netatmo/actions";
 import { ConnectedReduxProps } from "../store";
 import { INetatmoNAMain } from "../models/NetatmoNAMain";
@@ -18,6 +19,7 @@ interface IPropsFromState {
 interface IPropsFromDispatch {
     [key: string]: any
     fetchDarksky: typeof darkskyActions.fetchDarksky
+    fetchOpenWeather: typeof openweatherActions.fetchOpenWeather
     fetchStationData: typeof netatmoActions.fetchStationData
     fetchMeasure: typeof netatmoActions.fetchMeasure
     fetchRainMeasure: typeof netatmoActions.fetchRainMeasure
@@ -32,7 +34,9 @@ class DashboardLayout extends React.Component<AllProps> {
     private interval: number | undefined;
 
     public componentDidMount(): void {
+        // TODO : we want to use only one of this
         this.props.fetchDarksky();
+        this.props.fetchOpenWeather();
 
         // Fetch on app load the temperature measure of Indoor module
         this.props.fetchMeasure(this.props.station_data?.id as string, this.props.station_data?.modules.OUTDOOR?.id as string, ['Temperature'], this.props.selected_timelapse);
