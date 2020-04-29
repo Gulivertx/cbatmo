@@ -170,7 +170,7 @@ class NetatmoNAMain implements INetatmoNAMain {
                     } else if (indoor_module_counter === 1) {
                         this.modules['INDOOR_SECOND'] = new NetatmoNAModule4(module);
                         this.available_modules['INDOOR_SECOND'] = true;
-                    } else if (indoor_module_counter === 1) {
+                    } else if (indoor_module_counter === 2) {
                         this.modules['INDOOR_THIRD'] = new NetatmoNAModule4(module);
                         this.available_modules['INDOOR_THIRD'] = true;
                     }
