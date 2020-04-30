@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import WeatherIcon from "./WeatherIcon";
 import { momentWithLocale } from '../utils/tools'
-import { IDailyData } from "../models/DarkskyData";
+import { IDailyData } from "../models/WeatherInterface";
 
 interface IPropsFromState {
     data: IDailyData|undefined
@@ -37,7 +37,7 @@ const ModuleForecastDaily: React.FunctionComponent<IPropsFromState> = ({data, lo
                 </div>
             </div>
             <div className={cx('icon', !data && 'bp3-skeleton')}>
-                <WeatherIcon condition={data? data.icon : 'clear-day'} size={2}/>
+                <WeatherIcon condition={data?.icon} size={2}/>
             </div>
         </div>
     )

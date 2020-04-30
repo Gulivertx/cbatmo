@@ -13,7 +13,14 @@ Swiss Weather forecast API and WebcamTravel API**. For this public
 release I removed Google Calendar API, WebcamTraval API and change Swiss Weather 
 API by Dark Sky API. The first proposal can be found in the [Netatmo forum](https://forum.netatmo.com/viewtopic.php?f=5&t=14458)
 
-### What's new in 2.1.x ?
+### Change in 2.2.x
+The version 2.2.0 introduce OpenWeather API in replacement of Dakrsky which is now part of Apple and close for new subsciption and close for all users from end of 2021. 
+So this is why CBatmo moved to OpenWeather.
+* Replace Darksky API by OpenWeather API
+
+**For users which have used CBatmo with Darksky please do not forget to update the file `.env` with the an OpenWeather key**
+
+### Change in 2.1.x
 * Move javascript code to typescript
 * New webpack configuration which is more easy to handle because using the same commands in Windows / MacOS / Linux (no manual OS variable to set anymore)
 * New application design with only one unique view
@@ -47,9 +54,9 @@ yarn
 ```
 
 #### Create a new .env file
-Copy the file `.env.dist` to `.env` in the root project folder. Edit the new file and fill your **Netatmo information** and **Dark Sky information**.
+Copy the file `.env.dist` to `.env` in the root project folder. Edit the new file and fill your **Netatmo information** and **OpenWeather information**.
 If you do not have these, you have to create new credentials to [Netatmo developer](https://dev.netatmo.com) and
-[Dark Sky dev](https://darksky.net/dev). All are free.
+[OpenWeather](https://openweathermap.org/). All are free.
 
 #### Run the DEV server
 To build the app and start the DEV server just use the command `yarn run watch`.

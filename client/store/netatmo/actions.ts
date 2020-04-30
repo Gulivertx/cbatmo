@@ -10,15 +10,12 @@ import { NetatmoActionTypes } from "./types";
 
 const NETATMO_API_ROOT_URL = "https://api.netatmo.com/";
 
-// TODO : build Express route to query the Netatmo API
-
 export const requestAuth = () => {
     return {
         type: NetatmoActionTypes.AUTH_REQUEST
     }
 };
 
-// Todo types
 export const successAuth = (json: any) => {
     return {
         type: NetatmoActionTypes.AUTH_SUCCESS,
@@ -27,7 +24,6 @@ export const successAuth = (json: any) => {
     }
 };
 
-// Todo types
 export const failureAuth = (error: any) => {
     return {
         type: NetatmoActionTypes.AUTH_FAILURE,
@@ -79,7 +75,6 @@ export const requestRefreshToken = () => {
     }
 };
 
-// Todo types
 export const successRefreshToken = (json: any) => {
     return {
         type: NetatmoActionTypes.REFRESH_TOKEN_SUCCESS,
@@ -88,7 +83,6 @@ export const successRefreshToken = (json: any) => {
     }
 };
 
-// Todo types
 export const failureRefreshToken = (error: any) => {
     return {
         type: NetatmoActionTypes.REFRESH_TOKEN_FAILURE,
@@ -135,7 +129,6 @@ export const requestStationData = () => {
     }
 };
 
-// Todo types
 export const successStationData = (json: any) => {
     return {
         type: NetatmoActionTypes.STATION_DATA_SUCCESS,
@@ -144,7 +137,6 @@ export const successStationData = (json: any) => {
     }
 };
 
-// Todo types
 export const failureStationData = (error: any) => {
     return {
         type: NetatmoActionTypes.STATION_DATA_FAILURE,
@@ -194,7 +186,6 @@ export const requestMeasure = () => {
     }
 };
 
-// Todo types
 export const successMeasure = (data: any, module: string, types: string[], timelapse: '12h'|'1d'|'1m') => {
     return {
         type: NetatmoActionTypes.MEASURE_SUCCESS,
@@ -206,7 +197,6 @@ export const successMeasure = (data: any, module: string, types: string[], timel
     }
 };
 
-// Todo types
 export const failureMeasure = (error: any) => {
     return {
         type: NetatmoActionTypes.MEASURE_FAILURE,
@@ -271,7 +261,6 @@ export const requestRainMeasure = () => {
     }
 };
 
-// Todo types
 export const successRainMeasure = (data: any) => {
     return {
         type: NetatmoActionTypes.MEASURE_RAIN_SUCCESS,
@@ -280,7 +269,6 @@ export const successRainMeasure = (data: any) => {
     }
 };
 
-// Todo types
 export const failureNRainMeasure = (error: any) => {
     return {
         type: NetatmoActionTypes.MEASURE_RAIN_FAILURE,
