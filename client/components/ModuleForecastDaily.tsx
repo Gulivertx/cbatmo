@@ -37,7 +37,7 @@ const ModuleForecastDaily: React.FunctionComponent<IPropsFromState> = ({data, lo
                 </div>
             </div>
             <div className={cx('icon', !data && 'bp3-skeleton')}>
-                <WeatherIcon condition={data? data.icon : 'clear-day'} size={2}/>
+                <WeatherIcon condition={data?.icon} size={2}/>
             </div>
         </div>
     )

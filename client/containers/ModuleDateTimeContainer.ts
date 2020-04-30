@@ -3,9 +3,9 @@ import { ThunkDispatch} from "redux-thunk";
 import { ApplicationState } from "../store";
 import ModuleDateTime from "../components/ModuleDateTime"
 
-const mapStateToProps = ({ darksky, application}: ApplicationState) => ({
-    sunset_time: darksky.data?.daily.data[0].sunset_time,
-    sunrise_time: darksky.data?.daily.data[0].sunrise_time,
+const mapStateToProps = ({ openweather, application}: ApplicationState) => ({
+    sunset_time: openweather.data?.daily.data[0].sunset_time,
+    sunrise_time: openweather.data?.daily.data[0].sunrise_time,
     locale: application.user.lang
 });
 

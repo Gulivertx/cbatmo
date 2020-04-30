@@ -1,6 +1,6 @@
 {
   "name": "cbatmo",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description": "A Netatmo Weather Station Web-APP for Raspberry Pi and official Raspberry touchscreen",
   "keywords": [
     "dark sky",

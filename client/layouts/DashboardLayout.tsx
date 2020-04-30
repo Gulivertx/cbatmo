@@ -34,8 +34,7 @@ class DashboardLayout extends React.Component<AllProps> {
     private interval: number | undefined;
 
     public componentDidMount(): void {
-        // TODO : we want to use only one of this
-        this.props.fetchDarksky();
+        //this.props.fetchDarksky();
         this.props.fetchOpenWeather();
 
         // Fetch on app load the temperature measure of Indoor module
