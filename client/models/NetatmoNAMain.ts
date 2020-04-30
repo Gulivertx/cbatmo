@@ -6,6 +6,8 @@ import NetatmoNAModule2, {INetatmoNAModule2} from "./NetatmoNAModule2";
 export enum MODULE_TYPE {
     MAIN = 'NAMain',
     INDOOR = 'NAModule4',
+    INDOOR_SECOND = 'NAModule4',
+    INDOOR_THIRD = 'NAModule4',
     OUTDOOR = 'NAModule1',
     RAIN = 'NAModule3',
     WIND = 'NAModule2'

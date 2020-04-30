@@ -14,11 +14,10 @@ release I removed Google Calendar API, WebcamTraval API and change Swiss Weather
 API by Dark Sky API. The first proposal can be found in the [Netatmo forum](https://forum.netatmo.com/viewtopic.php?f=5&t=14458)
 
 ### Change in 2.2.x
-The version 2.2.0 introduce OpenWeather API in replacement of Dakrsky which is now part of Apple and close for new subsciption and close for all users from end of 2021. 
-So this is why CBatmo moved to OpenWeather.
+The version 2.2.0 introduce OpenWeather API in replacement of Darksky which is now part of Apple and close for new subsciption and will be closed for all users from the end of 2021. 
 * Replace Darksky API by OpenWeather API
 
-**For users which have used CBatmo with Darksky please do not forget to update the file `.env` with the an OpenWeather key**
+**For users which have used CBatmo with Darksky please do not forget to update the file `.env` after a `git pull` and fill the OpenWeather key**
 
 ### Change in 2.1.x
 * Move javascript code to typescript
