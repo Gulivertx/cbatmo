@@ -8,6 +8,7 @@ import AppStarting from "../components/AppStarting"
 const mapStateToProps =  ({ application, netatmo}: ApplicationState) => ({
     loading_station_data: netatmo.loading_station_data,
     info: application.info,
+    user: application.user,
     station_data_errors: netatmo.station_data_errors,
     refresh_token: netatmo.refresh_token,
     access_token: netatmo.access_token,
