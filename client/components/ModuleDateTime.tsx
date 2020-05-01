@@ -16,6 +16,7 @@ interface IPropsFromState {
 }
 
 interface IpropsFromDispatch extends WithTranslation {
+    [key: string]: any
     t: i18next.TFunction
 }
 
