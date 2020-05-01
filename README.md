@@ -16,15 +16,17 @@ API by Dark Sky API. The first proposal can be found in the [Netatmo forum](http
 ### Change in 2.2.x
 The version 2.2.0 introduce OpenWeather API in replacement of Darksky which is now part of Apple and close for new subsciption and will be closed for all users from the end of 2021. 
 * Replace Darksky API by OpenWeather API
+* Add i18n translation support for French and English languages
 
-**For users which have used CBatmo with Darksky please do not forget to update the file `.env` after a `git pull` and fill the OpenWeather key**
+**For users which have used CBatmo with Darksky please do not forget to update the file `.env` after a `git pull` and fill the OpenWeather key**.
+
+Currently the application support English and French language, if you would like to have this application in any other languages please 
+provide me a new translated file based on [english  file](https://github.com/Gulivertx/cbatmo/blob/master/client/i18n/en/common.json).
 
 ### Change in 2.1.x
 * Move javascript code to typescript
 * New webpack configuration which is more easy to handle because using the same commands in Windows / MacOS / Linux (no manual OS variable to set anymore)
 * New application design with only one unique view
-
-Currently I did not re-implemented the language support for this new version, I will do a new minor release asap to support EN and FR languages as in the version 2.0.0.
 
 If you still want to use the version 2.0.0 you can download it here : https://github.com/Gulivertx/cbatmo/releases
 
