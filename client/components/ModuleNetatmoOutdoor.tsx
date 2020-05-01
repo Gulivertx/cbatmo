@@ -1,6 +1,7 @@
 import React from 'react';
 import { Colors } from "@blueprintjs/core";
-
+import { withTranslation, WithTranslation } from 'react-i18next';
+import * as i18next from 'i18next';
 import ModuleLayout from "../layouts/ModuleLayout";
 
 import { INetatmoNAModule1 } from "../models/NetatmoNAModule1";
@@ -13,12 +14,14 @@ interface IPropsFromState {
     device_id: string|undefined
     selected_timelapse: '12h'|'1d'|'1m'
     temperature_ratio: string
+    unit: string
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
-interface IPropsFromDispatch {
+interface IPropsFromDispatch extends WithTranslation {
     [key: string]: any
     fetchMeasure: typeof netatmoActions.fetchMeasure
+    t: i18next.TFunction
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -36,11 +39,11 @@ const NetatmoModuleOutdoor: React.FunctionComponent<AllProps> = (props) => {
             <div className="modules-layout">
                 <div className="row">
                     <div className="temperature" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Temperature'], props.selected_timelapse)}>
-                        <div className="sub-label" style={{ color: Colors.GRAY4 }}>Temperature</div>
-                        {Math.round(eval(props.module_data?.data?.temperature + '*' + props.temperature_ratio) * 10) / 10}<small>°C</small>
+                        <div className="sub-label" style={{ color: Colors.GRAY4 }}>{props.t('netatmo.temperature')}</div>
+                        {Math.round(eval(props.module_data?.data?.temperature + '*' + props.temperature_ratio) * 10) / 10}<small>°{props.unit === 'si' ? 'C' : 'F'}</small>
                     </div>
                     <div className="humidity" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Humidity'], props.selected_timelapse)}>
-                        <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>Humidity</div>
+                        <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.humidity')}</div>
                         {props.module_data?.data?.humidity}<small>%</small>
                     </div>
                 </div>
@@ -49,4 +52,4 @@ const NetatmoModuleOutdoor: React.FunctionComponent<AllProps> = (props) => {
     )
 };
 
-export default NetatmoModuleOutdoor
+export default withTranslation('common')(NetatmoModuleOutdoor)

@@ -1,0 +1,31 @@
+{
+  "notifications": {
+    "loading": "Loading...",
+    "configuration_success": "Configured with success, please wait...",
+    "configuration_error": "Oops, an error occur!",
+    "not_reachable": "This module cannot reach the Station. Check the battery status or bring it closer to the Station."
+  },
+  "app_info": {
+    "description": "A Netatmo Weather Station Web-APP for Raspberry Pi and official Raspberry touchscreen",
+    "version": "Version",
+    "created_by": "Created by"
+  },
+  "forecast" : {
+    "forecast": "Forecast",
+    "sunrise": "Sunrise",
+    "sunset": "Sunset"
+  },
+  "netatmo": {
+    "barometer": "Barometer",
+    "time": "Time",
+    "graph": "Graph",
+    "day": "day",
+    "month": "month",
+    "temperature": "Temperature",
+    "humidity": "Humidity",
+    "cumulative": "Cumulative",
+    "noise": "Noise",
+    "wind_strength": "Wind strength",
+    "wind_max_day": "Max day"
+  }
+}

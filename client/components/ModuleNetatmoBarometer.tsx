@@ -1,5 +1,6 @@
 import React from 'react';
-
+import { withTranslation, WithTranslation } from 'react-i18next';
+import * as i18next from 'i18next';
 import ModuleLayout from "../layouts/ModuleLayout";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
@@ -15,9 +16,10 @@ interface IPropsFromState {
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
-interface IPropsFromDispatch {
+interface IPropsFromDispatch extends WithTranslation {
     [key: string]: any
     fetchMeasure: typeof netatmoActions.fetchMeasure
+    t: i18next.TFunction
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -27,7 +29,7 @@ type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 const NetatmoModuleBarmometer: React.FunctionComponent<AllProps> = (props) => {
     return (
         <ModuleLayout
-            label="Barometer"
+            label={props.t('netatmo.barometer')}
             reachable={props.reachable}
             vertical_divider={true}
         >
@@ -42,4 +44,4 @@ const NetatmoModuleBarmometer: React.FunctionComponent<AllProps> = (props) => {
     )
 };
 
-export default NetatmoModuleBarmometer
+export default withTranslation('common')(NetatmoModuleBarmometer)

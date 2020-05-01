@@ -11,7 +11,7 @@ const initialState: IApplicationState = {
     },
     user: {
         mail: '',
-        lang: 'en',
+        lang: '',
         locale: '',
         pressure_unit: '',
         unit: '',

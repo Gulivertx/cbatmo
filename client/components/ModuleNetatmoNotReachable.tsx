@@ -1,10 +1,13 @@
 import React from 'react';
 import moment from 'moment';
 import {Icon, Intent} from "@blueprintjs/core";
+import { withTranslation, WithTranslation } from 'react-i18next';
+import * as i18next from 'i18next';
 
 // Separate state props + dispatch props to their own interfaces.
-interface IPropsFromState {
+interface IPropsFromState extends WithTranslation {
     last_seen?: number
+    t: i18next.TFunction
 }
 
 const NetatmoModuleError: React.FunctionComponent<IPropsFromState> = (props) => {
@@ -13,8 +16,7 @@ const NetatmoModuleError: React.FunctionComponent<IPropsFromState> = (props) => 
             <Icon icon="warning-sign" iconSize={40} intent={Intent.WARNING}/>
             <div className="description">
                 <div>
-                    This module cannot reach the Station. Check the battery status or bring it closer
-                    to the Station.
+                    {props.t('notification.not_reachable')}
                 </div>
                 {
                     props.last_seen && (
@@ -26,4 +28,4 @@ const NetatmoModuleError: React.FunctionComponent<IPropsFromState> = (props) => 
     )
 };
 
-export default NetatmoModuleError;
+export default withTranslation('common')(NetatmoModuleError);

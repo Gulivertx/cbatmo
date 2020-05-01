@@ -2,6 +2,8 @@ import React from 'react';
 import { Alignment, Button, ButtonGroup, Colors } from "@blueprintjs/core";
 import { AreaChart, Area, CartesianGrid, XAxis, YAxis } from 'recharts';
 import removeAccents from 'remove-accents';
+import { withTranslation, WithTranslation } from 'react-i18next';
+import * as i18next from 'i18next';
 import ModuleLayout from "../layouts/ModuleLayout";
 import {Types} from "../models/NetatmoChartsData";
 import {colorChooser} from "../utils/tools";
@@ -19,9 +21,10 @@ interface IPropsFromState {
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
-interface IPropsFromDispatch {
+interface IPropsFromDispatch extends WithTranslation {
     [key: string]: any
     fetchMeasure: typeof netatmoActions.fetchMeasure
+    t: i18next.TFunction
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -56,7 +59,7 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
     public render() {
         return (
             <ModuleLayout
-                label="Graph"
+                label={this.props.t('netatmo.graph')}
                 reachable={true}
             >
                 <div className="modules-layout">
@@ -68,11 +71,11 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
                         <Button
                             active={this.props.selected_timelapse === '1d'}
                             onClick={() => this.handleOnclick('1d')}
-                        >1 day</Button>
+                        >1 {this.props.t('netatmo.day')}</Button>
                         <Button
                             active={this.props.selected_timelapse === '1m'}
                             onClick={() => this.handleOnclick('1m')}
-                        >1 month</Button>
+                        >1 {this.props.t('netatmo.month')}</Button>
                     </ButtonGroup>
                     <AreaChart
                         width={270}
@@ -100,4 +103,4 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
     }
 }
 
-export default NetatmoModuleGraph
+export default withTranslation('common')(NetatmoModuleGraph)
