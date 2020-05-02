@@ -1,7 +1,13 @@
 import { Reducer } from 'redux';
 import { IApplicationState, ApplicationActionTypes } from "./types";
+import MobileDetect from 'mobile-detect';
+
+const md = new MobileDetect(window.navigator.userAgent);
 
 const initialState: IApplicationState = {
+    phone: md.phone(),
+    tablet: md.tablet(),
+    mobile: md.mobile(),
     isConfigured: false,
     info: {
         name: '',

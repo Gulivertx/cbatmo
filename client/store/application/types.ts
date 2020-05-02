@@ -14,6 +14,9 @@ export interface IApplicationInfoState {
 
 // The complete state for the store
 export interface IApplicationState {
+    readonly phone?: string
+    readonly tablet?: string
+    readonly mobile?: string
     readonly isConfigured: boolean
     readonly info: IApplicationInfoState
     readonly user: INetatmoUserInformation

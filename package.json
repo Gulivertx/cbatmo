@@ -1,6 +1,6 @@
 {
   "name": "cbatmo",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "A Netatmo Weather Station Web-APP for Raspberry Pi and official Raspberry touchscreen",
   "keywords": [
     "dark sky",
@@ -30,8 +30,10 @@
     "express": "^4.16.4",
     "http-errors": "^1.7.1",
     "i18next": "^19.4.4",
+    "mobile-detect": "^1.4.4",
     "morgan": "^1.9.1",
     "react-i18next": "^11.4.0",
+    "reflexbox": "^4.0.6",
     "remove": "^0.1.5",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
@@ -47,6 +49,7 @@
     "@types/react-dom": "^16.9.4",
     "@types/react-redux": "^7.1.5",
     "@types/recharts": "^1.8.3",
+    "@types/reflexbox": "^4.0.0",
     "@types/styled-components": "^5.0.1",
     "awesome-typescript-loader": "^5.2.1",
     "classnames": "^2.2.6",
@@ -81,7 +84,7 @@
     "webpack": "^4.29.4",
     "webpack-bundle-analyzer": "^3.0.4",
     "webpack-cli": "^3.2.3",
-    "webpack-pwa-manifest": "^4.1.1",
+    "webpack-pwa-manifest": "^4.2.0",
     "webpack-shell-plugin": "^0.5.0"
   }
 }

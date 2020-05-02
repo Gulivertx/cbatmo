@@ -1,9 +1,11 @@
 import React from 'react';
 import removeAccents from 'remove-accents';
-import { Colors, Icon, Spinner, Intent } from '@blueprintjs/core';
+import { Button, Colors, Icon, Spinner, Intent, InputGroup } from '@blueprintjs/core';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import * as i18next from 'i18next';
-import {i18n} from "i18next";
+import {i18n} from 'i18next';
+import { Box, Flex } from 'reflexbox';
+
 import { ContextMainLayout } from "../layouts/MainLayout";
 
 import * as applicationActions from '../store/application/actions';
@@ -15,7 +17,10 @@ import { INetatmoUserInformation } from "../models/NetatmoUserInformation";
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     loading_station_data: boolean
-    info: IApplicationInfoState
+    info?: IApplicationInfoState
+    mobile?: string
+    phone?: string
+    tablet: string
     user: INetatmoUserInformation
     station_data_errors: any
     refresh_token: string|null
@@ -35,11 +40,19 @@ interface IPropsFromDispatch extends WithTranslation {
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
 type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 
-class AppStarting extends React.Component<AllProps> {
+interface IState {
+    username: string
+    password: string
+}
+
+class AppStarting extends React.Component<AllProps, IState> {
+    state: IState = {
+        username: '',
+        password: ''
+    }
+
     public componentDidMount(): void {
-        if (!this.props.refresh_token) {
-            this.props.fetchAuth();
-        } else {
+        if (this.props.refresh_token) {
             this.props.fetchStationData();
         }
     }
@@ -62,36 +75,76 @@ class AppStarting extends React.Component<AllProps> {
         }
     }
 
+    private _auth = async () => {
+        if (!this.state.username || !this.state.password) {
+            this.context.addToast('error', "Please fill username and password", Intent.DANGER);
+            return;
+        }
+
+        try {
+            await this.props.fetchAuth(this.state.username, this.state.password);
+        } catch (e) {
+            this.context.addToast('error', "Error to login", Intent.DANGER);
+        }
+    }
+
     public render() {
-        const { info, station_data_errors } = this.props;
+        const { info, station_data_errors, refresh_token, mobile } = this.props;
 
         return (
             <div className="starting-page-layout">
                 <div className="content">
-                    <h1 className="title">{info.name}</h1>
-                    <h4 style={{ color: Colors.GRAY4 }}>{this.props.t('app_info.version')} {info.version}</h4>
-                    <div className="description">{this.props.t('app_info.description')}</div>
-
-                    <div className="loader">
-                        {
-                            station_data_errors ? (
-                                <Icon icon="error" iconSize={60} intent={Intent.DANGER} />
-                            ) : (
-                                <Spinner size={ Spinner.SIZE_STANDARD } intent={Intent.PRIMARY} />
-                            )
-                        }
-                    </div>
-
+                    <h1 className="title">{info?.name}</h1>
+                    <h4 style={{ color: Colors.GRAY4 }}>{this.props.t('app_info.version')} {info?.version}</h4>
                     {
-                        station_data_errors ? (
-                            <div>{this.props.t('notifications.configuration_error')}</div>
+                        refresh_token ? (
+                            <>
+                                <div className="description">{this.props.t('app_info.description')}</div>
+                                <div className="loader">
+                                    {
+                                        station_data_errors ? (
+                                            <Icon icon="error" iconSize={60} intent={Intent.DANGER} />
+                                        ) : (
+                                            <Spinner size={ Spinner.SIZE_STANDARD } intent={Intent.PRIMARY} />
+                                        )
+                                    }
+                                </div>
+
+                                {
+                                    station_data_errors ? (
+                                        <div>{this.props.t('notifications.configuration_error')}</div>
+                                    ) : (
+                                        <div>{this.props.t('notifications.loading')}</div>
+                                    )
+                                }
+                            </>
                         ) : (
-                            <div>{this.props.t('notifications.loading')}</div>
+                            <Flex flexDirection={'column'} width={[ '100%', '30%', '25%' ]} mt={2} px={3}>
+                                <InputGroup
+                                    leftElement={<Icon icon="user" />}
+                                    type={ "text"}
+                                    onChange={(e: any) => this.setState({username: e.target.value})}
+                                    large={!!this.props.mobile}
+                                />
+                                <InputGroup
+                                    leftElement={<Icon icon="lock" />}
+                                    type={ "password"}
+                                    onChange={(e: any) => this.setState({password: e.target.value})}
+                                    large={!!this.props.mobile}
+                                />
+                                <Button
+                                    style={{width: '100%'}}
+                                    onClick={this._auth}
+                                    large={!!this.props.mobile}
+                                >
+                                    Log-in
+                                </Button>
+                            </Flex>
                         )
                     }
                 </div>
                 <div className="footer" style={{ color: Colors.GRAY4 }}>
-                    {this.props.t('app_info.created_by')} {removeAccents(info.author)}
+                    {this.props.t('app_info.created_by')} {removeAccents(info?.author as string)}
                 </div>
             </div>
         )

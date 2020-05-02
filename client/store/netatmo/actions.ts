@@ -31,21 +31,15 @@ export const failureAuth = (error: any) => {
     }
 };
 
-export const fetchAuth = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchAuth = (username: string, password: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         dispatch(requestAuth());
 
-        const { netatmo } = getState();
-
         const params = new URLSearchParams();
-        params.append('client_id', netatmo.client_id);
-        params.append('client_secret', netatmo.client_secret);
-        params.append('grant_type', 'password');
-        params.append('scope', 'read_station');
-        params.append('username', netatmo.username);
-        params.append('password', netatmo.password);
+        params.append('username', username);
+        params.append('password', password);
 
-        return fetch(`${NETATMO_API_ROOT_URL}oauth2/token`, {method: 'POST', body: params})
+        return fetch('/netatmo-auth', {method: 'POST', body: params})
             .then(response => {
                 if (!response.ok) throw response;
                 return response.json()
@@ -95,15 +89,11 @@ export const fetchRefreshToken = (): ThunkAction<void, ApplicationState, null, A
         dispatch(requestRefreshToken());
 
         const current_refresh_token = window.localStorage.getItem('NetatmoRefreshToken');
-        const { netatmo } = getState();
 
         const params = new URLSearchParams();
-        params.append('client_id', netatmo.client_id);
-        params.append('client_secret', netatmo.client_secret);
-        params.append('grant_type', 'refresh_token');
         params.append('refresh_token', current_refresh_token ? current_refresh_token : '');
 
-        return fetch(`${NETATMO_API_ROOT_URL}oauth2/token`, {method: 'POST', body: params})
+        return fetch('/netatmo-refresh-token', {method: 'POST', body: params})
             .then(response => {
                 if (!response.ok) throw response;
                 return response.json()
