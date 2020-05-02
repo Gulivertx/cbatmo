@@ -39,10 +39,10 @@ if [ ! -f "$ENV_FILE" ]; then
   echo "NETATMO_CLIENT_ID=${NETATMO_CLIENT_ID}" >> $ENV_FILE
   read -p "Please specify your Netatmo client secret: " NETATMO_CLIENT_SECRET
   echo "NETATMO_CLIENT_SECRET=${NETATMO_CLIENT_SECRET}" >> $ENV_FILE
-  read -p "Please specify your Netatmo username: " NETATMO_USERNAME
-  echo "NETATMO_USERNAME=${NETATMO_USERNAME}" >> $ENV_FILE
-  read -p "Please specify your Netatmo password: " NETATMO_PASSWORD
-  echo "NETATMO_PASSWORD=${NETATMO_PASSWORD}" >> $ENV_FILE
+#  read -p "Please specify your Netatmo username: " NETATMO_USERNAME
+#  echo "NETATMO_USERNAME=${NETATMO_USERNAME}" >> $ENV_FILE
+#  read -p "Please specify your Netatmo password: " NETATMO_PASSWORD
+#  echo "NETATMO_PASSWORD=${NETATMO_PASSWORD}" >> $ENV_FILE
 fi
 
 # build for production
