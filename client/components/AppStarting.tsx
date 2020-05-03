@@ -16,6 +16,7 @@ import { INetatmoUserInformation } from "../models/NetatmoUserInformation";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
+    loading_auth: boolean
     loading_station_data: boolean
     info?: IApplicationInfoState
     mobile?: string
@@ -81,11 +82,8 @@ class AppStarting extends React.Component<AllProps, IState> {
             return;
         }
 
-        try {
-            await this.props.fetchAuth(this.state.username, this.state.password);
-        } catch (e) {
-            this.context.addToast('error', "Error to login", Intent.DANGER);
-        }
+        // Todo use async and await with try and catch to handle error notification
+        this.props.fetchAuth(this.state.username, this.state.password);
     }
 
     public render() {
@@ -119,23 +117,26 @@ class AppStarting extends React.Component<AllProps, IState> {
                                 }
                             </>
                         ) : (
-                            <Flex flexDirection={'column'} width={[ '100%', '30%', '25%' ]} mt={2} px={3}>
+                            <Flex flexDirection={'column'} width={[ '100%', '30%', '290px%', '250px' ]} mt={2} px={3}>
                                 <InputGroup
                                     leftElement={<Icon icon="user" />}
-                                    type={ "text"}
+                                    type="email"
                                     onChange={(e: any) => this.setState({username: e.target.value})}
                                     large={!!this.props.mobile}
+                                    disabled={this.props.loading_auth}
                                 />
                                 <InputGroup
                                     leftElement={<Icon icon="lock" />}
                                     type={ "password"}
                                     onChange={(e: any) => this.setState({password: e.target.value})}
                                     large={!!this.props.mobile}
+                                    disabled={this.props.loading_auth}
                                 />
                                 <Button
                                     style={{width: '100%'}}
                                     onClick={this._auth}
                                     large={!!this.props.mobile}
+                                    loading={this.props.loading_auth}
                                 >
                                     Log-in
                                 </Button>

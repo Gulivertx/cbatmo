@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import * as darkskyActions from "../store/darksky/actions";
 import * as openweatherActions from "../store/openweather/actions";
 import * as netatmoActions from "../store/netatmo/actions";
 import { ConnectedReduxProps } from "../store";
@@ -18,7 +17,6 @@ interface IPropsFromState {
 // We can use `typeof` here to map our dispatch types to the props, like so.
 interface IPropsFromDispatch {
     [key: string]: any
-    fetchDarksky: typeof darkskyActions.fetchDarksky
     fetchOpenWeather: typeof openweatherActions.fetchOpenWeather
     fetchStationData: typeof netatmoActions.fetchStationData
     fetchMeasure: typeof netatmoActions.fetchMeasure
@@ -34,7 +32,6 @@ class DashboardLayout extends React.Component<AllProps> {
     private interval: number | undefined;
 
     public componentDidMount(): void {
-        //this.props.fetchDarksky();
         this.props.fetchOpenWeather();
 
         // Fetch on app load the temperature measure of Indoor module
@@ -46,7 +43,7 @@ class DashboardLayout extends React.Component<AllProps> {
         }
 
         this.interval = setInterval(() => {
-            this.props.fetchDarksky();
+            this.props.fetchOpenWeather();
             this.props.fetchStationData();
             this.fetchNetatmoModulesMeasures();
         }, REFRESH_TIME);

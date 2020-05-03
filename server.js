@@ -175,7 +175,8 @@ app.post('/netatmo-measure', (req, res, next) => {
             scale: scale,
             type: type,
             date_begin: date_begin,
-            date_end: date_end
+            date_end: date_end,
+            optimize: 'false'
         },
         headers: {
             'User-Agent': 'Request-Promise'

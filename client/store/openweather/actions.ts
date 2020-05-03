@@ -5,6 +5,8 @@ import moment from "moment";
 import { OpenWeatherActionTypes } from "./types";
 import OpenWeatherData from '../../models/OpenWeatherData';
 
+const CALL_DELAY = 30;
+
 export const requestData = () => {
     return {
         type: OpenWeatherActionTypes.REQUEST
@@ -28,7 +30,7 @@ export const failureData = (error: any) => {
 
 export const fetchOpenWeather = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
-        if (getState().openweather.updated_at === null || getState().openweather.updated_at !== null && moment(moment()).diff(getState().openweather.updated_at, 'minute') >= 10) {
+        if (getState().openweather.updated_at === null || getState().openweather.updated_at !== null && moment(moment()).diff(getState().openweather.updated_at, 'minute') >= CALL_DELAY) {
             dispatch(requestData());
 
             // Take latitude and longitude from Netatmo station

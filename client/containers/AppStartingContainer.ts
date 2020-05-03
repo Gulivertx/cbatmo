@@ -6,6 +6,7 @@ import { ApplicationState } from "../store";
 import AppStarting from "../components/AppStarting"
 
 const mapStateToProps =  ({ application, netatmo}: ApplicationState) => ({
+    loading_auth: netatmo.loading_auth,
     loading_station_data: netatmo.loading_station_data,
     mobile: application.mobile,
     tablet: application.tablet,

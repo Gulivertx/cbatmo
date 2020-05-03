@@ -8,7 +8,7 @@ import NetatmoUserInformation from "../../models/NetatmoUserInformation";
 import NetatmoChartsData, { Scale } from "../../models/NetatmoChartsData";
 import { NetatmoActionTypes } from "./types";
 
-const NETATMO_API_ROOT_URL = "https://api.netatmo.com/";
+const CALL_DELAY = 10;
 
 export const requestAuth = () => {
     return {
@@ -137,15 +137,18 @@ export const failureStationData = (error: any) => {
 export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // If no access token or refresh token is soon expired
-        if (!getState().netatmo.access_token || moment.unix(Number(getState().netatmo.access_token_expire_in)).diff(moment(), 'minute') < 10) {
+        if (!getState().netatmo.access_token || moment.unix(Number(getState().netatmo.access_token_expire_in)).diff(moment(), 'minute') < CALL_DELAY) {
             // Fetch a new access token from refresh token and then fetch station data
             dispatch(fetchRefreshToken());
         } else {
             // Fetch new data only if last data stored is bigger than 10 minutes
-            if (getState().netatmo.station_data_last_updated === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
+            if (getState().netatmo.station_data_last_updated === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > CALL_DELAY) {
                 dispatch(requestStationData());
 
-                return fetch(`${NETATMO_API_ROOT_URL}api/getstationsdata?access_token=${getState().netatmo.access_token}`)
+                const params = new URLSearchParams();
+                params.append('access_token', getState().netatmo.access_token as string);
+
+                return fetch('/netatmo-station-data', {method: 'POST', body: params})
                     .then(response => {
                         if (!response.ok) throw response;
                         return response.json()
@@ -200,11 +203,11 @@ export const fetchMeasure = (device: string, module: string, type: string[], tim
         if (getState().netatmo.measure_data.length === 0 ||
             (getState().netatmo.selected_types[0] !== type[0] || getState().netatmo.selected_module !== module) ||
             getState().netatmo.selected_timelapse !== timelapse ||
-            moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
+            moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > CALL_DELAY) {
             dispatch(requestMeasure());
 
-            let date_begin;
-            let scale;
+            let date_begin: number;
+            let scale: Scale;
 
             switch (timelapse) {
                 case "12h":
@@ -223,7 +226,16 @@ export const fetchMeasure = (device: string, module: string, type: string[], tim
 
             const date_end = moment().unix();
 
-            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=${scale}&type=${type}&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
+            const params = new URLSearchParams();
+            params.append('access_token', getState().netatmo.access_token as string);
+            params.append('device_id', device);
+            params.append('module_id', module);
+            params.append('scale', scale);
+            params.append('type', type.toString());
+            params.append('date_begin', date_begin.toString());
+            params.append('date_end', date_end.toString());
+
+            return fetch('/netatmo-measure', {method: 'POST', body: params})
                 .then(response => {
                     if (!response.ok) throw response;
                     return response.json()
@@ -269,13 +281,19 @@ export const failureNRainMeasure = (error: any) => {
 export const fetchRainMeasure = (device: string, module: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
-        if (getState().netatmo.measure_rain_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > 10) {
+        if (getState().netatmo.measure_rain_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > CALL_DELAY) {
             dispatch(requestRainMeasure());
 
-            const date_begin = moment().subtract(23, 'hours').unix();
-            const date_end = moment().unix();
+            const params = new URLSearchParams();
+            params.append('access_token', getState().netatmo.access_token as string);
+            params.append('device_id', device);
+            params.append('module_id', module);
+            params.append('scale', '1hour');
+            params.append('type', 'Rain');
+            params.append('date_begin', moment().subtract(23, 'hours').unix().toString());
+            params.append('date_end', moment().unix().toString());
 
-            return fetch(`${NETATMO_API_ROOT_URL}api/getmeasure?access_token=${getState().netatmo.access_token}&device_id=${device}&module_id=${module}&scale=1hour&type=Rain&date_begin=${date_begin}&date_end=${date_end}&optimize=false`)
+            return fetch('/netatmo-measure', {method: 'POST', body: params})
                 .then(response => {
                     if (!response.ok) throw response;
                     return response.json()
