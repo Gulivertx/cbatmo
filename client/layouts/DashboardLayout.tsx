@@ -46,7 +46,7 @@ class DashboardLayout extends React.Component<AllProps> {
         }
 
         this.interval = setInterval(() => {
-            this.props.fetchDarksky();
+            this.props.fetchOpenWeather();
             this.props.fetchStationData();
             this.fetchNetatmoModulesMeasures();
         }, REFRESH_TIME);
