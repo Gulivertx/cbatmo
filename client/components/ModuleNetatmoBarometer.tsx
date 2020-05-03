@@ -32,6 +32,7 @@ const NetatmoModuleBarmometer: React.FunctionComponent<AllProps> = (props) => {
             label={props.t('netatmo.barometer')}
             reachable={props.reachable}
             vertical_divider={true}
+            fill={true}
         >
             <div className="modules-layout">
                 <div className="row">

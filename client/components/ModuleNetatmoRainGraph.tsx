@@ -7,13 +7,14 @@ interface IPropsFromState {
     device?: string
     module?: string
     data: []
+    phone?: string
 }
 
 const ModuleNetatmoRainGraph: React.FunctionComponent<IPropsFromState> = (props) => {
     return(
         <BarChart
-            width={170}
-            height={108}
+            width={140}
+            height={props.phone ? 90 : 108}
             data={props.data}
             syncId="anyId"
             margin={{top: 10, right: 0, left: -30, bottom: 0}}

@@ -63,9 +63,9 @@ class DashboardLayout extends React.Component<AllProps> {
 
     public render() {
         return (
-            <div className="dashboard-grid-layout">
+            <>
                 {this.props.children}
-            </div>
+            </>
         )
     }
 }

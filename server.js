@@ -187,25 +187,6 @@ app.post('/netatmo-measure', (req, res, next) => {
     handleRequestPromise(res, next,  options);
 });
 
-app.get('/darksky/:latitude/:longitude/:lang/:units', (req, res, next) => {
-    // We want to verify that each needed parameters are set in the request
-    const {latitude, longitude, units, lang} = req.params;
-    if (!latitude || !longitude || !lang || !units) return res.status(400).json({status: 'error', msg: 'Bad request'});
-
-    DarkSkyApi.units = units; // default 'us'
-    DarkSkyApi.language = lang; // default 'en'
-
-    const position = {
-        latitude: latitude,
-        longitude: longitude
-    };
-
-    DarkSkyApi.loadItAll('hourly,flags', position)
-        .then(result => {
-            res.json(result)
-            })
-});
-
 app.get('/openweather/:latitude/:longitude/:lang/:units', (req, res, next) => {
     // We want to verify that each needed parameters are set in the request
     let {latitude, longitude, units, lang} = req.params;

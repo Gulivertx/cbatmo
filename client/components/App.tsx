@@ -1,4 +1,5 @@
 import React from 'react';
+import { Flex, Box } from 'reflexbox'
 
 /** React layouts **/
 import MainLayout from '../layouts/MainLayout';
@@ -39,57 +40,45 @@ const layoutChooser = (available_modules: IAvailableModules|undefined) => {
     if (available_modules?.INDOOR && available_modules?.RAIN && available_modules?.WIND) {
         // All modules available
         return (
-            <div className="second-column">
-                <ModuleForecastContainer />
-                <div className="row-grid">
-                    <ModuleNetatmoIndoorContainer />
-                    <ModuleNetatmoRainContainer />
-                </div>
-                <div className="row-grid">
-                    <ModuleNetatmoWindContainer />
-                    <ModuleNetatmoGraphContainer />
-                </div>
-                <ModuleNetatmoInformationContainer />
-            </div>
-        )
-    } else if (available_modules?.INDOOR || available_modules?.RAIN || available_modules?.WIND) {
-        // only one additional available
-        return (
-            <div className="second-column">
-                <ModuleForecastContainer />
-                <div className="row-grid">
+            <Flex flexDirection='column' width={[ '100%', '65%' ]}>
+                <Flex flexWrap='wrap' flex={1}>
+                    <ModuleForecastContainer />
                     {
                         available_modules?.INDOOR ? (
-                            <ModuleNetatmoIndoorContainer />
-                        ) : (<div />)
+                            <Box width={[ '100%', '50%' ]}>
+                                <ModuleNetatmoIndoorContainer />
+                            </Box>
+                        ) : null
                     }
                     {
                         available_modules?.RAIN ? (
-                            <ModuleNetatmoRainContainer />
-                        ) : (<div />)
+                            <Box width={[ '100%', '50%' ]}>
+                                <ModuleNetatmoRainContainer />
+                            </Box>
+                        ) : null
                     }
-                </div>
-                <div className="row-grid">
                     {
                         available_modules?.WIND ? (
-                            <ModuleNetatmoWindContainer />
-                        ) : (<div />)
+                            <Box width={[ '100%', '50%' ]}>
+                                <ModuleNetatmoWindContainer />
+                            </Box>
+                        ) : null
                     }
-                    <ModuleNetatmoGraphContainer />
-                </div>
+                    <Box width={[ '100%', '50%' ]}>
+                        <ModuleNetatmoGraphContainer />
+                    </Box>
+                </Flex>
                 <ModuleNetatmoInformationContainer />
-            </div>
+            </Flex>
         )
     } else {
         // No additional modules
         return (
-            <div className="second-column">
+            <Flex flexDirection='column' width={[ '100%', '65%' ]}>
                 <ModuleForecastContainer />
-                <div className="row" style={{gridRow: '2 / 4'}}>
-                    <ModuleNetatmoGraphContainer />
-                </div>
+                <ModuleNetatmoGraphContainer />
                 <ModuleNetatmoInformationContainer />
-            </div>
+            </Flex>
         )
     }
 };
@@ -103,12 +92,12 @@ class App extends React.Component<AllProps> {
                 {
                     this.props.isConfigured ? (
                         <DashboardLayoutContainer>
-                            <div className="first-column">
+                            <Flex flexDirection='column' width={[ '100%', '35%' ]}>
                                 <ModuleDateTimeContainer/>
                                 <ModuleNetatmoStationContainer />
                                 <ModuleNetatmoOutdoorContainer />
                                 <ModuleNetatmoBarometerContainer />
-                            </div>
+                            </Flex>
                             {layoutChooser(available_modules)}
                         </DashboardLayoutContainer>
                     ) : (

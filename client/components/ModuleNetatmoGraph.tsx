@@ -13,6 +13,7 @@ import {ConnectedReduxProps} from "../store";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
+    phone?: string
     measure_data: []
     selected_types: Types[]
     selected_module: string
@@ -78,8 +79,8 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
                         >1 {this.props.t('netatmo.month')}</Button>
                     </ButtonGroup>
                     <AreaChart
-                        width={270}
-                        height={132}
+                        width={240}
+                        height={this.props.phone ? 94 : 122}
                         data={this.props.measure_data}
                         margin={{top: 14, right: 0, left: -30, bottom: 8}}
                     >

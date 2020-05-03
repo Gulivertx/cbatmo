@@ -185,6 +185,7 @@ body {
 
     .icon {
       padding-top: 12px;
+      padding-bottom: 10px;
     }
   }
 }
@@ -279,5 +280,69 @@ body {
   .footer {
     height: 28px;
     font-size: 1rem;
+  }
+}
+
+/*
+  Lower than iphone XR
+*/
+
+@media (min-height: 200px) and (max-height: 414px) {
+  body {
+    font-size: 1.1rem;
+  }
+
+  .modules-layout {
+    padding-top: 22px;
+    font-size: 2rem;
+
+    small {
+      font-size: 1.2rem;
+      margin-left: 4px;
+    }
+
+    .row {
+      .wind-orientation {
+        font-size: 4rem;
+      }
+    }
+  }
+
+  .module-datetime {
+    display: flex;
+
+    .time {
+      padding-top: 10px;
+      font-size: 3.6rem;
+
+      small {
+        font-size: 1.8rem;
+      }
+    }
+
+    .date {
+      font-size: 1rem;
+    }
+
+    .sun {
+      .sunrise {
+        font-size: 0.9rem;
+      }
+      .sunset {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media all and (orientation:portrait) {
+  html {
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    width: 100vh;
+    overflow-x: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
   }
 }
