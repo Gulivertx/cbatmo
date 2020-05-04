@@ -8,6 +8,7 @@ const initialState: IApplicationState = {
     phone: md.phone(),
     tablet: md.tablet(),
     mobile: md.mobile(),
+    orientation: 'landscape',
     isConfigured: false,
     info: {
         name: '',
@@ -45,6 +46,9 @@ const reducer: Reducer<IApplicationState> = (state = initialState, action) => {
         /** SET user info from Netatmo API **/
         case ApplicationActionTypes.USER_INFO:
             return { ...state, user: action.payload };
+
+        case ApplicationActionTypes.DEVICE_ORIENTATION:
+            return { ...state, orientation: action.payload };
 
         default:
             return state;

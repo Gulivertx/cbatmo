@@ -19,7 +19,7 @@ const mapStateToProps =  ({ application, netatmo}: ApplicationState) => ({
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
-    fetchAuth: (username: string, password: string) => dispatch(netatmoActions.fetchAuth(username, password)),
+    fetchAuth: (username: string, password: string, secret: string) => dispatch(netatmoActions.fetchAuth(username, password, secret)),
     fetchStationData: () => dispatch(netatmoActions.fetchStationData()),
     appConfigured: (value: boolean) => dispatch(applicationActions.appConfigured(value))
 });

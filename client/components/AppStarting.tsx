@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FormEvent} from 'react';
 import removeAccents from 'remove-accents';
 import { Button, Colors, Icon, Spinner, Intent, InputGroup } from '@blueprintjs/core';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -44,12 +44,14 @@ type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 interface IState {
     username: string
     password: string
+    secret: string
 }
 
 class AppStarting extends React.Component<AllProps, IState> {
     state: IState = {
         username: '',
-        password: ''
+        password: '',
+        secret: ''
     }
 
     public componentDidMount(): void {
@@ -76,14 +78,16 @@ class AppStarting extends React.Component<AllProps, IState> {
         }
     }
 
-    private _auth = async () => {
-        if (!this.state.username || !this.state.password) {
-            this.context.addToast('error', "Please fill username and password", Intent.DANGER);
+    private _auth = async (e: FormEvent) => {
+        e.preventDefault();
+
+        if (!this.state.username || !this.state.password || !this.state.secret) {
+            this.context.addToast('error', "Please fill all credential fields", Intent.DANGER);
             return;
         }
 
         // Todo use async and await with try and catch to handle error notification
-        this.props.fetchAuth(this.state.username, this.state.password);
+        this.props.fetchAuth(this.state.username, this.state.password, this.state.secret);
     }
 
     public render() {
@@ -117,29 +121,41 @@ class AppStarting extends React.Component<AllProps, IState> {
                                 }
                             </>
                         ) : (
-                            <Flex flexDirection={'column'} width={[ '100%', '30%', '290px%', '250px' ]} mt={2} px={3}>
-                                <InputGroup
-                                    leftElement={<Icon icon="user" />}
-                                    type="email"
-                                    onChange={(e: any) => this.setState({username: e.target.value})}
-                                    large={!!this.props.mobile}
-                                    disabled={this.props.loading_auth}
-                                />
-                                <InputGroup
-                                    leftElement={<Icon icon="lock" />}
-                                    type={ "password"}
-                                    onChange={(e: any) => this.setState({password: e.target.value})}
-                                    large={!!this.props.mobile}
-                                    disabled={this.props.loading_auth}
-                                />
-                                <Button
-                                    style={{width: '100%'}}
-                                    onClick={this._auth}
-                                    large={!!this.props.mobile}
-                                    loading={this.props.loading_auth}
-                                >
-                                    Log-in
-                                </Button>
+                            <Flex flexDirection={'column'} width={[ '100%', '40%', '30%', '20%' ]} mt={2} px={3}>
+                                <form onSubmit={this._auth}>
+                                    <InputGroup
+                                        fill
+                                        leftElement={<Icon icon="user" />}
+                                        type='email'
+                                        onChange={(e: any) => this.setState({username: e.target.value})}
+                                        large={!!this.props.mobile}
+                                        disabled={this.props.loading_auth}
+                                    />
+                                    <InputGroup
+                                        fill
+                                        leftElement={<Icon icon="lock" />}
+                                        type='password'
+                                        onChange={(e: any) => this.setState({password: e.target.value})}
+                                        large={!!this.props.mobile}
+                                        disabled={this.props.loading_auth}
+                                    />
+                                    <InputGroup
+                                        fill
+                                        leftElement={<Icon icon="key" />}
+                                        type='password'
+                                        onChange={(e: any) => this.setState({secret: e.target.value})}
+                                        large={!!this.props.mobile}
+                                        disabled={this.props.loading_auth}
+                                    />
+                                    <Button
+                                        fill
+                                        type='submit'
+                                        large={!!this.props.mobile}
+                                        loading={this.props.loading_auth}
+                                    >
+                                        Log-in
+                                    </Button>
+                                </form>
                             </Flex>
                         )
                     }

@@ -37,7 +37,7 @@ type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 
 // Return the the available modules
 const layoutChooser = (available_modules: IAvailableModules|undefined) => {
-    if (available_modules?.INDOOR && available_modules?.RAIN && available_modules?.WIND) {
+    if (available_modules?.INDOOR || available_modules?.RAIN || available_modules?.WIND) {
         // All modules available
         return (
             <Flex flexDirection='column' width={[ '100%', '65%' ]}>

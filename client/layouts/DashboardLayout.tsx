@@ -1,9 +1,11 @@
 import React, { ReactNode } from 'react';
 import * as openweatherActions from "../store/openweather/actions";
 import * as netatmoActions from "../store/netatmo/actions";
+import * as applicationActions from "../store/application/actions";
 import { ConnectedReduxProps } from "../store";
 import { INetatmoNAMain } from "../models/NetatmoNAMain";
 import {Types} from "../models/NetatmoChartsData";
+import {Orientation} from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -21,6 +23,7 @@ interface IPropsFromDispatch {
     fetchStationData: typeof netatmoActions.fetchStationData
     fetchMeasure: typeof netatmoActions.fetchMeasure
     fetchRainMeasure: typeof netatmoActions.fetchRainMeasure
+    setOrientation: typeof applicationActions.setOrientation
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -32,6 +35,16 @@ class DashboardLayout extends React.Component<AllProps> {
     private interval: number | undefined;
 
     public componentDidMount(): void {
+        // Get current orientation
+        const angle = window.orientation; // Deprecated feature but only this work on iOS Safari
+        this.props.setOrientation(this._getOrientation(angle as number));
+
+        // Listen mobile orientation
+        window.addEventListener('orientationchange', (e: Event) => {
+            const angle = window.orientation;
+            this.props.setOrientation(this._getOrientation(angle as number));
+        }, true)
+
         this.props.fetchOpenWeather();
 
         // Fetch on app load the temperature measure of Indoor module
@@ -51,6 +64,14 @@ class DashboardLayout extends React.Component<AllProps> {
 
     public componentWillUnmount(): void {
         clearInterval(this.interval);
+    }
+
+    private _getOrientation = (angle: number): Orientation => {
+        if (angle === 0) {
+            return 'portrait';
+        } else {
+            return 'landscape';
+        }
     }
 
     private fetchNetatmoModulesMeasures = (): void => {

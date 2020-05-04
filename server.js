@@ -96,8 +96,12 @@ const handleRequestPromise = (res, next, options) => {
 
 app.post('/netatmo-auth', (req, res, next) => {
     // We want to verify that each needed parameters are set in the request
-    const {username, password} = req.body;
-    if (!username || !password) return res.status(400).json({status: 'error', msg: 'Bad request'});
+    const {username, password, secret} = req.body;
+    if (!username || !password || !secret) return res.status(400).json({status: 'error', msg: 'Bad request'});
+
+    // We want to check if the secret key is correct
+    // TODO : may be add a database or a file to manage multiple keys and revoke any access
+    if (secret !== process.env.APP_SECRET) return res.status(401).json({status: 'error', msg: 'Bad login'});
 
     const options = {
         method: 'POST',

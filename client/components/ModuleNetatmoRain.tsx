@@ -35,7 +35,7 @@ const NetatmoModuleRain: React.FunctionComponent<AllProps> = (props) => {
         >
             <div className="modules-layout">
                 <div className="row">
-                    <div className="graph">
+                    <div style={{width: '80%'}}>
                         <ModuleNetatmoRainGraphContainer />
                     </div>
                     <div className="rain-24" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)}>

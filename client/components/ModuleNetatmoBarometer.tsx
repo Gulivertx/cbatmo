@@ -4,6 +4,7 @@ import * as i18next from 'i18next';
 import ModuleLayout from "../layouts/ModuleLayout";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
+import {Orientation} from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -13,6 +14,7 @@ interface IPropsFromState {
     device_id: string|undefined
     selected_timelapse: '12h'|'1d'|'1m'
     pressure_ratio: number
+    orientation: Orientation
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -31,7 +33,7 @@ const NetatmoModuleBarmometer: React.FunctionComponent<AllProps> = (props) => {
         <ModuleLayout
             label={props.t('netatmo.barometer')}
             reachable={props.reachable}
-            vertical_divider={true}
+            vertical_divider={props.orientation === 'landscape'}
             fill={true}
         >
             <div className="modules-layout">

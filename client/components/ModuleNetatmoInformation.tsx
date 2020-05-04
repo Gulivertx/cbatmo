@@ -36,6 +36,12 @@ class ModuleNetatmoInformation extends React.Component<IPropsFromState, IState> 
         clearInterval(this.interval);
     }
 
+    public componentDidUpdate(prevProps: Readonly<IPropsFromState>, prevState: Readonly<IState>, snapshot?: any) {
+        if (prevProps.last_status_store !== this.props.last_status_store) {
+            this.lastStatusStore();
+        }
+    }
+
     private lastStatusStore = () => {
         let moment = momentWithLocale(this.props.locale);
         const now = moment();

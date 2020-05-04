@@ -31,18 +31,14 @@ if [ ! -f "$ENV_FILE" ]; then
 
   touch .env
   echo "APP_ENV=prod" >> $ENV_FILE
-  #read -p "Please specify your Darksky secret key: " DARKSKY_SECRET_KEY
-  #echo "DARKSKY_SECRET_KEY=${DARKSKY_SECRET_KEY}" >> $ENV_FILE
+  read -p "Please specify your APP secret key: " APP_SECRET
+  echo "APP_SECRET=${APP_SECRET}" >> $ENV_FILE
   read -p "Please specify your OpenWeather API key: " OPENWEATHER_API_KEY
   echo "OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}" >> $ENV_FILE
   read -p "Please specify your Netatmo client id: " NETATMO_CLIENT_ID
   echo "NETATMO_CLIENT_ID=${NETATMO_CLIENT_ID}" >> $ENV_FILE
   read -p "Please specify your Netatmo client secret: " NETATMO_CLIENT_SECRET
   echo "NETATMO_CLIENT_SECRET=${NETATMO_CLIENT_SECRET}" >> $ENV_FILE
-#  read -p "Please specify your Netatmo username: " NETATMO_USERNAME
-#  echo "NETATMO_USERNAME=${NETATMO_USERNAME}" >> $ENV_FILE
-#  read -p "Please specify your Netatmo password: " NETATMO_PASSWORD
-#  echo "NETATMO_PASSWORD=${NETATMO_PASSWORD}" >> $ENV_FILE
 fi
 
 # build for production

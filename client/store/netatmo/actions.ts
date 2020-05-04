@@ -31,13 +31,14 @@ export const failureAuth = (error: any) => {
     }
 };
 
-export const fetchAuth = (username: string, password: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchAuth = (username: string, password: string, secret: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         dispatch(requestAuth());
 
         const params = new URLSearchParams();
         params.append('username', username);
         params.append('password', password);
+        params.append('secret', secret);
 
         return fetch('/netatmo-auth', {method: 'POST', body: params})
             .then(response => {
