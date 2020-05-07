@@ -6,7 +6,11 @@ import { ApplicationState } from "../store";
 import AppStarting from "../components/AppStarting"
 
 const mapStateToProps =  ({ application, netatmo}: ApplicationState) => ({
+    loading_auth: netatmo.loading_auth,
     loading_station_data: netatmo.loading_station_data,
+    mobile: application.mobile,
+    tablet: application.tablet,
+    phone: application.phone,
     info: application.info,
     user: application.user,
     station_data_errors: netatmo.station_data_errors,
@@ -15,7 +19,7 @@ const mapStateToProps =  ({ application, netatmo}: ApplicationState) => ({
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
-    fetchAuth: () => dispatch(netatmoActions.fetchAuth()),
+    fetchAuth: (username: string, password: string, secret: string) => dispatch(netatmoActions.fetchAuth(username, password, secret)),
     fetchStationData: () => dispatch(netatmoActions.fetchStationData()),
     appConfigured: (value: boolean) => dispatch(applicationActions.appConfigured(value))
 });

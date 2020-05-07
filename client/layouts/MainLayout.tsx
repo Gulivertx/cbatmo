@@ -1,5 +1,6 @@
 import React from 'react';
 import {Intent, Position, Toaster} from "@blueprintjs/core";
+import { Flex } from 'reflexbox'
 
 export const ContextMainLayout = React.createContext(undefined);
 ContextMainLayout.displayName = 'MainLayout';
@@ -18,7 +19,7 @@ class MainLayout extends React.Component {
 
     public render() {
         return (
-            <div className="main-layout">
+            <Flex flexWrap='wrap' style={{height: '100vh'}}>
                 <ContextMainLayout.Provider
                     // @ts-ignore
                     value={{
@@ -28,7 +29,7 @@ class MainLayout extends React.Component {
                     {this.props.children}
                 </ContextMainLayout.Provider>
                 <Toaster autoFocus={false} usePortal={false} position={Position.TOP} ref={this.refHandlers.toaster} />
-            </div>
+            </Flex>
         );
     }
 }

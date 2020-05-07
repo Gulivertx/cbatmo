@@ -4,12 +4,13 @@ import ModuleNetatmoGraph from "../components/ModuleNetatmoGraph";
 import {ApplicationState} from "../store";
 import * as netatmoActions from "../store/netatmo/actions";
 
-const mapStateToProps = ({ netatmo}: ApplicationState) => ({
+const mapStateToProps = ({ netatmo, application }: ApplicationState) => ({
     measure_data: netatmo.measure_data,
     selected_types: netatmo.selected_types,
     selected_module: netatmo.selected_module,
     selected_timelapse: netatmo.selected_timelapse,
-    station_data: netatmo.station_data
+    station_data: netatmo.station_data,
+    phone: application.phone
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({

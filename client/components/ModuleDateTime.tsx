@@ -7,12 +7,14 @@ import * as i18next from 'i18next';
 import { momentWithLocale } from '../utils/tools';
 import {ConnectedReduxProps} from "../store";
 import ModuleLayout from "../layouts/ModuleLayout";
+import {Orientation} from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     locale: string
     sunset_time: number|undefined
     sunrise_time: number|undefined
+    orientation: Orientation
 }
 
 interface IpropsFromDispatch extends WithTranslation {
@@ -67,7 +69,7 @@ class ModuleDateTime extends React.Component<AllProps, IState> {
         let moment = momentWithLocale(this.props.locale);
 
         return (
-            <ModuleLayout label={this.props.t('netatmo.time')} reachable={true} vertical_divider={true}>
+            <ModuleLayout label={this.props.t('netatmo.time')} reachable={true} vertical_divider={this.props.orientation === 'landscape'}>
                 <div className="module-datetime">
                     <div className="time">{ this.state.hour }:{ this.state.minutes }<small>{this.state.seconds}</small></div>
                     <div className="date" style={{ color: Colors.GRAY5 }}>{ removeAccents(this.state.date) }</div>

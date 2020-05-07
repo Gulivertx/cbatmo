@@ -1,4 +1,4 @@
-import { ApplicationActionTypes } from './types'
+import {ApplicationActionTypes, Orientation} from './types'
 import {INetatmoUserInformation} from "../../models/NetatmoUserInformation";
 
 /** Application actions **/
@@ -13,5 +13,12 @@ export const setUserInfo = (user: INetatmoUserInformation) => {
     return {
         type: ApplicationActionTypes.USER_INFO,
         payload: user
+    }
+};
+
+export const setOrientation = (orientation: Orientation) => {
+    return {
+        type: ApplicationActionTypes.DEVICE_ORIENTATION,
+        payload: orientation
     }
 };

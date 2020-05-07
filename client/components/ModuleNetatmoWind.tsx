@@ -3,10 +3,10 @@ import { Colors } from "@blueprintjs/core";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import * as i18next from 'i18next';
 import ModuleLayout from "../layouts/ModuleLayout";
-
 import { INetatmoNAModule2 } from "../models/NetatmoNAModule2";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
+import {Orientation} from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -15,6 +15,7 @@ interface IPropsFromState {
     unit: string
     selected_timelapse: '12h'|'1d'|'1m'
     wind_ratio: number
+    orientation: Orientation
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -33,7 +34,7 @@ const NetatmoModuleWind: React.FunctionComponent<AllProps> = (props) => {
         <ModuleLayout
             label={props.module_data?.module_name}
             reachable={props.module_data?.reachable}
-            vertical_divider={true}
+            vertical_divider={props.orientation === 'landscape'}
         >
             <div className="modules-layout">
                 <div className="row">
@@ -46,7 +47,7 @@ const NetatmoModuleWind: React.FunctionComponent<AllProps> = (props) => {
                         {Math.round(props.module_data?.data?.max_wind_str as number * props.wind_ratio)}<small>{props.unit}</small>
                     </div>
                 </div>
-                <div className="row">
+                <div className="row" style={{transform: props.phone ? 'translateY(-32px)' : ''}}>
                     <div className="wind-orientation">
                         <i className={'wind-icon wi wi-wind from-' + props.module_data?.data?.wind_angle + '-deg'}/>
                     </div>

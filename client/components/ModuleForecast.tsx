@@ -10,19 +10,20 @@ import { IOpenWeatherState } from "../store/openweather/types";
 interface IPropsFromState extends WithTranslation  {
     openweather: IOpenWeatherState
     locale: string
+    phone?: string
     t: i18next.TFunction
 }
 
 const ModuleDate: React.FunctionComponent<IPropsFromState> = (props) => {
     return (
-        <ModuleLayout label={props.t('forecast.forecast')} reachable={true}>
+        <ModuleLayout label={props.t('forecast.forecast')} reachable={true} fill={true}>
             <div className="module-forecast">
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[0]} locale={props.locale} />
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[1]} locale={props.locale} />
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[2]} locale={props.locale} />
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[3]} locale={props.locale} />
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[4]} locale={props.locale} />
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[5]} locale={props.locale} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[0]} locale={props.locale} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[1]} locale={props.locale} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[2]} locale={props.locale} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[3]} locale={props.locale} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[4]} locale={props.locale} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[5]} locale={props.locale} phone={props.phone} />
             </div>
         </ModuleLayout>
     )

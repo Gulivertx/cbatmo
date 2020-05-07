@@ -7,6 +7,7 @@ import ModuleLayout from "../layouts/ModuleLayout";
 import { INetatmoNAMain } from "../models/NetatmoNAMain";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
+import {Orientation} from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -15,6 +16,7 @@ interface IPropsFromState {
     selected_timelapse: '12h'|'1d'|'1m'
     temperature_ratio: string
     unit: string
+    orientation: Orientation
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -33,7 +35,7 @@ const NetatmoModuleStation: React.FunctionComponent<AllProps> = (props) => {
         <ModuleLayout
             label={props.station_data?.module_name}
             reachable={props.station_data?.reachable}
-            vertical_divider={true}
+            vertical_divider={props.orientation === 'landscape'}
         >
             <div className="modules-layout">
                 <div className="row">

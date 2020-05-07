@@ -3,10 +3,10 @@ import { Colors } from "@blueprintjs/core";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import * as i18next from 'i18next';
 import ModuleLayout from "../layouts/ModuleLayout";
-
 import { INetatmoNAModule4 } from "../models/NetatmoNAModule4";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
+import {Orientation} from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -15,6 +15,7 @@ interface IPropsFromState {
     selected_timelapse: '12h'|'1d'|'1m'
     temperature_ratio: string
     unit: string
+    orientation: Orientation
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -35,7 +36,7 @@ const NetatmoModuleIndoor: React.FunctionComponent<AllProps> = (props) => {
             label={props.module_data?.module_name}
             reachable={props.module_data?.reachable}
             last_seen={props.module_data?.last_seen}
-            vertical_divider={true}
+            vertical_divider={props.orientation === 'landscape'}
         >
             <div className="modules-layout">
                 <div className="row">
