@@ -29,9 +29,9 @@ great.
 
 Here is a preview on an iPhone XR
 
-![screenshot mobile 1](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_003.png)
-![screenshot mobile 2](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_001.png)
-![screenshot mobile 3](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_002.png)
+[screenshot mobile 1](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_003.png)
+[screenshot mobile 2](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_001.png)
+[screenshot mobile 3](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_002.png)
 
 
 ### Change in 2.2.x
