@@ -42,16 +42,29 @@ const NetatmoModuleWind: React.FunctionComponent<AllProps> = (props) => {
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>{props.t('netatmo.wind_strength')}</div>
                         {Math.round(props.module_data?.data?.wind_strength as number * props.wind_ratio)}<small>{props.unit}</small>
                     </div>
+
+                    {
+                        props.orientation === 'portrait' && (
+                            <div className="wind-orientation">
+                                <i className={'wind-icon wi wi-wind from-' + props.module_data?.data?.wind_angle + '-deg'}/>
+                            </div>
+                        )
+                    }
+
                     <div className="wind-max">
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.wind_max_day')}</div>
                         {Math.round(props.module_data?.data?.max_wind_str as number * props.wind_ratio)}<small>{props.unit}</small>
                     </div>
                 </div>
-                <div className="row" style={{transform: props.phone ? 'translateY(-32px)' : ''}}>
-                    <div className="wind-orientation">
-                        <i className={'wind-icon wi wi-wind from-' + props.module_data?.data?.wind_angle + '-deg'}/>
-                    </div>
-                </div>
+                {
+                    props.orientation === 'landscape' && (
+                        <div className="row">
+                            <div className="wind-orientation">
+                                <i className={'wind-icon wi wi-wind from-' + props.module_data?.data?.wind_angle + '-deg'}/>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         </ModuleLayout>
     )

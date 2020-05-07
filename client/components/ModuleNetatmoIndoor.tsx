@@ -1,5 +1,5 @@
 import React from 'react';
-import { Colors } from "@blueprintjs/core";
+import { Alignment, Button, ButtonGroup, Colors } from "@blueprintjs/core";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import * as i18next from 'i18next';
 import ModuleLayout from "../layouts/ModuleLayout";
@@ -54,6 +54,7 @@ const NetatmoModuleIndoor: React.FunctionComponent<AllProps> = (props) => {
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>co2</div>
                         {props.module_data?.data?.co2}<small>ppm</small>
                     </div>
+
                 </div>
             </div>
         </ModuleLayout>

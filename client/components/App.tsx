@@ -12,6 +12,8 @@ import ModuleDateTimeContainer from "../containers/ModuleDateTimeContainer";
 import ModuleNetatmoStationContainer from "../containers/ModuleNetatmoStationContainer";
 import ModuleNetatmoOutdoorContainer from "../containers/ModuleNetatmoOutdoorContainer";
 import ModuleNetatmoIndoorContainer from "../containers/ModuleNetatmoIndoorContainer";
+import ModuleNetatmoIndoorSecondContainer from "../containers/ModuleNetatmoIndoorSecondContainer";
+import ModuleNetatmoIndoorThirdContainer from "../containers/ModuleNetatmoIndoorThirdContainer";
 import ModuleNetatmoRainContainer from "../containers/ModuleNetatmoRainContainer";
 import ModuleNetatmoWindContainer from "../containers/ModuleNetatmoWindContainer";
 import ModuleNetatmoBarometerContainer from "../containers/ModuleNetatmoBarometerContainer";
@@ -19,11 +21,13 @@ import ModuleForecastContainer from "../containers/ModuleForecastContainer";
 import ModuleNetatmoGraphContainer from "../containers/ModuleNetatmoGraphContainer";
 
 import { ConnectedReduxProps } from '../store';
-import {IAvailableModules} from "../models/NetatmoNAMain";
+import { IAvailableModules } from "../models/NetatmoNAMain";
+import { Orientation } from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     isConfigured: boolean
+    orientation?: Orientation
     available_modules: IAvailableModules|undefined
 }
 
@@ -36,8 +40,12 @@ interface IPropsFromDispatch {
 type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 
 // Return the the available modules
-const layoutChooser = (available_modules: IAvailableModules|undefined) => {
-    if (available_modules?.INDOOR || available_modules?.RAIN || available_modules?.WIND) {
+const layoutChooser = (available_modules?: IAvailableModules, orientation?: Orientation) => {
+    if (available_modules?.INDOOR ||
+        available_modules?.INDOOR_SECOND ||
+        available_modules?.INDOOR_THIRD ||
+        available_modules?.RAIN ||
+        available_modules?.WIND) {
         // All modules available
         return (
             <Flex flexDirection='column' width={[ '100%', '65%' ]}>
@@ -47,6 +55,20 @@ const layoutChooser = (available_modules: IAvailableModules|undefined) => {
                         available_modules?.INDOOR ? (
                             <Box width={[ '100%', '50%' ]}>
                                 <ModuleNetatmoIndoorContainer />
+                            </Box>
+                        ) : null
+                    }
+                    {
+                        available_modules?.INDOOR_SECOND && orientation === 'portrait' ? (
+                            <Box width={[ '100%', '50%' ]}>
+                                <ModuleNetatmoIndoorSecondContainer />
+                            </Box>
+                        ) : null
+                    }
+                    {
+                        available_modules?.INDOOR_THIRD && orientation === 'portrait' ? (
+                            <Box width={[ '100%', '50%' ]}>
+                                <ModuleNetatmoIndoorThirdContainer />
                             </Box>
                         ) : null
                     }
@@ -85,7 +107,7 @@ const layoutChooser = (available_modules: IAvailableModules|undefined) => {
 
 class App extends React.Component<AllProps> {
     public render() {
-        const { available_modules } = this.props;
+        const { available_modules, orientation } = this.props;
 
         return (
             <MainLayout>
@@ -98,7 +120,9 @@ class App extends React.Component<AllProps> {
                                 <ModuleNetatmoOutdoorContainer />
                                 <ModuleNetatmoBarometerContainer />
                             </Flex>
-                            {layoutChooser(available_modules)}
+                            {
+                                layoutChooser(available_modules, orientation)
+                            }
                         </DashboardLayoutContainer>
                     ) : (
                         <AppStartingContainer />

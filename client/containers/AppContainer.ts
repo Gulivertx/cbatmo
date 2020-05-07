@@ -5,6 +5,7 @@ import App from "../components/App"
 
 const mapStateToProps = ({ application, netatmo}: ApplicationState) => ({
     isConfigured: application.isConfigured,
+    orientation: application.orientation,
     available_modules: netatmo.station_data?.available_modules
 });
 

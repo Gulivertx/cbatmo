@@ -16,12 +16,12 @@ const NetatmoModuleError: React.FunctionComponent<IPropsFromState> = (props) => 
             <Icon icon="warning-sign" iconSize={40} intent={Intent.WARNING}/>
             <div className="description">
                 <div>
-                    {props.t('notification.not_reachable')}
+                    {props.t('notifications.not_reachable')}
                 </div>
                 {
-                    props.last_seen && (
+                    props.last_seen ? (
                         <div>Last seen : {moment.unix(props.last_seen).format('DD.MM.YYYY HH:mm')}.</div>
-                    )
+                    ) : null
                 }
             </div>
         </div>

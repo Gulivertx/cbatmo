@@ -33,8 +33,15 @@ class NetatmoUserInformation implements INetatmoUserInformation{
 
     constructor(data: any) {
         this.mail = data.mail;
-        this.lang = data.administrative.lang.includes('fr') ? 'fr' : 'en';
         this.locale = data.administrative.reg_locale;
+
+        if (data.administrative.lang.includes('fr')) {
+            this.lang = 'fr';
+        } else if (data.administrative.lang.includes('de')) {
+            this.lang = 'de';
+        } else {
+            this.lang = 'en';
+        }
 
         switch (data.administrative.pressureunit) {
             case 0:

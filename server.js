@@ -8,7 +8,6 @@ const logger = require('morgan');
 const fs = require('fs');
 const path = require('path');
 const rfs = require('rotating-file-stream');
-const DarkSkyApi = require('dark-sky-api');
 const pjson = require('./package.json');
 const request = require('request-promise');
 require('dotenv').config();
@@ -16,10 +15,6 @@ require('dotenv').config();
 process.env.APP_ENV === 'dev' ? process.env.NODE_ENV = 'development' : process.env.NODE_ENV = 'production';
 
 const app = express();
-
-/** Configure DarkSkyApi **/
-DarkSkyApi.apiKey = process.env.DARKSKY_SECRET_KEY;
-DarkSkyApi.proxy = true;
 
 /** Configure OpenWeather **/
 const openWeatherSettings = {

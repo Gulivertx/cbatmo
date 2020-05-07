@@ -16,6 +16,10 @@ export const momentWithLocale = (locale: string) => {
         case 'en':
             moment.locale('en');
             break;
+        case 'de':
+            require('moment/locale/de');
+            moment.locale('de');
+            break;
         default:
             moment.locale('en');
             break;

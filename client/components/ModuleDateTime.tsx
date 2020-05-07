@@ -71,7 +71,11 @@ class ModuleDateTime extends React.Component<AllProps, IState> {
         return (
             <ModuleLayout label={this.props.t('netatmo.time')} reachable={true} vertical_divider={this.props.orientation === 'landscape'}>
                 <div className="module-datetime">
-                    <div className="time">{ this.state.hour }:{ this.state.minutes }<small>{this.state.seconds}</small></div>
+                    {
+                        this.props.orientation === 'landscape' ? (
+                            <div className="time">{ this.state.hour }:{ this.state.minutes }<small>{this.state.seconds}</small></div>
+                        ) : null
+                    }
                     <div className="date" style={{ color: Colors.GRAY5 }}>{ removeAccents(this.state.date) }</div>
                     <div className="sun">
                         <div className={cx(!this.props.sunrise_time && 'bp3-skeleton')}>
