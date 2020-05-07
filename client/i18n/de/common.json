@@ -1,0 +1,31 @@
+{
+  "notifications": {
+    "loading": "Lädt...",
+    "configuration_success": "Konfiguration abgeschlossen, bitte warten...",
+    "configuration_error": "Oops, es ist ein Fehler aufgetreten!",
+    "not_reachable": "Dieses Modul kann die Station nicht erreichen. Überprüfen Sie den Batteriestatus oder bringen Sie es näher an die Station."
+  },
+  "app_info": {
+    "description": "Netatmo Wetterstation für Raspberry Pi mit offiziellem Touchscreen.",
+    "version": "Version",
+    "created_by": "Erstellt von"
+  },
+  "forecast" : {
+    "forecast": "Vorhersage",
+    "sunrise": "Sonnenaufgang",
+    "sunset": "Sonnenuntergang"
+  },
+  "netatmo": {
+    "barometer": "Barometer",
+    "time": "Zeit",
+    "graph": "Graph",
+    "day": "Tag",
+    "month": "Monat",
+    "temperature": "Temperatur",
+    "humidity": "Luftfeuchtigkeit",
+    "cumulative": "Kumulativ",
+    "noise": "Lärm",
+    "wind_strength": "Windgeschwindigkeit",
+    "wind_max_day": "Max Tag"
+  }
+}
