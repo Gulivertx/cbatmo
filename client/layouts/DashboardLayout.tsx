@@ -1,10 +1,11 @@
 import React, { ReactNode } from 'react';
-import * as darkskyActions from "../store/darksky/actions";
 import * as openweatherActions from "../store/openweather/actions";
 import * as netatmoActions from "../store/netatmo/actions";
+import * as applicationActions from "../store/application/actions";
 import { ConnectedReduxProps } from "../store";
 import { INetatmoNAMain } from "../models/NetatmoNAMain";
 import {Types} from "../models/NetatmoChartsData";
+import {Orientation} from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -18,11 +19,11 @@ interface IPropsFromState {
 // We can use `typeof` here to map our dispatch types to the props, like so.
 interface IPropsFromDispatch {
     [key: string]: any
-    fetchDarksky: typeof darkskyActions.fetchDarksky
     fetchOpenWeather: typeof openweatherActions.fetchOpenWeather
     fetchStationData: typeof netatmoActions.fetchStationData
     fetchMeasure: typeof netatmoActions.fetchMeasure
     fetchRainMeasure: typeof netatmoActions.fetchRainMeasure
+    setOrientation: typeof applicationActions.setOrientation
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -34,7 +35,16 @@ class DashboardLayout extends React.Component<AllProps> {
     private interval: number | undefined;
 
     public componentDidMount(): void {
-        //this.props.fetchDarksky();
+        // Get current orientation
+        const angle = window.orientation; // Deprecated feature but only this work on iOS Safari
+        this.props.setOrientation(this._getOrientation(angle as number));
+
+        // Listen mobile orientation
+        window.addEventListener('orientationchange', (e: Event) => {
+            const angle = window.orientation;
+            this.props.setOrientation(this._getOrientation(angle as number));
+        }, true)
+
         this.props.fetchOpenWeather();
 
         // Fetch on app load the temperature measure of Indoor module
@@ -56,6 +66,14 @@ class DashboardLayout extends React.Component<AllProps> {
         clearInterval(this.interval);
     }
 
+    private _getOrientation = (angle: number): Orientation => {
+        if (angle === 0) {
+            return 'portrait';
+        } else {
+            return 'landscape';
+        }
+    }
+
     private fetchNetatmoModulesMeasures = (): void => {
         this.props.fetchMeasure(this.props.station_data?.id as string, this.props.selected_module as string, this.props.selected_types, this.props.selected_timelapse);
 
@@ -66,9 +84,9 @@ class DashboardLayout extends React.Component<AllProps> {
 
     public render() {
         return (
-            <div className="dashboard-grid-layout">
+            <>
                 {this.props.children}
-            </div>
+            </>
         )
     }
 }

@@ -13,6 +13,28 @@ Swiss Weather forecast API and WebcamTravel API**. For this public
 release I removed Google Calendar API, WebcamTraval API and change Swiss Weather 
 API by Dark Sky API. The first proposal can be found in the [Netatmo forum](https://forum.netatmo.com/viewtopic.php?f=5&t=14458)
 
+### Change in 2.3.x
+* Added German language (thanks to [marcol43](https://github.com/marcol123) for the [pull request](https://github.com/Gulivertx/cbatmo/pull/20))
+* Added support for all indoor modules and not only one
+* Improve OpenWeather icons
+* Fix bugs to show correct units and convert data for graphics according to the units
+
+**I also make a big change to support mobile devices!** What does that means?
+Cbatmo can be reach from your mobile and will have an adapted (more and less) UI for landscape and portrait orientation. You
+can pin to your dashboard the app and it will work as PWA (currently no service worker implemented). To use CBatmo outside
+your home, you have to configure port forwarding in your router. I also had to modify how we connect to the app to add
+a login page where you have to fill your Netatmo credential and a secret key that only you know and have to be configured in .env file.
+
+I'm developping this UI adaptation only on an iPhone XR and 7 plus then any feedback from user using other phones will be
+great or even better, pull request with fix for other devices.
+
+Here is a preview on an iPhone XR
+
+[screenshot mobile 1](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_003.png)
+[screenshot mobile 2](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_001.png)
+[screenshot mobile 3](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_002.png)
+
+
 ### Change in 2.2.x
 The version 2.2.0 introduce OpenWeather API in replacement of Darksky which is now part of Apple and close for new subsciption and will be closed for all users from the end of 2021. 
 * Replace Darksky API by OpenWeather API

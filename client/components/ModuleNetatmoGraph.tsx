@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alignment, Button, ButtonGroup, Colors } from "@blueprintjs/core";
-import { AreaChart, Area, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { AreaChart, Area, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import removeAccents from 'remove-accents';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import * as i18next from 'i18next';
@@ -13,6 +13,7 @@ import {ConnectedReduxProps} from "../store";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
+    phone?: string
     measure_data: []
     selected_types: Types[]
     selected_module: string
@@ -41,6 +42,10 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
             return this.props.station_data.module_name;
         } else if (module_id === modules.INDOOR?.id) {
             return modules.INDOOR.module_name;
+        } else if (module_id === modules.INDOOR_SECOND?.id) {
+            return modules.INDOOR_SECOND.module_name;
+        } else if (module_id === modules.INDOOR_THIRD?.id) {
+            return modules.INDOOR_THIRD.module_name;
         } else if (module_id === modules.OUTDOOR?.id) {
             return modules.OUTDOOR.module_name;
         } else if (module_id === modules.RAIN?.id) {
@@ -61,6 +66,7 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
             <ModuleLayout
                 label={this.props.t('netatmo.graph')}
                 reachable={true}
+                fill={true}
             >
                 <div className="modules-layout">
                     <ButtonGroup className="toolbar" alignText={Alignment.CENTER} minimal={true}>
@@ -77,23 +83,25 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
                             onClick={() => this.handleOnclick('1m')}
                         >1 {this.props.t('netatmo.month')}</Button>
                     </ButtonGroup>
-                    <AreaChart
-                        width={270}
-                        height={132}
-                        data={this.props.measure_data}
-                        margin={{top: 14, right: 0, left: -30, bottom: 8}}
-                    >
-                        <CartesianGrid stroke={Colors.GRAY1} />
-                        <YAxis tick={{fontSize: '10px'}} minTickGap={1} />
-                        <XAxis dataKey='name' hide={true} minTickGap={1} interval={0}/>
-                        <Area
-                            type='monotone'
-                            dataKey={this.props.selected_types[0]}
-                            stroke={colorChooser(this.props.selected_types[0])}
-                            fill='rgba(148,159,177,0.2)'
-                            strokeWidth={2} isAnimationActive={false}
-                        />
-                    </AreaChart>
+                    <ResponsiveContainer height={this.props.phone ? 94 : 122}>
+                        <AreaChart
+                            //width={240}
+                            //height={this.props.phone ? 94 : 122}
+                            data={this.props.measure_data}
+                            margin={{top: 14, right: 10, left: -30, bottom: 8}}
+                        >
+                            <CartesianGrid stroke={Colors.GRAY1} />
+                            <YAxis tick={{fontSize: '10px'}} minTickGap={1} />
+                            <XAxis dataKey='name' hide={true} minTickGap={1} interval={0}/>
+                            <Area
+                                type='monotone'
+                                dataKey={this.props.selected_types[0]}
+                                stroke={colorChooser(this.props.selected_types[0])}
+                                fill='rgba(148,159,177,0.2)'
+                                strokeWidth={2} isAnimationActive={false}
+                            />
+                        </AreaChart>
+                    </ResponsiveContainer>
                 </div>
                 <div className="sub-label" style={{textAlign: 'center'}}>
                     {removeAccents(this.findModuleName(this.props.selected_module))} - {this.props.selected_types[0]}

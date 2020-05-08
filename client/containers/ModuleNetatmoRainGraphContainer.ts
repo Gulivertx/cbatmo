@@ -3,10 +3,11 @@ import { ThunkDispatch } from "redux-thunk";
 import ModuleNetatmoRainGraph from "../components/ModuleNetatmoRainGraph";
 import {ApplicationState} from "../store";
 
-const mapStateToProps = ({ netatmo}: ApplicationState) => ({
+const mapStateToProps = ({ netatmo, application }: ApplicationState) => ({
     device: netatmo.station_data?.id,
     module: netatmo.station_data?.modules.RAIN?.id,
-    data: netatmo.measure_rain_data
+    data: netatmo.measure_rain_data,
+    phone: application.phone
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({

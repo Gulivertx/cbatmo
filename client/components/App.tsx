@@ -1,4 +1,5 @@
 import React from 'react';
+import { Flex, Box } from 'reflexbox'
 
 /** React layouts **/
 import MainLayout from '../layouts/MainLayout';
@@ -11,6 +12,8 @@ import ModuleDateTimeContainer from "../containers/ModuleDateTimeContainer";
 import ModuleNetatmoStationContainer from "../containers/ModuleNetatmoStationContainer";
 import ModuleNetatmoOutdoorContainer from "../containers/ModuleNetatmoOutdoorContainer";
 import ModuleNetatmoIndoorContainer from "../containers/ModuleNetatmoIndoorContainer";
+import ModuleNetatmoIndoorSecondContainer from "../containers/ModuleNetatmoIndoorSecondContainer";
+import ModuleNetatmoIndoorThirdContainer from "../containers/ModuleNetatmoIndoorThirdContainer";
 import ModuleNetatmoRainContainer from "../containers/ModuleNetatmoRainContainer";
 import ModuleNetatmoWindContainer from "../containers/ModuleNetatmoWindContainer";
 import ModuleNetatmoBarometerContainer from "../containers/ModuleNetatmoBarometerContainer";
@@ -18,11 +21,13 @@ import ModuleForecastContainer from "../containers/ModuleForecastContainer";
 import ModuleNetatmoGraphContainer from "../containers/ModuleNetatmoGraphContainer";
 
 import { ConnectedReduxProps } from '../store';
-import {IAvailableModules} from "../models/NetatmoNAMain";
+import { IAvailableModules } from "../models/NetatmoNAMain";
+import { Orientation } from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     isConfigured: boolean
+    orientation?: Orientation
     available_modules: IAvailableModules|undefined
 }
 
@@ -35,81 +40,89 @@ interface IPropsFromDispatch {
 type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 
 // Return the the available modules
-const layoutChooser = (available_modules: IAvailableModules|undefined) => {
-    if (available_modules?.INDOOR && available_modules?.RAIN && available_modules?.WIND) {
+const layoutChooser = (available_modules?: IAvailableModules, orientation?: Orientation) => {
+    if (available_modules?.INDOOR ||
+        available_modules?.INDOOR_SECOND ||
+        available_modules?.INDOOR_THIRD ||
+        available_modules?.RAIN ||
+        available_modules?.WIND) {
         // All modules available
         return (
-            <div className="second-column">
-                <ModuleForecastContainer />
-                <div className="row-grid">
-                    <ModuleNetatmoIndoorContainer />
-                    <ModuleNetatmoRainContainer />
-                </div>
-                <div className="row-grid">
-                    <ModuleNetatmoWindContainer />
-                    <ModuleNetatmoGraphContainer />
-                </div>
-                <ModuleNetatmoInformationContainer />
-            </div>
-        )
-    } else if (available_modules?.INDOOR || available_modules?.RAIN || available_modules?.WIND) {
-        // only one additional available
-        return (
-            <div className="second-column">
-                <ModuleForecastContainer />
-                <div className="row-grid">
+            <Flex flexDirection='column' width={[ '100%', '65%' ]}>
+                <Flex flexWrap='wrap' flex={1}>
+                    <ModuleForecastContainer />
                     {
                         available_modules?.INDOOR ? (
-                            <ModuleNetatmoIndoorContainer />
-                        ) : (<div />)
+                            <Box width={[ '100%', '50%' ]}>
+                                <ModuleNetatmoIndoorContainer />
+                            </Box>
+                        ) : null
+                    }
+                    {
+                        available_modules?.INDOOR_SECOND && orientation === 'portrait' ? (
+                            <Box width={[ '100%', '50%' ]}>
+                                <ModuleNetatmoIndoorSecondContainer />
+                            </Box>
+                        ) : null
+                    }
+                    {
+                        available_modules?.INDOOR_THIRD && orientation === 'portrait' ? (
+                            <Box width={[ '100%', '50%' ]}>
+                                <ModuleNetatmoIndoorThirdContainer />
+                            </Box>
+                        ) : null
                     }
                     {
                         available_modules?.RAIN ? (
-                            <ModuleNetatmoRainContainer />
-                        ) : (<div />)
+                            <Box width={[ '100%', '50%' ]}>
+                                <ModuleNetatmoRainContainer />
+                            </Box>
+                        ) : null
                     }
-                </div>
-                <div className="row-grid">
                     {
                         available_modules?.WIND ? (
-                            <ModuleNetatmoWindContainer />
-                        ) : (<div />)
+                            <Box width={[ '100%', '50%' ]}>
+                                <ModuleNetatmoWindContainer />
+                            </Box>
+                        ) : null
                     }
-                    <ModuleNetatmoGraphContainer />
-                </div>
+                    <Box width={[ '100%', '50%' ]}>
+                        <ModuleNetatmoGraphContainer />
+                    </Box>
+                </Flex>
                 <ModuleNetatmoInformationContainer />
-            </div>
+            </Flex>
         )
     } else {
         // No additional modules
         return (
-            <div className="second-column">
+            <Flex flexDirection='column' width={[ '100%', '65%' ]}>
                 <ModuleForecastContainer />
-                <div className="row" style={{gridRow: '2 / 4'}}>
-                    <ModuleNetatmoGraphContainer />
-                </div>
+                <ModuleNetatmoGraphContainer />
                 <ModuleNetatmoInformationContainer />
-            </div>
+            </Flex>
         )
     }
 };
 
 class App extends React.Component<AllProps> {
     public render() {
-        const { available_modules } = this.props;
+        const { available_modules, orientation } = this.props;
 
         return (
             <MainLayout>
                 {
                     this.props.isConfigured ? (
                         <DashboardLayoutContainer>
-                            <div className="first-column">
+                            <Flex flexDirection='column' width={[ '100%', '35%' ]}>
                                 <ModuleDateTimeContainer/>
                                 <ModuleNetatmoStationContainer />
                                 <ModuleNetatmoOutdoorContainer />
                                 <ModuleNetatmoBarometerContainer />
-                            </div>
-                            {layoutChooser(available_modules)}
+                            </Flex>
+                            {
+                                layoutChooser(available_modules, orientation)
+                            }
                         </DashboardLayoutContainer>
                     ) : (
                         <AppStartingContainer />

@@ -29,7 +29,7 @@ const plugins = [
         description: 'A Netatmo Weather Station Web-APP for Raspberry Pi and official Raspberry touchscreen',
         background_color: '#1E1E1E',
         crossorigin: null,
-        display: 'fullscreen',
+        display: 'standalone',
         orientation: 'landscape'
     })
 ];

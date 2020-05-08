@@ -3,8 +3,7 @@ import { ThunkDispatch} from "redux-thunk";
 import { ApplicationState } from "../store";
 import ModuleDate from "../components/ModuleDate"
 
-const mapStateToProps = ({ darksky, application}: ApplicationState) => ({
-    moon_phase: darksky.data?.daily.data[0].moon_phase,
+const mapStateToProps = ({ application}: ApplicationState) => ({
     locale: application.user.lang
 });
 

@@ -9,7 +9,8 @@ const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     device_id: netatmo.station_data?.id,
     selected_timelapse: netatmo.selected_timelapse,
     temperature_ratio: application.user.temperature_ratio,
-    unit: application.user.unit
+    temperature_unit: application.user.temperature_unit,
+    orientation: application.orientation,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({

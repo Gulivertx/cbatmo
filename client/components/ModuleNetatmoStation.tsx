@@ -7,6 +7,7 @@ import ModuleLayout from "../layouts/ModuleLayout";
 import { INetatmoNAMain } from "../models/NetatmoNAMain";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
+import {Orientation} from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -14,7 +15,8 @@ interface IPropsFromState {
     device_id: string|undefined
     selected_timelapse: '12h'|'1d'|'1m'
     temperature_ratio: string
-    unit: string
+    temperature_unit: string
+    orientation: Orientation
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -33,13 +35,13 @@ const NetatmoModuleStation: React.FunctionComponent<AllProps> = (props) => {
         <ModuleLayout
             label={props.station_data?.module_name}
             reachable={props.station_data?.reachable}
-            vertical_divider={true}
+            vertical_divider={props.orientation === 'landscape'}
         >
             <div className="modules-layout">
                 <div className="row">
                     <div className="temperature" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Temperature'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>{props.t('netatmo.temperature')}</div>
-                        {Math.round(eval(props.station_data?.data?.temperature + '*' + props.temperature_ratio) * 10) / 10}<small>°{props.unit === 'si' ? 'C' : 'F'}</small>
+                        {props.station_data?.data?.temperature}<small>°{props.temperature_unit}</small>
                     </div>
                     <div className="humidity" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Humidity'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.humidity')}</div>

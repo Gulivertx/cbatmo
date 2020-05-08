@@ -1,7 +1,14 @@
 import { Reducer } from 'redux';
 import { IApplicationState, ApplicationActionTypes } from "./types";
+import MobileDetect from 'mobile-detect';
+
+const md = new MobileDetect(window.navigator.userAgent);
 
 const initialState: IApplicationState = {
+    phone: md.phone(),
+    tablet: md.tablet(),
+    mobile: md.mobile(),
+    orientation: 'landscape',
     isConfigured: false,
     info: {
         name: '',
@@ -15,10 +22,13 @@ const initialState: IApplicationState = {
         locale: '',
         pressure_unit: '',
         unit: '',
+        temperature_unit: '',
+        distance_unit: '',
         windunit: '',
         temperature_ratio: '',
         pressure_ratio: 1,
-        wind_ratio: 1
+        wind_ratio: 1,
+        rain_ratio: 1
     },
     loading: true
 };
@@ -39,6 +49,9 @@ const reducer: Reducer<IApplicationState> = (state = initialState, action) => {
         /** SET user info from Netatmo API **/
         case ApplicationActionTypes.USER_INFO:
             return { ...state, user: action.payload };
+
+        case ApplicationActionTypes.DEVICE_ORIENTATION:
+            return { ...state, orientation: action.payload };
 
         default:
             return state;

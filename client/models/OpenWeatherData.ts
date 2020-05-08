@@ -46,6 +46,7 @@ class OpenWeatherData implements IOpenWeatherData {
                 time: day.dt,
                 summary: day.weather[0].description,
                 icon: day.weather[0].icon,
+                icon_id: day.weather[0].id,
                 sunrise_time: day.sunrise,
                 sunset_time: day.sunset,
                 moon_phase: 0, // not exist in openweather
