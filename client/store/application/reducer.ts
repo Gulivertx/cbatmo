@@ -22,10 +22,13 @@ const initialState: IApplicationState = {
         locale: '',
         pressure_unit: '',
         unit: '',
+        temperature_unit: '',
+        distance_unit: '',
         windunit: '',
         temperature_ratio: '',
         pressure_ratio: 1,
-        wind_ratio: 1
+        wind_ratio: 1,
+        rain_ratio: 1
     },
     loading: true
 };

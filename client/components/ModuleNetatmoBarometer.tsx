@@ -10,7 +10,7 @@ import {Orientation} from "../store/application/types";
 interface IPropsFromState {
     reachable?: boolean
     pressure?: number
-    unit: string
+    pressure_unit: string
     device_id: string|undefined
     selected_timelapse: '12h'|'1d'|'1m'
     pressure_ratio: number
@@ -39,7 +39,7 @@ const NetatmoModuleBarmometer: React.FunctionComponent<AllProps> = (props) => {
             <div className="modules-layout">
                 <div className="row">
                     <div className="pressure" onClick={() => props.fetchMeasure(props.device_id as string, props.device_id as string, ['Pressure'], props.selected_timelapse)}>
-                        {Math.round(props.pressure as number * props.pressure_ratio * 10) / 10}<small>{props.unit}</small>
+                        {props.pressure}<small>{props.pressure_unit}</small>
                     </div>
                 </div>
             </div>

@@ -40,7 +40,7 @@ const NetatmoModuleWind: React.FunctionComponent<AllProps> = (props) => {
                 <div className="row">
                     <div className="wind-strength" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['windStrength'], props.selected_timelapse)}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>{props.t('netatmo.wind_strength')}</div>
-                        {Math.round(props.module_data?.data?.wind_strength as number * props.wind_ratio)}<small>{props.unit}</small>
+                        {props.module_data?.data?.wind_strength}<small>{props.unit}</small>
                     </div>
 
                     {
@@ -53,7 +53,7 @@ const NetatmoModuleWind: React.FunctionComponent<AllProps> = (props) => {
 
                     <div className="wind-max">
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.wind_max_day')}</div>
-                        {Math.round(props.module_data?.data?.max_wind_str as number * props.wind_ratio)}<small>{props.unit}</small>
+                        {props.module_data?.data?.max_wind_str}<small>{props.unit}</small>
                     </div>
                 </div>
                 {

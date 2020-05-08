@@ -14,6 +14,8 @@ interface IPropsFromState {
     module_data: INetatmoNAModule3|undefined
     device_id: string|undefined
     selected_timelapse: '12h'|'1d'|'1m'
+    distance_unit: string
+    rain_ratio: number
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -38,9 +40,15 @@ const NetatmoModuleRain: React.FunctionComponent<AllProps> = (props) => {
                     <div style={{width: '80%'}}>
                         <ModuleNetatmoRainGraphContainer />
                     </div>
-                    <div className="rain-24" onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)}>
-                        <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.cumulative')}</div>
-                        {props.module_data?.data?.sum_rain_24 ? props.module_data?.data?.sum_rain_24.toFixed(1) : '0'}<small>mm</small>
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)}>
+                            <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.cumulative')}</div>
+                            {props.module_data?.data?.sum_rain_24}<small>{props.distance_unit}</small>
+                        </div>
+                        <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)}>
+                            <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.distance_unit}</div>
+                            {props.module_data?.data?.sum_rain_1}<small>{props.distance_unit}</small>
+                        </div>
                     </div>
                 </div>
             </div>

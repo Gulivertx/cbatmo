@@ -1,3 +1,5 @@
+import {INetatmoUserInformation} from "./NetatmoUserInformation";
+
 export interface INetatmoNAModule4 {
     id: string
     type: string
@@ -37,7 +39,7 @@ class NetatmoNAModule4 {
     battery_percent: number;
     data: IData|undefined;
 
-    constructor(data: any) {
+    constructor(data: any, userInfo: INetatmoUserInformation) {
         this.id = data._id;
         this.type = data.type;
         this.module_name = data.module_name;
@@ -94,11 +96,11 @@ class NetatmoNAModule4 {
 
         if (this.reachable) {
             this.data = {
-                temperature: data.dashboard_data.Temperature,
+                temperature: Math.round(eval(data.dashboard_data.Temperature + '*' + userInfo.temperature_ratio) * 10) / 10,
                 co2: data.dashboard_data.CO2,
                 humidity: data.dashboard_data.Humidity,
-                min_temp: data.dashboard_data.min_temp,
-                max_temp: data.dashboard_data.max_temp,
+                min_temp: Math.round(eval(data.dashboard_data.min_temp + '*' + userInfo.temperature_ratio) * 10) / 10,
+                max_temp: Math.round(eval(data.dashboard_data.max_temp + '*' + userInfo.temperature_ratio) * 10) / 10,
                 temp_trend: data.dashboard_data.temp_trend
             }
         }

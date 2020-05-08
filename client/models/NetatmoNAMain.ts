@@ -2,6 +2,7 @@ import NetatmoNAModule1, {INetatmoNAModule1} from "./NetatmoNAModule1";
 import NetatmoNAModule4, {INetatmoNAModule4} from "./NetatmoNAModule4";
 import NetatmoNAModule3, {INetatmoNAModule3} from "./NetatmoNAModule3";
 import NetatmoNAModule2, {INetatmoNAModule2} from "./NetatmoNAModule2";
+import NetatmoUserInformation, {INetatmoUserInformation} from "./NetatmoUserInformation";
 
 export enum MODULE_TYPE {
     MAIN = 'NAMain',
@@ -85,7 +86,10 @@ class NetatmoNAMain implements INetatmoNAMain {
     available_modules: IAvailableModules;
     modules: IModule;
 
-    constructor(data: any) {
+    constructor(data: any, user: any) {
+        // We need user information object to get conversion ratio
+        const userInfo: INetatmoUserInformation = new NetatmoUserInformation(user);
+
         this.id = data._id;
         this.type = data.type;
         this.last_status_store = data.last_status_store;
@@ -123,14 +127,14 @@ class NetatmoNAMain implements INetatmoNAMain {
         // If main module reachable
         if (this.reachable) {
             this.data = {
-                temperature: data.dashboard_data.Temperature,
+                temperature: Math.round(eval(data.dashboard_data.Temperature + '*' + userInfo.temperature_ratio) * 10) / 10,
                 co2: data.dashboard_data.CO2,
                 humidity: data.dashboard_data.Humidity,
                 noise: data.dashboard_data.Noise,
-                pressure: data.dashboard_data.Pressure,
-                absolute_pressure: data.dashboard_data.AbsolutePressure,
-                min_temp: data.dashboard_data.min_temp,
-                max_temp: data.dashboard_data.max_temp,
+                pressure: Math.round(data.dashboard_data.Pressure * userInfo.pressure_ratio * 10) / 10,
+                absolute_pressure: Math.round(data.dashboard_data.AbsolutePressure * userInfo.pressure_ratio * 10) / 10,
+                min_temp: Math.round(eval(data.dashboard_data.min_temp + '*' + userInfo.temperature_ratio) * 10) / 10,
+                max_temp: Math.round(eval(data.dashboard_data.max_temp + '*' + userInfo.temperature_ratio) * 10) / 10,
                 temp_trend: data.dashboard_data.temp_trend,
                 pressure_trend: data.dashboard_data.pressure_trend
             }
@@ -161,29 +165,29 @@ class NetatmoNAMain implements INetatmoNAMain {
         data.modules.map((module: any) => {
             switch (module.type) {
                 case MODULE_TYPE.OUTDOOR:
-                    this.modules['OUTDOOR'] = new NetatmoNAModule1(module);
+                    this.modules['OUTDOOR'] = new NetatmoNAModule1(module, userInfo);
                     this.available_modules['OUTDOOR'] = true;
                     break;
                 case MODULE_TYPE.INDOOR:
                     // A maximum of 3 indoor modules can be available
                     if (indoor_module_counter === 0) {
-                        this.modules['INDOOR'] = new NetatmoNAModule4(module);
+                        this.modules['INDOOR'] = new NetatmoNAModule4(module, userInfo);
                         this.available_modules['INDOOR'] = true;
                     } else if (indoor_module_counter === 1) {
-                        this.modules['INDOOR_SECOND'] = new NetatmoNAModule4(module);
+                        this.modules['INDOOR_SECOND'] = new NetatmoNAModule4(module, userInfo);
                         this.available_modules['INDOOR_SECOND'] = true;
                     } else if (indoor_module_counter === 2) {
-                        this.modules['INDOOR_THIRD'] = new NetatmoNAModule4(module);
+                        this.modules['INDOOR_THIRD'] = new NetatmoNAModule4(module, userInfo);
                         this.available_modules['INDOOR_THIRD'] = true;
                     }
                     indoor_module_counter++;
                     break;
                 case MODULE_TYPE.RAIN:
-                    this.modules['RAIN'] = new NetatmoNAModule3(module);
+                    this.modules['RAIN'] = new NetatmoNAModule3(module, userInfo);
                     this.available_modules['RAIN'] = true;
                     break;
                 case MODULE_TYPE.WIND:
-                    this.modules['WIND'] = new NetatmoNAModule2(module);
+                    this.modules['WIND'] = new NetatmoNAModule2(module, userInfo);
                     this.available_modules['WIND'] = true;
                     break;
             }

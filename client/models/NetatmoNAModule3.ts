@@ -1,3 +1,5 @@
+import {INetatmoUserInformation} from "./NetatmoUserInformation";
+
 export interface INetatmoNAModule3 {
     id: string
     type: string
@@ -34,7 +36,7 @@ class NetatmoNAModule3 implements INetatmoNAModule3 {
     battery_percent: number;
     data: IData|undefined;
 
-    constructor(data: any) {
+    constructor(data: any, userInfo: INetatmoUserInformation) {
         this.id = data._id;
         this.type = data.type;
         this.module_name = data.module_name;
@@ -91,9 +93,9 @@ class NetatmoNAModule3 implements INetatmoNAModule3 {
 
         if (this.reachable) {
             this.data = {
-                rain: data.dashboard_data.Rain,
-                sum_rain_24: data.dashboard_data.sum_rain_24, // Last 24 hours
-                sum_rain_1: data.dashboard_data.sum_rain_1 // Last hour
+                rain: Number((data.dashboard_data.Rain / userInfo.rain_ratio).toFixed(userInfo.unit === 'si' ? 1 : 3)),
+                sum_rain_24: Number((data.dashboard_data.sum_rain_24 / userInfo.rain_ratio).toFixed(userInfo.unit === 'si' ? 1 : 3)), // Last 24 hours
+                sum_rain_1: Number((data.dashboard_data.sum_rain_1 / userInfo.rain_ratio).toFixed(userInfo.unit === 'si' ? 1 : 3)) // Last hour
             }
         }
     }

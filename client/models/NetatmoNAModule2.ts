@@ -1,3 +1,5 @@
+import {INetatmoUserInformation} from "./NetatmoUserInformation";
+
 export interface INetatmoNAModule2 {
     id: string
     type: string
@@ -37,7 +39,7 @@ class NetatmoNAModule2 implements INetatmoNAModule2 {
     battery_percent: number;
     data: IData|undefined;
 
-    constructor(data: any) {
+    constructor(data: any, userInfo: INetatmoUserInformation) {
         this.id = data._id;
         this.type = data.type;
         this.module_name = data.module_name;
@@ -94,11 +96,11 @@ class NetatmoNAModule2 implements INetatmoNAModule2 {
 
         if (this.reachable) {
             this.data = {
-                wind_strength: data.dashboard_data.WindStrength,
+                wind_strength: Math.round(data.dashboard_data.WindStrength * userInfo.wind_ratio),
                 wind_angle: data.dashboard_data.WindAngle,
-                gust_strength: data.dashboard_data.GustStrength,
+                gust_strength: Math.round(data.dashboard_data.GustStrength * userInfo.wind_ratio),
                 gust_angle: data.dashboard_data.GustAngle,
-                max_wind_str: data.dashboard_data.max_wind_str,
+                max_wind_str: Math.round(data.dashboard_data.max_wind_str * userInfo.wind_ratio),
                 max_wind_angle: data.dashboard_data.max_wind_angle
             }
         }

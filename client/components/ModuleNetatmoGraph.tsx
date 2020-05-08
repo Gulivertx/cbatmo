@@ -42,6 +42,10 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
             return this.props.station_data.module_name;
         } else if (module_id === modules.INDOOR?.id) {
             return modules.INDOOR.module_name;
+        } else if (module_id === modules.INDOOR_SECOND?.id) {
+            return modules.INDOOR_SECOND.module_name;
+        } else if (module_id === modules.INDOOR_THIRD?.id) {
+            return modules.INDOOR_THIRD.module_name;
         } else if (module_id === modules.OUTDOOR?.id) {
             return modules.OUTDOOR.module_name;
         } else if (module_id === modules.RAIN?.id) {

@@ -155,7 +155,7 @@ export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Ac
                         return response.json()
                     })
                     .then(json => {
-                        const data = new NetatmoNAMain(json.body.devices[0]);
+                        const data = new NetatmoNAMain(json.body.devices[0], json.body.user);
                         const user = new NetatmoUserInformation(json.body.user);
                         dispatch(successStationData(data))
                         dispatch(setUserInfo(user))
@@ -242,7 +242,7 @@ export const fetchMeasure = (device: string, module: string, type: string[], tim
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoChartsData(json.body, type);
+                    const dataChart = new NetatmoChartsData(json.body, type, getState().application.user);
                     dispatch(successMeasure(dataChart.data, module, type, timelapse))
                 })
                 .catch(error => {
@@ -300,7 +300,7 @@ export const fetchRainMeasure = (device: string, module: string): ThunkAction<vo
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoChartsData(json.body, ['Rain']);
+                    const dataChart = new NetatmoChartsData(json.body, ['Rain'], getState().application.user);
                     dispatch(successRainMeasure(dataChart.data))
                 })
                 .catch(error => {

@@ -13,23 +13,29 @@ export interface INetatmoUserInformation {
     locale: string
     pressure_unit: string
     unit: string
+    temperature_unit: string
+    distance_unit: string
     windunit: string
-    temperature_ratio: string;
-    wind_ratio: number;
-    pressure_ratio: number;
+    temperature_ratio: string
+    wind_ratio: number
+    pressure_ratio: number
+    rain_ratio: number
 }
 
 
 class NetatmoUserInformation implements INetatmoUserInformation{
-    mail: string;
-    lang: string;
-    locale: string;
-    pressure_unit: string;
-    unit: string;
-    windunit: string;
-    temperature_ratio: string;
-    wind_ratio: number;
-    pressure_ratio: number;
+    mail: string
+    lang: string
+    locale: string
+    pressure_unit: string
+    unit: string
+    temperature_unit: string
+    distance_unit: string
+    windunit: string
+    temperature_ratio: string
+    wind_ratio: number
+    pressure_ratio: number
+    rain_ratio: number
 
     constructor(data: any) {
         this.mail = data.mail;
@@ -65,15 +71,24 @@ class NetatmoUserInformation implements INetatmoUserInformation{
         switch (data.administrative.unit) {
             case 0:
                 this.unit = 'si';
+                this.temperature_unit = 'C';
+                this.distance_unit = 'mm';
                 this.temperature_ratio = '1';
+                this.rain_ratio = 1;
                 break;
             case 1:
                 this.unit = 'us';
+                this.temperature_unit = 'F';
+                this.distance_unit = 'in';
                 this.temperature_ratio = '9/5 + 32';
+                this.rain_ratio = 25.4;
                 break;
             default:
                 this.unit = 'si';
+                this.temperature_unit = 'C';
+                this.distance_unit = 'mm';
                 this.temperature_ratio = '1';
+                this.rain_ratio = 1;
                 break;
         }
 
@@ -107,6 +122,22 @@ class NetatmoUserInformation implements INetatmoUserInformation{
 
 
         console.debug(this)
+    }
+
+    public getTemperatureRatio = (): string => {
+        return this.temperature_ratio
+    }
+
+    public getWindRatio = (): number => {
+        return this.wind_ratio
+    }
+
+    public getPressureRatio = (): number => {
+        return this.pressure_ratio
+    }
+
+    public getRainRatio = (): number => {
+        return this.pressure_ratio
     }
 }
 

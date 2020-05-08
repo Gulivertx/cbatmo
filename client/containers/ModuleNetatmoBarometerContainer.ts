@@ -7,7 +7,7 @@ import * as netatmoActions from "../store/netatmo/actions";
 const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     reachable: netatmo.station_data?.reachable,
     pressure: netatmo.station_data?.data?.pressure,
-    unit: application.user.pressure_unit,
+    pressure_unit: application.user.pressure_unit,
     device_id: netatmo.station_data?.id,
     selected_timelapse: netatmo.selected_timelapse,
     pressure_ratio: application.user.pressure_ratio,
