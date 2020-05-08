@@ -46,7 +46,7 @@ const NetatmoModuleRain: React.FunctionComponent<AllProps> = (props) => {
                             {props.module_data?.data?.sum_rain_24}<small>{props.distance_unit}</small>
                         </div>
                         <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)}>
-                            <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.distance_unit}</div>
+                            <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.distance_unit}/h</div>
                             {props.module_data?.data?.sum_rain_1}<small>{props.distance_unit}</small>
                         </div>
                     </div>

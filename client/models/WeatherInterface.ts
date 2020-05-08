@@ -27,6 +27,7 @@ export interface IDailyData {
     time: number
     summary: string
     icon: string
+    icon_id?: number
     sunrise_time: number
     sunset_time: number
     moon_phase: number
