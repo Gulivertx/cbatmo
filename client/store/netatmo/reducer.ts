@@ -33,12 +33,37 @@ const initialState: INetatmoState = {
     measure_errors: undefined,
     measure_data: [],
     selected_module: '',
-    selected_types: [],
+    selected_types: ['Temperature'],
     selected_timelapse: '12h',
 
     loading_rain_measure: false,
     measure_rain_errors: undefined,
-    measure_rain_data: []
+    measure_rain_data: [],
+
+    loading_indoor_measure: false,
+    measure_indoor_errors: undefined,
+    measure_indoor_data: [],
+    selected_indoor_type: 'Temperature',
+
+    loading_indoor_second_measure: false,
+    measure_indoor_second_errors: undefined,
+    measure_indoor_second_data: [],
+    selected_indoor_second_type: 'Temperature',
+
+    loading_indoor_third_measure: false,
+    measure_indoor_third_errors: undefined,
+    measure_indoor_third_data: [],
+    selected_indoor_third_type: 'Temperature',
+
+    loading_outdoor_measure: false,
+    measure_outdoor_errors: undefined,
+    measure_outdoor_data: [],
+    selected_outdoor_type: 'Temperature',
+
+    loading_station_measure: false,
+    measure_station_errors: undefined,
+    measure_station_data: [],
+    selected_station_type: 'Temperature',
 };
 
 const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
@@ -93,7 +118,8 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
                 station_data: action.payload,
                 station_data_last_updated: action.receivedAt,
                 station_data_errors: undefined,
-                first_fetch: false
+                first_fetch: false,
+                selected_module: state.selected_module ? state.selected_module : action.payload.modules.OUTDOOR.id
             };
 
         case NetatmoActionTypes.STATION_DATA_FAILURE:
@@ -129,6 +155,91 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
 
         case NetatmoActionTypes.MEASURE_RAIN_FAILURE:
             return { ...state, loading_rain_measure: false, measure_rain_errors: action.error };
+
+        /** NETATMO MEASURE DATA **/
+        case NetatmoActionTypes.MEASURES_REQUEST:
+            switch (action.module) {
+                case 'indoor':
+                    return { ...state, loading_indoor_measure: true };
+                case 'indoor_second':
+                    return { ...state, loading_indoor_second_measure: true };
+                case 'indoor_third':
+                    return { ...state, loading_indoor_third_measure: true };
+                case 'outdoor':
+                    return { ...state, loading_outdoor_measure: true };
+                case 'station':
+                    return { ...state, loading_station_measure: true };
+                default:
+                    return state;
+            }
+
+        case NetatmoActionTypes.MEASURES_SUCCESS:
+            switch (action.module) {
+                case 'indoor':
+                    return { ...state,
+                        loading_indoor_measure: false,
+                        measure_indoor_data: action.payload,
+                        measure_indoor_errors: undefined
+                    };
+                case 'indoor_second':
+                    return { ...state,
+                        loading_indoor_second_measure: false,
+                        measure_indoor_second_data: action.payload,
+                        measure_indoor_second_errors: undefined
+                    };
+                case 'indoor_third':
+                    return { ...state,
+                        loading_indoor_third_measure: false,
+                        measure_indoor_third_data: action.payload,
+                        measure_indoor_third_errors: undefined
+                    };
+                case 'outdoor':
+                    return { ...state,
+                        loading_outdoor_measure: false,
+                        measure_outdoor_data: action.payload,
+                        measure_outdoor_errors: undefined
+                    };
+                case 'station':
+                    return { ...state,
+                        loading_station_measure: false,
+                        measure_station_data: action.payload,
+                        measure_station_errors: undefined
+                    };
+                default:
+                    return state;
+            }
+
+        case NetatmoActionTypes.MEASURES_FAILURE:
+            switch (action.module) {
+                case 'indoor':
+                    return { ...state, loading_indoor_measure: false, measure_indoor_errors: action.error };
+                case 'indoor_second':
+                    return { ...state, loading_indoor_second_measure: false, measure_indoor_second_errors: action.error };
+                case 'indoor_third':
+                    return { ...state, loading_indoor_third_measure: false, measure_indoor_third_errors: action.error };
+                case 'outdoor':
+                    return { ...state, loading_outdoor_measure: false, measure_outdoor_errors: action.error };
+                case 'station':
+                    return { ...state, loading_station_measure: false, measure_station_errors: action.error };
+                default:
+                    return state;
+            }
+
+        case NetatmoActionTypes.CHANGE_SELECTED_TYPE:
+            switch (action.module) {
+                case 'indoor':
+                    return { ...state, selected_indoor_type: action.payload };
+                case 'indoor_second':
+                    return { ...state, selected_indoor_second_type: action.payload };
+                case 'indoor_third':
+                    return { ...state, selected_indoor_third_type: action.payload };
+                case 'outdoor':
+                    return { ...state, selected_outdoor_type: action.payload };
+                case 'station':
+                    return { ...state, selected_station_type: action.payload };
+                default:
+                    return state;
+            }
 
         default:
             return state;

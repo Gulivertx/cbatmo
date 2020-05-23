@@ -1,9 +1,11 @@
 import React from 'react';
 import { Colors } from "@blueprintjs/core";
 import removeAccents from 'remove-accents';
+import { Flex  } from 'reflexbox'
 import { IPlace } from "../models/NetatmoNAMain";
 import { momentWithLocale } from "../utils/tools";
 import ModuleLayout from "../layouts/ModuleLayout";
+import {Orientation} from "../store/application/types";
 
 interface IPropsFromState {
     station_name?: string
@@ -11,6 +13,7 @@ interface IPropsFromState {
     place?: IPlace
     reachable?: boolean
     locale: string
+    orientation?: Orientation
 }
 
 interface IState {
@@ -51,11 +54,12 @@ class ModuleNetatmoInformation extends React.Component<IPropsFromState, IState> 
 
     public render() {
         return (
-            <ModuleLayout label={`Station ${this.props.station_name}`} reachable={this.props.reachable}>
-                <div className="module-netatmo-information">
-                    <div className="last-update" style={{ color: Colors.GRAY4 }}>{this.state.last_status_store}</div>
-                    <div className="place">{removeAccents(this.props.place ? this.props.place.city : '')} - {this.props.place?.altitude}m</div>
-                </div>
+            <ModuleLayout label={`Station ${this.props.station_name}`} reachable={this.props.reachable} fill={false}>
+                <Flex justifyContent='flex-end' alignItems='flex-end' flexDirection={this.props.orientation === 'portrait' ? 'column' : 'row'}>
+                    {this.props.orientation === 'landscape' && <div className="last-update" style={{ color: Colors.GRAY4, marginRight: 12 }}>{this.state.last_status_store}</div>}
+                    <div>{removeAccents(this.props.place ? this.props.place.city : '')} - {this.props.place?.altitude}m</div>
+                    {this.props.orientation === 'portrait' && <div className="last-update" style={{ color: Colors.GRAY4 }}>{this.state.last_status_store}</div>}
+                </Flex>
             </ModuleLayout>
         )
     }

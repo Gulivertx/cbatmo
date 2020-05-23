@@ -8,7 +8,8 @@ const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     last_status_store: netatmo.station_data?.last_status_store,
     place: netatmo.station_data?.place,
     reachable: netatmo.station_data?.reachable,
-    locale: application.user.lang
+    locale: application.user.lang,
+    orientation: application.orientation
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({

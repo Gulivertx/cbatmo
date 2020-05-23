@@ -12,8 +12,8 @@ import {Orientation} from "../store/application/types";
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     locale: string
-    sunset_time: number|undefined
-    sunrise_time: number|undefined
+    sunset_time: number
+    sunrise_time: number
     orientation: Orientation
 }
 

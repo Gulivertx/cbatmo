@@ -23,6 +23,8 @@
     "month": "month",
     "temperature": "Temperature",
     "humidity": "Humidity",
+    "co2": "CO2",
+    "pressure": "Pressure",
     "cumulative": "Cumulative",
     "noise": "Noise",
     "wind_strength": "Wind strength",

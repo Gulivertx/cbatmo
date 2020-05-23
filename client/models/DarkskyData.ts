@@ -8,6 +8,9 @@ export interface IDarkskyData {
     daily: IDaily;
 }
 
+/**
+ * @deprecated Replaced by OpenWeatherData
+ */
 class DarkskyData implements IDarkskyData {
     last_status_store: number;
     place: IPlace;

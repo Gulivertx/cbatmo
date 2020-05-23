@@ -10,10 +10,13 @@ import {colorChooser} from "../utils/tools";
 import {INetatmoNAMain} from "../models/NetatmoNAMain";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
+import { Orientation } from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     phone?: string
+    mobile?: string
+    orientation: Orientation
     measure_data: []
     selected_types: Types[]
     selected_module: string
@@ -61,6 +64,16 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
         this.props.fetchMeasure(this.props.station_data?.id as string, this.props.selected_module, this.props.selected_types, timelapse);
     };
 
+    private _setGraphHeight = (phone: boolean, orientation: Orientation): number => {
+        if (phone && orientation === 'portrait') {
+            return 144
+        } else if (phone && orientation === 'landscape') {
+            return 94
+        } else {
+            return 122
+        }
+    }
+
     public render() {
         return (
             <ModuleLayout
@@ -83,7 +96,7 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
                             onClick={() => this.handleOnclick('1m')}
                         >1 {this.props.t('netatmo.month')}</Button>
                     </ButtonGroup>
-                    <ResponsiveContainer height={this.props.phone ? 94 : 122}>
+                    <ResponsiveContainer height={this._setGraphHeight(!!this.props.phone, this.props.orientation)}>
                         <AreaChart
                             //width={240}
                             //height={this.props.phone ? 94 : 122}
@@ -91,14 +104,14 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
                             margin={{top: 14, right: 10, left: -30, bottom: 8}}
                         >
                             <CartesianGrid stroke={Colors.GRAY1} />
-                            <YAxis tick={{fontSize: '10px'}} minTickGap={1} />
+                            <YAxis tick={{fontSize: '10px', fill: Colors.GRAY4}} minTickGap={1} domain={['dataMin', 'dataMax']} />
                             <XAxis dataKey='name' hide={true} minTickGap={1} interval={0}/>
                             <Area
                                 type='monotone'
                                 dataKey={this.props.selected_types[0]}
                                 stroke={colorChooser(this.props.selected_types[0])}
                                 fill='rgba(148,159,177,0.2)'
-                                strokeWidth={2} isAnimationActive={false}
+                                strokeWidth={2} isAnimationActive={!!this.props.mobile}
                             />
                         </AreaChart>
                     </ResponsiveContainer>

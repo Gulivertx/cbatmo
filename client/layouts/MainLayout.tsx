@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 import {Intent, Position, Toaster} from "@blueprintjs/core";
 import { Flex } from 'reflexbox'
 

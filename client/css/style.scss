@@ -18,6 +18,7 @@
 body {
   width: 100%;
   height: 100%;
+  max-height: 100vh;
   user-select: none;
   //overflow: hidden;
   font-family: 'Digital-7',sans-serif;
@@ -27,23 +28,22 @@ body {
   background-color: $dark;
   position: absolute;
   background-image: url('../img/world_map_800x480.png');
-  background-repeat: no-repeat;
+  //background-repeat: no-repeat;
   background-size: cover;
-  z-index: 1;
+  //z-index: 1;
 }
 
 /** Module container **/
 .module-container {
   position: relative;
   padding: 5px 10px;
-  flex: 1;
   //max-width: 266px;
   //min-width: 180px;
 
   .toolbar {
     position: absolute;
     top: 4px;
-    right: 4px;
+    right: 16px;
   }
 
   .item-label {
@@ -84,7 +84,7 @@ body {
   display: flex;
   flex-direction: column;
   padding-top: 22px;
-  font-size: 2.8rem;
+  font-size: 2.6rem;
 
   small {
     font-size: 1.2rem;
@@ -144,17 +144,17 @@ body {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
-
-    .sunrise {
-      font-size: 1rem;
-      padding-bottom: 2px;
-    }
-    .sunset {
-      font-size: 1rem;
-      padding-bottom: 2px;
-      text-align: right;
-    }
   }
+}
+
+.sunrise {
+  font-size: 1rem;
+  padding-bottom: 2px;
+}
+.sunset {
+  font-size: 1rem;
+  padding-bottom: 2px;
+  text-align: right;
 }
 
 .module-forecast {
@@ -185,19 +185,13 @@ body {
   }
 }
 
-.module-netatmo-information {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-
-  .station-name {
-    margin-right: 12px;
-    font-size: 1.8rem;
-  }
-  .last-update {
-    margin-right: 12px;
-    font-size: 1rem;
-  }
+.station-name {
+  margin-right: 12px;
+  font-size: 1.8rem;
+}
+.last-update {
+  //margin-right: 12px;
+  font-size: 1rem;
 }
 
 /** Layouts **/
@@ -317,14 +311,12 @@ body {
     .date {
       font-size: 1rem;
     }
+  }
 
-    .sun {
-      .sunrise {
-        font-size: 0.9rem;
-      }
-      .sunset {
-        font-size: 0.9rem;
-      }
-    }
+  .sunrise {
+    font-size: 0.9rem;
+  }
+  .sunset {
+    font-size: 0.9rem;
   }
 }
