@@ -21,6 +21,12 @@ export enum NetatmoActionTypes {
     MEASURE_RAIN_REQUEST = '@@netatmo/MEASURE_RAIN_REQUEST',
     MEASURE_RAIN_SUCCESS = '@@netatmo/MEASURE_RAIN_SUCCESS',
     MEASURE_RAIN_FAILURE = '@@netatmo/MEASURE_RAIN_FAILURE',
+
+    MEASURES_REQUEST = '@@netatmo/MEASURES_REQUEST',
+    MEASURES_SUCCESS = '@@netatmo/MEASURES_SUCCESS',
+    MEASURES_FAILURE = '@@netatmo/MEASURES_FAILURE',
+
+    CHANGE_SELECTED_TYPE = '@@netatmo/CHANGE_SELECTED_TYPE'
 }
 
 // The complete state for the store
@@ -53,4 +59,29 @@ export interface INetatmoState {
     readonly loading_rain_measure: boolean
     readonly measure_rain_data: []
     readonly measure_rain_errors: any|undefined
+
+    readonly loading_indoor_measure: boolean
+    readonly measure_indoor_data: []
+    readonly measure_indoor_errors: any|undefined
+    readonly selected_indoor_type: Types
+
+    readonly loading_indoor_second_measure: boolean
+    readonly measure_indoor_second_data: []
+    readonly measure_indoor_second_errors: any|undefined
+    readonly selected_indoor_second_type: Types
+
+    readonly loading_indoor_third_measure: boolean
+    readonly measure_indoor_third_data: []
+    readonly measure_indoor_third_errors: any|undefined
+    readonly selected_indoor_third_type: Types
+
+    readonly loading_outdoor_measure: boolean
+    readonly measure_outdoor_data: []
+    readonly measure_outdoor_errors: any|undefined
+    readonly selected_outdoor_type: Types
+
+    readonly loading_station_measure: boolean
+    readonly measure_station_data: []
+    readonly measure_station_errors: any|undefined
+    readonly selected_station_type: Types
 }

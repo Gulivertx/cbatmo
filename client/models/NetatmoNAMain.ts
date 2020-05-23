@@ -3,6 +3,7 @@ import NetatmoNAModule4, {INetatmoNAModule4} from "./NetatmoNAModule4";
 import NetatmoNAModule3, {INetatmoNAModule3} from "./NetatmoNAModule3";
 import NetatmoNAModule2, {INetatmoNAModule2} from "./NetatmoNAModule2";
 import NetatmoUserInformation, {INetatmoUserInformation} from "./NetatmoUserInformation";
+import {Types} from "./NetatmoChartsData";
 
 export enum MODULE_TYPE {
     MAIN = 'NAMain',
@@ -23,7 +24,7 @@ export interface INetatmoNAMain {
     wifi: string
     reachable: boolean
     station_name: string
-    data_type: string[]
+    data_type: Types[]
     place: IPlace
     data: IData|undefined
     available_modules: IAvailableModules
@@ -80,7 +81,7 @@ class NetatmoNAMain implements INetatmoNAMain {
     wifi: string;
     reachable: boolean;
     station_name: string;
-    data_type: string[];
+    data_type: Types[];
     place: IPlace;
     data: IData|undefined;
     available_modules: IAvailableModules;

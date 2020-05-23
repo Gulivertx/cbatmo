@@ -1,7 +1,7 @@
 {
   "notifications": {
     "loading": "Chargement...",
-    "configuration_success": "Configuration terminee, merci de patienter...",
+    "configuration_success": "Modules detectes, merci de patienter...",
     "configuration_error": "Oops, une erreur s'est produite!",
     "not_reachable": "Ce module ne peut pas joindre la station. Controler les batteries..."
   },
@@ -23,6 +23,8 @@
     "month": "mois",
     "temperature": "Temperature",
     "humidity": "Humidite",
+    "co2": "CO2",
+    "pressure": "Pression",
     "cumulative": "Cumule",
     "noise": "Bruit",
     "wind_strength": "Force du vent",

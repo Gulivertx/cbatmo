@@ -1,10 +1,11 @@
 import {INetatmoUserInformation} from "./NetatmoUserInformation";
+import {Types} from "./NetatmoChartsData";
 
 export interface INetatmoNAModule1 {
     id: string
     type: string
     module_name: string
-    data_type: string[]
+    data_type: Types[]
     reachable: boolean
     last_seen: number
     rf_status: number
@@ -28,7 +29,7 @@ class NetatmoNAModule1 implements INetatmoNAModule1{
     id: string;
     type: string;
     module_name: string;
-    data_type: string[];
+    data_type: Types[];
     reachable: boolean;
     last_seen: number;
     rf_status: number;

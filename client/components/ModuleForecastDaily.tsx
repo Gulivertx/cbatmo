@@ -18,7 +18,7 @@ const ModuleForecastDaily: React.FunctionComponent<IPropsFromState> = ({data, lo
 
     return (
         <div className="module-forecast-daily">
-            <div className={cx('label', !data && 'bp3-skeleton')}>
+            <div className={cx('sub-label', !data && 'bp3-skeleton')} style={{ color: Colors.GRAY4 }}>
                 { data ? (moment.unix(data.time).format('dddd')) : 'Monday' }
             </div>
             {

@@ -10,7 +10,9 @@ const mapStateToProps = ({ netatmo, application }: ApplicationState) => ({
     selected_module: netatmo.selected_module,
     selected_timelapse: netatmo.selected_timelapse,
     station_data: netatmo.station_data,
-    phone: application.phone
+    phone: application.phone,
+    mobile: application.mobile,
+    orientation: application.orientation
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({

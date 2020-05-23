@@ -25,10 +25,10 @@ class NetatmoModuleChartData implements INetatmoChartData {
                         formatedObject[label] = Math.round(eval(obj[1][index] + '*' + userInfo.temperature_ratio) * 10) / 10;
                         break;
                     case 'Pressure':
-                        formatedObject[label] = Math.round(obj[1][index] * userInfo.pressure_ratio * 10) / 10;
+                        formatedObject[label] = Math.round(obj[1][index] * userInfo.pressure_ratio);
                         break;
                     case 'Rain':
-                        formatedObject[label] = Number((obj[1][index] / userInfo.rain_ratio).toFixed(userInfo.unit === 'si' ? 1 : 3));
+                        formatedObject[label] = Math.round(eval(obj[1][index] + '* 10 *' + userInfo.temperature_ratio) * 10) / 10;
                         break;
                     case 'windStrength':
                         formatedObject[label] = Math.round(obj[1][index] * userInfo.wind_ratio);

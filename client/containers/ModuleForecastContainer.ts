@@ -6,7 +6,8 @@ import ModuleForecast from "../components/ModuleForecast"
 const mapStateToProps = ({ openweather, application}: ApplicationState) => ({
     openweather: openweather,
     locale: application.user.lang,
-    phone: application.phone
+    phone: application.phone,
+    orientation: application.orientation
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({

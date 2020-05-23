@@ -7,7 +7,9 @@ const mapStateToProps = ({ netatmo, application }: ApplicationState) => ({
     device: netatmo.station_data?.id,
     module: netatmo.station_data?.modules.RAIN?.id,
     data: netatmo.measure_rain_data,
-    phone: application.phone
+    phone: application.phone,
+    mobile: application.mobile,
+    orientation: application.orientation,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({

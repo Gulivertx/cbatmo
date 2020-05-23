@@ -51,7 +51,7 @@ const NetatmoModuleWind: React.FunctionComponent<AllProps> = (props) => {
                         )
                     }
 
-                    <div className="wind-max">
+                    <div className="wind-max" style={{textAlign: 'right'}}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.wind_max_day')}</div>
                         {props.module_data?.data?.max_wind_str}<small>{props.unit}</small>
                     </div>
