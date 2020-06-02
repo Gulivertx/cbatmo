@@ -30,6 +30,5 @@ node_modules/
 # System Files
 .DS_Store
 Thumbs.db
-views/index.ejs
 !/deploy
 /deploy/infomaniak_deploy.sh
