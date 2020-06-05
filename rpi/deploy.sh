@@ -1,4 +1,5 @@
 #!/bin/bash
+# @deprecated -> will be replaced by new script deploy/install.sh
 # An automatic installer script for CBATMO
 # This script works on MacOS and Linux
 
