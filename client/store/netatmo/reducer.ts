@@ -120,7 +120,7 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
                 station_data_last_updated: action.receivedAt,
                 station_data_errors: undefined,
                 first_fetch: false,
-                selected_module: state.selected_module ? state.selected_module : action.payload.modules.OUTDOOR.id
+                selected_module: state.selected_module || action.payload.modules.OUTDOOR.id
             };
 
         case NetatmoActionTypes.STATION_DATA_FAILURE:

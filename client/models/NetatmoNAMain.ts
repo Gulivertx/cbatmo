@@ -28,6 +28,7 @@ export interface INetatmoNAMain {
     place: IPlace
     data: IData|undefined
     available_modules: IAvailableModules
+    number_of_additional_modules: number // Additional modules counter (without station and outdoor module)
     modules: IModule
 }
 
@@ -85,6 +86,7 @@ class NetatmoNAMain implements INetatmoNAMain {
     place: IPlace;
     data: IData|undefined;
     available_modules: IAvailableModules;
+    number_of_additional_modules: number
     modules: IModule;
 
     constructor(data: any, user: any) {
@@ -152,6 +154,9 @@ class NetatmoNAMain implements INetatmoNAMain {
             RAIN: false,
             WIND: false
         };
+
+        this.number_of_additional_modules = 0;
+
         this.modules = {
             OUTDOOR: undefined,
             INDOOR: undefined,
@@ -174,22 +179,27 @@ class NetatmoNAMain implements INetatmoNAMain {
                     if (indoor_module_counter === 0) {
                         this.modules['INDOOR'] = new NetatmoNAModule4(module, userInfo);
                         this.available_modules['INDOOR'] = true;
+                        this.number_of_additional_modules = this.number_of_additional_modules + 1;
                     } else if (indoor_module_counter === 1) {
                         this.modules['INDOOR_SECOND'] = new NetatmoNAModule4(module, userInfo);
                         this.available_modules['INDOOR_SECOND'] = true;
+                        this.number_of_additional_modules = this.number_of_additional_modules + 1;
                     } else if (indoor_module_counter === 2) {
                         this.modules['INDOOR_THIRD'] = new NetatmoNAModule4(module, userInfo);
                         this.available_modules['INDOOR_THIRD'] = true;
+                        this.number_of_additional_modules = this.number_of_additional_modules + 1;
                     }
                     indoor_module_counter++;
                     break;
                 case MODULE_TYPE.RAIN:
                     this.modules['RAIN'] = new NetatmoNAModule3(module, userInfo);
                     this.available_modules['RAIN'] = true;
+                    this.number_of_additional_modules = this.number_of_additional_modules + 1;
                     break;
                 case MODULE_TYPE.WIND:
                     this.modules['WIND'] = new NetatmoNAModule2(module, userInfo);
                     this.available_modules['WIND'] = true;
+                    this.number_of_additional_modules = this.number_of_additional_modules + 1;
                     break;
             }
         });

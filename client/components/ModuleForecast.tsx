@@ -22,7 +22,7 @@ interface IPropsFromState extends WithTranslation  {
 
 const ModuleDate: React.FunctionComponent<IPropsFromState> = (props) => {
     return (
-        <ModuleLayout label={props.t('forecast.forecast')} reachable={true} fill={true} position={!!props.phone && props.orientation === 'portrait' ? 'fixed-bottom' : undefined}>
+        <ModuleLayout label={props.t('forecast.forecast')} reachable={true} fill={true} position={!!props.phone && props.orientation === 'portrait' ? 'fixed-bottom' : undefined} vertical_divider={props.orientation === 'landscape'}>
             <div className="module-forecast">
                 <ModuleForecastDaily data={props.openweather.data?.daily.data[0]} locale={props.locale} phone={props.phone} />
                 <ModuleForecastDaily data={props.openweather.data?.daily.data[1]} locale={props.locale} phone={props.phone} />

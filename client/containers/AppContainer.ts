@@ -9,7 +9,8 @@ const mapStateToProps = ({ application, netatmo}: ApplicationState) => ({
     mobile: application.mobile,
     phone: application.phone,
     tablet: application.tablet,
-    available_modules: netatmo.station_data?.available_modules
+    available_modules: netatmo.station_data?.available_modules,
+    number_of_additional_modules: netatmo.station_data?.number_of_additional_modules
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({

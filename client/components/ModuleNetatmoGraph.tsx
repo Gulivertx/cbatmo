@@ -64,13 +64,21 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
         this.props.fetchMeasure(this.props.station_data?.id as string, this.props.selected_module, this.props.selected_types, timelapse);
     };
 
-    private _setGraphHeight = (phone: boolean, orientation: Orientation): number => {
+    private _setGraphHeight = (phone: boolean, orientation: Orientation, number_of_additional_modules: number): number => {
         if (phone && orientation === 'portrait') {
             return 144
         } else if (phone && orientation === 'landscape') {
-            return 94
+            if (number_of_additional_modules === 0) {
+                return 94 * 2.6
+            } else {
+                return 94
+            }
         } else {
-            return 122
+            if (number_of_additional_modules === 0) {
+                return 122 * 2.6
+            } else {
+                return 122
+            }
         }
     }
 
@@ -80,6 +88,7 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
                 label={this.props.t('netatmo.graph')}
                 reachable={true}
                 fill={true}
+                vertical_divider={true}
             >
                 <div className="modules-layout">
                     <ButtonGroup className="toolbar" alignText={Alignment.CENTER} minimal={true}>
@@ -96,7 +105,7 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
                             onClick={() => this.handleOnclick('1m')}
                         >1 {this.props.t('netatmo.month')}</Button>
                     </ButtonGroup>
-                    <ResponsiveContainer height={this._setGraphHeight(!!this.props.phone, this.props.orientation)}>
+                    <ResponsiveContainer height={this._setGraphHeight(!!this.props.phone, this.props.orientation, this.props.station_data?.number_of_additional_modules as number)}>
                         <AreaChart
                             //width={240}
                             //height={this.props.phone ? 94 : 122}
