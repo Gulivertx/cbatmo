@@ -43,7 +43,7 @@ class NetatmoNAModule4 {
     constructor(data: any, userInfo: INetatmoUserInformation) {
         this.id = data._id;
         this.type = data.type;
-        this.module_name = data.module_name;
+        this.module_name = data.module_name || 'Indoor'; // Default name in case of no module name given
         this.data_type = data.data_type;
         this.reachable = data.reachable;
         this.last_seen = data.last_seen;

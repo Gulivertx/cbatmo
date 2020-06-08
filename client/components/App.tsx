@@ -125,14 +125,14 @@ class App extends React.Component<AllProps> {
                             {
                                 available_modules?.INDOOR_SECOND && number_of_additional_modules as number <= 3 ? (
                                     <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
-                                        <ModuleNetatmoIndoorContainer />
+                                        <ModuleNetatmoIndoorSecondContainer />
                                     </Box>
                                 ) : null
                             }
                             {
                                 available_modules?.INDOOR_THIRD && number_of_additional_modules as number <= 3 ? (
                                     <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
-                                        <ModuleNetatmoIndoorContainer />
+                                        <ModuleNetatmoIndoorThirdContainer />
                                     </Box>
                                 ) : null
                             }
@@ -150,7 +150,8 @@ class App extends React.Component<AllProps> {
                                     </Box>
                                 ) : null
                             }
-                            <Box  width={number_of_additional_modules as number !== 1 && number_of_additional_modules as number !== 2 ? [ '100%', '50%' ] : '100%'}>
+                            <Box  width={number_of_additional_modules as number !== 1 && number_of_additional_modules as number !== 2 ?
+                                [ '100%', '50%' ] : '100%'}>
                                 <ModuleNetatmoGraphContainer />
                             </Box>
                         </Flex>

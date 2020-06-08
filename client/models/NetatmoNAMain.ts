@@ -116,7 +116,7 @@ class NetatmoNAMain implements INetatmoNAMain {
         }
 
         this.reachable = data.reachable;
-        this.station_name = data.station_name;
+        this.station_name = data.station_name || 'Main station'; // Default name in case of no module name given
         this.data_type = data.data_type;
         this.place = {
             altitude: data.place.altitude,
