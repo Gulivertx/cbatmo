@@ -16,6 +16,7 @@ API by Dark Sky API. The first proposal can be found in the [Netatmo forum](http
 ### Change in 2.3.x
 #### 2.3.2
 * Fix issues #31 #38 #35 #33 #32 #26
+* You can now install cbatmo directly from raspberry pi without any build process from another computer as the build is now commit in github! A new install.sh script is on the way and will be soon available
 
 #### 2.3.1
 * Improve mobile portrait layout
