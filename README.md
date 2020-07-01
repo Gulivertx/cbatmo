@@ -15,7 +15,7 @@ API by Dark Sky API. The first proposal can be found in the [Netatmo forum](http
 
 ### Change in 2.3.x
 #### 2.3.2
-* New deploy script (please follow the new instruction !!!)
+* Fix issues #31 #38 #35 #33 #32 #26
 
 #### 2.3.1
 * Improve mobile portrait layout
