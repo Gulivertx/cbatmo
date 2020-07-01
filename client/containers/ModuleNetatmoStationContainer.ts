@@ -7,7 +7,6 @@ import {Types} from "../models/NetatmoChartsData";
 
 const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     station_data: netatmo.station_data,
-    device_id: netatmo.station_data?.id,
     selected_timelapse: netatmo.selected_timelapse,
     temperature_unit: application.user.temperature_unit,
     pressure_unit: application.user.pressure_unit,

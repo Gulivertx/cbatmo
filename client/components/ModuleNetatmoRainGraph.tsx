@@ -5,8 +5,6 @@ import {Orientation} from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
-    device?: string
-    module?: string
     data: []
     phone?: string
     mobile?: string

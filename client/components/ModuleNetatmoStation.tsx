@@ -16,7 +16,6 @@ import {Types} from "../models/NetatmoChartsData";
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     station_data: INetatmoNAMain|undefined
-    device_id: string|undefined
     selected_timelapse: '12h'|'1d'|'1m'
     temperature_unit: string
     pressure_unit: string
@@ -40,7 +39,7 @@ type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 const NetatmoModuleStation: React.FunctionComponent<AllProps> = (props) => {
     const _onClick = (type: string) => {
         if (props.orientation !== 'portrait') {
-            props.fetchMeasure(props.device_id as string, props.module_data?.id as string, [type], props.selected_timelapse);
+            props.fetchMeasure(props.station_data?.id as string, props.station_data?.id as string, [type], props.selected_timelapse);
         }
     }
 

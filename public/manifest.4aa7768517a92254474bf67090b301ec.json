@@ -1,0 +1,9 @@
+{
+  "name": "CBatmo",
+  "short_name": "CBatmo",
+  "orientation": "landscape",
+  "display": "standalone",
+  "start_url": ".",
+  "description": "A Netatmo Weather Station Web-APP for Raspberry Pi and official Raspberry touchscreen",
+  "background_color": "#1E1E1E"
+}

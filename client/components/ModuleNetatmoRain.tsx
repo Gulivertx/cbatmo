@@ -2,12 +2,14 @@ import React from 'react';
 import { Colors } from "@blueprintjs/core";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import * as i18next from 'i18next';
+import {Flex} from 'reflexbox';
 import ModuleNetatmoRainGraphContainer from "../containers/ModuleNetatmoRainGraphContainer";
 import ModuleLayout from "../layouts/ModuleLayout";
 
 import { INetatmoNAModule3 } from "../models/NetatmoNAModule3";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
+import {Orientation} from "../store/application/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -16,6 +18,7 @@ interface IPropsFromState {
     selected_timelapse: '12h'|'1d'|'1m'
     distance_unit: string
     rain_ratio: number
+    orientation: Orientation
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -34,23 +37,24 @@ const NetatmoModuleRain: React.FunctionComponent<AllProps> = (props) => {
         <ModuleLayout
             label={props.module_data?.module_name}
             reachable={props.module_data?.reachable}
+            vertical_divider={props.orientation === 'landscape'}
         >
             <div className="modules-layout">
-                <div className="row">
-                    <div style={{width: '80%'}}>
+                <Flex flexDirection='row'>
+                    <div style={{flex:2, position: 'relative'}}>
                         <ModuleNetatmoRainGraphContainer />
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'column'}}>
-                        <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)}>
+                    <Flex flexDirection='column' style={{flex: 1}}>
+                        <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)} style={{textAlign: 'right'}}>
                             <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.cumulative')}</div>
                             {props.module_data?.data?.sum_rain_24}<small>{props.distance_unit}</small>
                         </div>
-                        <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)}>
+                        <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)} style={{textAlign: 'right'}}>
                             <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.distance_unit}/h</div>
-                            {props.module_data?.data?.sum_rain_1}<small>{props.distance_unit}</small>
+                            {props.module_data?.data?.sum_rain_1}<small>{props.distance_unit}/h</small>
                         </div>
-                    </div>
-                </div>
+                    </Flex>
+                </Flex>
             </div>
         </ModuleLayout>
     )

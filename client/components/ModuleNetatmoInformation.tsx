@@ -54,7 +54,7 @@ class ModuleNetatmoInformation extends React.Component<IPropsFromState, IState> 
 
     public render() {
         return (
-            <ModuleLayout label={`Station ${this.props.station_name}`} reachable={this.props.reachable} fill={false}>
+            <ModuleLayout label={`Station ${this.props.station_name}`} reachable={this.props.reachable} fill={false} vertical_divider={this.props.orientation === 'landscape'}>
                 <Flex justifyContent='flex-end' alignItems='flex-end' flexDirection={this.props.orientation === 'portrait' ? 'column' : 'row'}>
                     {this.props.orientation === 'landscape' && <div className="last-update" style={{ color: Colors.GRAY4, marginRight: 12 }}>{this.state.last_status_store}</div>}
                     <div>{removeAccents(this.props.place ? this.props.place.city : '')} - {this.props.place?.altitude}m</div>

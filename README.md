@@ -14,6 +14,9 @@ release I removed Google Calendar API, WebcamTraval API and change Swiss Weather
 API by Dark Sky API. The first proposal can be found in the [Netatmo forum](https://forum.netatmo.com/viewtopic.php?f=5&t=14458)
 
 ### Change in 2.3.x
+#### 2.3.2
+* New deploy script (please follow the new instruction !!!)
+
 #### 2.3.1
 * Improve mobile portrait layout
 * Bug fix, rain graph, fullscreen layout for Raspberry touch screen

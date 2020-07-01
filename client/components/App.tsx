@@ -33,6 +33,7 @@ interface IPropsFromState {
     phone?: string
     tablet?: string
     available_modules: IAvailableModules|undefined
+    number_of_additional_modules?: number
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -59,7 +60,7 @@ class App extends React.Component<AllProps> {
     }*/
 
     public render() {
-        const { available_modules, orientation, mobile, phone, tablet } = this.props;
+        const { available_modules, number_of_additional_modules, orientation, mobile, phone, tablet } = this.props;
 
         return (
             <MainLayout>
@@ -67,7 +68,7 @@ class App extends React.Component<AllProps> {
                     this.props.isConfigured ? (
                         <DashboardLayoutContainer>
                             {
-                                this._layoutChooser(mobile, phone, tablet, orientation, available_modules)
+                                this._layoutChooser(mobile, phone, tablet, orientation, available_modules, number_of_additional_modules)
                             }
                         </DashboardLayoutContainer>
                     ) : (
@@ -83,26 +84,26 @@ class App extends React.Component<AllProps> {
         phone?: string,
         tablet?: string,
         orientation?: Orientation,
-        available_modules?: IAvailableModules
+        available_modules?: IAvailableModules,
+        number_of_additional_modules?: number
     ) => {
         // If we are in desktop render the RPI layout 800x480
         // TODO create a view for desktop with bigger screen
-        if (!mobile) return this._renderRpiLayout(available_modules);
+        if (!mobile) return this._renderRpiLayout(available_modules, number_of_additional_modules);
 
         // Mobile renders
-        if (!!phone && orientation === 'landscape') return this._renderPhoneLandscapeLayout(available_modules);
+        if (!!phone && orientation === 'landscape') return this._renderPhoneLandscapeLayout(available_modules, number_of_additional_modules);
         if (!!phone && orientation === 'portrait') return this._renderPhonePortraitLayout(available_modules);
-        if (!!tablet && orientation === 'landscape') return this._renderTabletLandscapeLayout(available_modules);
-        if (!!tablet && orientation === 'portrait') return this._renderTabletPortraitLayout(available_modules);
+        if (!!tablet && orientation === 'landscape') return this._renderTabletLandscapeLayout(available_modules, number_of_additional_modules);
+        if (!!tablet && orientation === 'portrait') return this._renderTabletPortraitLayout(available_modules, number_of_additional_modules);
     }
 
-    private _renderRpiLayout = (available_modules?: IAvailableModules) => {
+    private _renderRpiLayout = (available_modules?: IAvailableModules, number_of_additional_modules?: number) => {
         if (available_modules?.INDOOR ||
             available_modules?.INDOOR_SECOND ||
             available_modules?.INDOOR_THIRD ||
             available_modules?.RAIN ||
             available_modules?.WIND) {
-            // All modules available
             return (
                 <>
                     <Flex flexDirection='column' width={[ '100%', '35%' ]}>
@@ -116,26 +117,41 @@ class App extends React.Component<AllProps> {
                             <ModuleForecastContainer />
                             {
                                 available_modules?.INDOOR ? (
-                                    <Box width={[ '100%', '50%' ]}>
+                                    <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
                                         <ModuleNetatmoIndoorContainer />
                                     </Box>
                                 ) : null
                             }
                             {
+                                available_modules?.INDOOR_SECOND && number_of_additional_modules as number <= 3 ? (
+                                    <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
+                                        <ModuleNetatmoIndoorSecondContainer />
+                                    </Box>
+                                ) : null
+                            }
+                            {
+                                available_modules?.INDOOR_THIRD && number_of_additional_modules as number <= 3 ? (
+                                    <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
+                                        <ModuleNetatmoIndoorThirdContainer />
+                                    </Box>
+                                ) : null
+                            }
+                            {
                                 available_modules?.RAIN ? (
-                                    <Box width={[ '100%', '50%' ]}>
+                                    <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
                                         <ModuleNetatmoRainContainer />
                                     </Box>
                                 ) : null
                             }
                             {
                                 available_modules?.WIND ? (
-                                    <Box width={[ '100%', '50%' ]}>
+                                    <Box  width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
                                         <ModuleNetatmoWindContainer />
                                     </Box>
                                 ) : null
                             }
-                            <Box width={[ '100%', '50%' ]}>
+                            <Box  width={number_of_additional_modules as number !== 1 && number_of_additional_modules as number !== 2 ?
+                                [ '100%', '50%' ] : '100%'}>
                                 <ModuleNetatmoGraphContainer />
                             </Box>
                         </Flex>
@@ -163,8 +179,8 @@ class App extends React.Component<AllProps> {
         }
     }
 
-    private _renderPhoneLandscapeLayout = (available_modules?: IAvailableModules) => {
-        return this._renderRpiLayout(available_modules);
+    private _renderPhoneLandscapeLayout = (available_modules?: IAvailableModules, number_of_additional_modules?: number) => {
+        return this._renderRpiLayout(available_modules, number_of_additional_modules);
     }
 
     private _renderPhonePortraitLayout = (available_modules?: IAvailableModules) => {
@@ -172,8 +188,8 @@ class App extends React.Component<AllProps> {
             <Flex flexDirection='column' width={'100%'}>
                 <Flex flexDirection='column' ref={this.lockScrollElement} style={{overflowY: 'auto'}}>
                     <ModuleNetatmoInformationContainer />
-                    <ModuleNetatmoStationContainer />
                     <ModuleNetatmoOutdoorContainer />
+                    <ModuleNetatmoStationContainer />
                     {
                         available_modules?.INDOOR && (
                             <ModuleNetatmoIndoorContainer module_name='indoor' />
@@ -205,12 +221,12 @@ class App extends React.Component<AllProps> {
         )
     }
 
-    private _renderTabletLandscapeLayout = (available_modules?: IAvailableModules) => {
-        return this._renderRpiLayout(available_modules);
+    private _renderTabletLandscapeLayout = (available_modules?: IAvailableModules, number_of_additional_modules?: number) => {
+        return this._renderRpiLayout(available_modules, number_of_additional_modules);
     }
 
-    private _renderTabletPortraitLayout = (available_modules?: IAvailableModules) => {
-        return this._renderRpiLayout(available_modules);
+    private _renderTabletPortraitLayout = (available_modules?: IAvailableModules, number_of_additional_modules?: number) => {
+        return this._renderRpiLayout(available_modules, number_of_additional_modules);
     }
 }
 
