@@ -2,6 +2,7 @@ import React from 'react';
 import { Colors } from "@blueprintjs/core";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import * as i18next from 'i18next';
+import {Flex} from 'reflexbox';
 import ModuleNetatmoRainGraphContainer from "../containers/ModuleNetatmoRainGraphContainer";
 import ModuleLayout from "../layouts/ModuleLayout";
 
@@ -39,11 +40,11 @@ const NetatmoModuleRain: React.FunctionComponent<AllProps> = (props) => {
             vertical_divider={props.orientation === 'landscape'}
         >
             <div className="modules-layout">
-                <div className="row">
-                    <div style={{width: '80%'}}>
+                <Flex flexDirection='row'>
+                    <div style={{flex:2, position: 'relative'}}>
                         <ModuleNetatmoRainGraphContainer />
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                    <Flex flexDirection='column' style={{flex: 1}}>
                         <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)} style={{textAlign: 'right'}}>
                             <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.cumulative')}</div>
                             {props.module_data?.data?.sum_rain_24}<small>{props.distance_unit}</small>
@@ -52,8 +53,8 @@ const NetatmoModuleRain: React.FunctionComponent<AllProps> = (props) => {
                             <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.distance_unit}/h</div>
                             {props.module_data?.data?.sum_rain_1}<small>{props.distance_unit}/h</small>
                         </div>
-                    </div>
-                </div>
+                    </Flex>
+                </Flex>
             </div>
         </ModuleLayout>
     )

@@ -13,6 +13,7 @@ echo "______________________________________________________"
 # Verify if cbatmo folder exist
 if [ -d "${CBATMO_DIR}" ]; then
   echo "${CBATMO_DIR} already exist, currently update is not supported, aborted !"
+  # TODO
   exit 1
 fi
 

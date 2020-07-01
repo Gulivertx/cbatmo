@@ -4,7 +4,6 @@ import ModuleNetatmoRainGraph from "../components/ModuleNetatmoRainGraph";
 import {ApplicationState} from "../store";
 
 const mapStateToProps = ({ netatmo, application }: ApplicationState) => ({
-    module: netatmo.station_data?.modules.RAIN,
     data: netatmo.measure_rain_data,
     phone: application.phone,
     mobile: application.mobile,
