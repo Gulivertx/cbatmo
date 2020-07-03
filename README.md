@@ -14,6 +14,10 @@ release I removed Google Calendar API, WebcamTraval API and change Swiss Weather
 API by Dark Sky API. The first proposal can be found in the [Netatmo forum](https://forum.netatmo.com/viewtopic.php?f=5&t=14458)
 
 ### Change in 2.3.x
+#### 2.3.3
+* Fix issues #26 #41
+The issue 26 where the rain graph make the screen shaking was not finally fix by the version 2.3.2, this new commit should definitively fix this damn issue.
+
 #### 2.3.2
 * Fix issues #31 #38 #35 #33 #32 #26
 * You can now install cbatmo directly from raspberry pi without any build process from another computer as the build is now commit in github! A new install.sh script is on the way and will be soon available
