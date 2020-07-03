@@ -26,8 +26,10 @@
     "co2": "CO2",
     "pressure": "Druck",
     "cumulative": "Kumulativ",
+    "rain": "Kumulativ",
     "noise": "Laerm",
     "wind_strength": "Windgeschwindigkeit",
+    "windstrength": "Windgeschwindigkeit",
     "wind_max_day": "Max Tag"
   }
 }

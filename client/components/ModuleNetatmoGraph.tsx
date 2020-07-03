@@ -126,7 +126,7 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
                     </ResponsiveContainer>
                 </div>
                 <div className="sub-label" style={{textAlign: 'center'}}>
-                    {removeAccents(this.findModuleName(this.props.selected_module))} - {this.props.selected_types[0]}
+                    {removeAccents(this.findModuleName(this.props.selected_module))} - {this.props.t('netatmo.' + this.props.selected_types[0].toLowerCase())}
                 </div>
             </ModuleLayout>
         )
