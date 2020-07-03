@@ -9,9 +9,9 @@ export interface INetatmoNAModule3 {
     reachable: boolean
     last_seen: number
     rf_status: number
-    radio: string
+    radio: '1'|'2'|'3'|'4'
     battery_vp: number
-    battery: string
+    battery: '10'|'30'|'50'|'70'|'90'|'charging'
     battery_percent: number
     data: IData|undefined
 }
@@ -31,9 +31,9 @@ class NetatmoNAModule3 implements INetatmoNAModule3 {
     reachable: boolean;
     last_seen: number;
     rf_status: number;
-    radio: string;
+    radio: '1'|'2'|'3'|'4';
     battery_vp: number;
-    battery: string;
+    battery: '10'|'30'|'50'|'70'|'90'|'charging';
     battery_percent: number;
     data: IData|undefined;
 
@@ -53,16 +53,16 @@ class NetatmoNAModule3 implements INetatmoNAModule3 {
         // Set radio status
         switch (true) {
             case (data.rf_status <= 60):
-                this.radio = 'high';
+                this.radio = '4';
                 break;
             case (data.rf_status <= 75 && data.rf_status > 60):
-                this.radio = 'medium';
+                this.radio = '3';
                 break;
             case (data.rf_status < 90 && data.rf_status > 75):
-                this.radio = 'low';
+                this.radio = '2';
                 break;
             case (data.rf_status >= 90):
-                this.radio = 'very-low';
+                this.radio = '1';
                 break;
         }
 
@@ -71,22 +71,22 @@ class NetatmoNAModule3 implements INetatmoNAModule3 {
         // Set battery status
         switch (true) {
             case (data.battery_vp >= 6000):
-                this.battery = 'max';
+                this.battery = 'charging';
                 break;
             case (data.battery_vp < 6000 && data.battery_vp >= 5500):
-                this.battery = 'full';
+                this.battery = '90';
                 break;
             case (data.battery_vp < 5500 && data.battery_vp >= 5000):
-                this.battery = 'high';
+                this.battery = '70';
                 break;
             case (data.battery_vp < 5000 && data.battery_vp >= 4500):
-                this.battery = 'medium';
+                this.battery = '50';
                 break;
             case (data.battery_vp < 4500 && data.battery_vp >= 4000):
-                this.battery = 'low';
+                this.battery = '30';
                 break;
             case (data.battery_vp < 4000):
-                this.battery = 'very-low';
+                this.battery = '10';
                 break;
         }
 

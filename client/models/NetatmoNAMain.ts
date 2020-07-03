@@ -21,7 +21,7 @@ export interface INetatmoNAMain {
     last_status_store: number
     module_name: string
     wifi_status: string
-    wifi: string
+    wifi: '1'|'2'|'3'|'4'
     reachable: boolean
     station_name: string
     data_type: Types[]
@@ -79,7 +79,7 @@ class NetatmoNAMain implements INetatmoNAMain {
     last_status_store: number;
     module_name: string;
     wifi_status: string;
-    wifi: string;
+    wifi: '1'|'2'|'3'|'4';
     reachable: boolean;
     station_name: string;
     data_type: Types[];
@@ -102,16 +102,16 @@ class NetatmoNAMain implements INetatmoNAMain {
         // Set Wifi status
         switch (true) {
             case (data.wifi_status >= 86):
-                this.wifi = 'bad';
+                this.wifi = '4';
                 break;
             case (data.wifi_status < 86 && data.wifi_status > 56):
-                this.wifi = 'average';
+                this.wifi = '3';
                 break;
             case (data.wifi_status <= 56):
-                this.wifi = 'good';
+                this.wifi = '2';
                 break;
             default:
-                this.wifi = 'good';
+                this.wifi = '1';
                 break;
         }
 
