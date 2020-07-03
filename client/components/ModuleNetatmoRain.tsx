@@ -41,17 +41,17 @@ const NetatmoModuleRain: React.FunctionComponent<AllProps> = (props) => {
         >
             <div className="modules-layout">
                 <Flex flexDirection='row'>
-                    <div style={{flex:2, position: 'relative'}}>
+                    <div style={{width: props.orientation === 'portrait' ? '78%' : '60%'}}>
                         <ModuleNetatmoRainGraphContainer />
                     </div>
-                    <Flex flexDirection='column' style={{flex: 1}}>
+                    <Flex flexDirection='column' style={{width: props.orientation === 'portrait' ? '22%' : '40%'}}>
                         <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)} style={{textAlign: 'right'}}>
                             <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.cumulative')}</div>
                             {props.module_data?.data?.sum_rain_24}<small>{props.distance_unit}</small>
                         </div>
                         <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)} style={{textAlign: 'right'}}>
                             <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.distance_unit}/h</div>
-                            {props.module_data?.data?.sum_rain_1}<small>{props.distance_unit}/h</small>
+                            {props.module_data?.data?.sum_rain_1}
                         </div>
                     </Flex>
                 </Flex>

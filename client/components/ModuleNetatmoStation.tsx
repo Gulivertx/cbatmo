@@ -96,7 +96,7 @@ const NetatmoModuleStation: React.FunctionComponent<AllProps> = (props) => {
                                 <AreaChart
                                     key={props.selected_type}
                                     data={props.measure_data}
-                                    margin={{top: 14, right: 10, left: -30, bottom: 8}}
+                                    margin={{top: 14, right: 10, left: -30, bottom: 0}}
                                 >
                                     <CartesianGrid stroke={Colors.GRAY1} />
                                     <YAxis tick={{fontSize: '10px', fill: Colors.GRAY4}} minTickGap={1} domain={['dataMin', 'dataMax']} />
