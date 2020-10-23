@@ -32,3 +32,4 @@ node_modules/
 Thumbs.db
 !/deploy
 /deploy/infomaniak_deploy.sh
+/deploy/infomaniak_install.sh

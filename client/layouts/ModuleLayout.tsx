@@ -1,6 +1,7 @@
 import React, {CSSProperties} from 'react';
 import removeAccents from 'remove-accents';
 import { Flex } from 'reflexbox';
+import { Menu, MenuItem, Popover, Position } from "@blueprintjs/core";
 
 import ModuleNetatmoNotReachable from '../components/ModuleNetatmoNotReachable';
 
@@ -9,6 +10,7 @@ import netatmoOutdoorIcon from '../img/netatmo_outdoor_module.svg';
 import netatmoIndoorIcon from '../img/netatmo_indoor_module.svg';
 import netatmoRainIcon from '../img/netatmo_rain_module.svg';
 import netatmoWindIcon from '../img/netatmo_wind_module.svg';
+import {IIndoorModuleNames} from "../models/NetatmoNAMain";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -21,6 +23,10 @@ interface IPropsFromState {
     icon?: 'station'|'outdoor'|'indoor'|'rain'|'wind'
     batteryLevel?: '10'|'30'|'50'|'70'|'90'|'charging'
     radioLevel?: '1'|'2'|'3'|'4'
+    number_of_additional_modules?: number
+    onChangeSelectedInsideModule?: (module: number) => void
+    selected_indoor_module?: number
+    indoor_module_names?: IIndoorModuleNames
 }
 
 const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
@@ -61,11 +67,34 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
         }
     }
 
+    const indoorSwitchMenu = (
+        <Menu>
+            <MenuItem
+                text={removeAccents(props.indoor_module_names?.indoor || '')}
+                active={props.selected_indoor_module === 0}
+                onClick={() => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(0)}
+            />
+            <MenuItem
+                text={removeAccents(props.indoor_module_names?.indoor_second || '')}
+                active={props.selected_indoor_module === 1}
+                onClick={() => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(1)}
+            />
+            <MenuItem
+                text={removeAccents(props.indoor_module_names?.indoor_third || '')}
+                active={props.selected_indoor_module === 2}
+                onClick={() => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(2)}
+            />
+        </Menu>
+    );
+
     return (
         <div className="module-container" style={styles(props.fill, props.position)}>
             <div className="item-label">
-
-                <div className="label">{removeAccents(props.label? props.label : '')}</div>
+                {
+                    <Popover content={indoorSwitchMenu} position={Position.BOTTOM} disabled={props.icon !== 'indoor'} minimal={true}>
+                        <div className="label">{removeAccents(props.label? props.label : '')}</div>
+                    </Popover>
+                }
                 <div className="horizontal-top-divider" />
 
                 {
