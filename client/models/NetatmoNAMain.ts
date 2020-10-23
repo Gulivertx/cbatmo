@@ -21,7 +21,7 @@ export interface INetatmoNAMain {
     last_status_store: number
     module_name: string
     wifi_status: string
-    wifi: string
+    wifi: '1'|'2'|'3'|'4'
     reachable: boolean
     station_name: string
     data_type: Types[]
@@ -30,6 +30,7 @@ export interface INetatmoNAMain {
     available_modules: IAvailableModules
     number_of_additional_modules: number // Additional modules counter (without station and outdoor module)
     modules: IModule
+    indoor_module_names: IIndoorModuleNames
 }
 
 export interface IPlace {
@@ -64,12 +65,18 @@ export interface IAvailableModules {
 }
 
 export interface IModule {
-    OUTDOOR: INetatmoNAModule1|undefined,
-    INDOOR: INetatmoNAModule4|undefined,
-    INDOOR_SECOND: INetatmoNAModule4|undefined,
-    INDOOR_THIRD: INetatmoNAModule4|undefined,
-    RAIN: INetatmoNAModule3|undefined,
+    OUTDOOR: INetatmoNAModule1|undefined
+    INDOOR: INetatmoNAModule4|undefined
+    INDOOR_SECOND: INetatmoNAModule4|undefined
+    INDOOR_THIRD: INetatmoNAModule4|undefined
+    RAIN: INetatmoNAModule3|undefined
     WIND: INetatmoNAModule2|undefined
+}
+
+export interface IIndoorModuleNames {
+    indoor: string|undefined
+    indoor_second: string|undefined
+    indoor_third: string|undefined
 }
 
 /** Station Data model */
@@ -79,7 +86,7 @@ class NetatmoNAMain implements INetatmoNAMain {
     last_status_store: number;
     module_name: string;
     wifi_status: string;
-    wifi: string;
+    wifi: '1'|'2'|'3'|'4';
     reachable: boolean;
     station_name: string;
     data_type: Types[];
@@ -88,6 +95,7 @@ class NetatmoNAMain implements INetatmoNAMain {
     available_modules: IAvailableModules;
     number_of_additional_modules: number
     modules: IModule;
+    indoor_module_names: IIndoorModuleNames
 
     constructor(data: any, user: any) {
         // We need user information object to get conversion ratio
@@ -102,16 +110,16 @@ class NetatmoNAMain implements INetatmoNAMain {
         // Set Wifi status
         switch (true) {
             case (data.wifi_status >= 86):
-                this.wifi = 'bad';
+                this.wifi = '4';
                 break;
             case (data.wifi_status < 86 && data.wifi_status > 56):
-                this.wifi = 'average';
+                this.wifi = '3';
                 break;
             case (data.wifi_status <= 56):
-                this.wifi = 'good';
+                this.wifi = '2';
                 break;
             default:
-                this.wifi = 'good';
+                this.wifi = '1';
                 break;
         }
 
@@ -166,6 +174,12 @@ class NetatmoNAMain implements INetatmoNAMain {
             WIND: undefined,
         };
 
+        this.indoor_module_names = {
+            indoor: undefined,
+            indoor_second: undefined,
+            indoor_third: undefined,
+        };
+
         // Handle modules
         let indoor_module_counter = 0;
         data.modules.map((module: any) => {
@@ -179,14 +193,17 @@ class NetatmoNAMain implements INetatmoNAMain {
                     if (indoor_module_counter === 0) {
                         this.modules['INDOOR'] = new NetatmoNAModule4(module, userInfo);
                         this.available_modules['INDOOR'] = true;
+                        this.indoor_module_names.indoor = this.modules['INDOOR']?.module_name;
                         this.number_of_additional_modules = this.number_of_additional_modules + 1;
                     } else if (indoor_module_counter === 1) {
                         this.modules['INDOOR_SECOND'] = new NetatmoNAModule4(module, userInfo);
                         this.available_modules['INDOOR_SECOND'] = true;
+                        this.indoor_module_names.indoor_second = this.modules['INDOOR_SECOND']?.module_name;
                         this.number_of_additional_modules = this.number_of_additional_modules + 1;
                     } else if (indoor_module_counter === 2) {
                         this.modules['INDOOR_THIRD'] = new NetatmoNAModule4(module, userInfo);
                         this.available_modules['INDOOR_THIRD'] = true;
+                        this.indoor_module_names.indoor_third = this.modules['INDOOR_THIRD']?.module_name;
                         this.number_of_additional_modules = this.number_of_additional_modules + 1;
                     }
                     indoor_module_counter++;

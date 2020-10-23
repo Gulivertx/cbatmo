@@ -48,6 +48,9 @@ const NetatmoModuleOutdoor: React.FunctionComponent<AllProps> = (props) => {
             reachable={props.module_data?.reachable}
             last_seen={props.module_data?.last_seen}
             vertical_divider={props.orientation === 'landscape'}
+            icon='outdoor'
+            radioLevel={props.module_data?.radio}
+            batteryLevel={props.module_data?.battery}
         >
             <div className="modules-layout">
                 <div className="row">

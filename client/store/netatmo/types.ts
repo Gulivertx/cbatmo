@@ -26,7 +26,9 @@ export enum NetatmoActionTypes {
     MEASURES_SUCCESS = '@@netatmo/MEASURES_SUCCESS',
     MEASURES_FAILURE = '@@netatmo/MEASURES_FAILURE',
 
-    CHANGE_SELECTED_TYPE = '@@netatmo/CHANGE_SELECTED_TYPE'
+    CHANGE_SELECTED_TYPE = '@@netatmo/CHANGE_SELECTED_TYPE',
+
+    CHANGE_SELECTED_INSIDE_MODULE = '@@netatmo/CHANGE_SELECTED_INSIDE_MODULE'
 }
 
 // The complete state for the store
@@ -48,6 +50,8 @@ export interface INetatmoState {
     readonly station_data_errors: any
     readonly station_data: INetatmoNAMain|undefined
     readonly first_fetch: boolean
+
+    readonly selected_indoor_module: 0|1|2
 
     readonly loading_measure: boolean
     readonly measure_data: []

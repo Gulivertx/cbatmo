@@ -63,6 +63,18 @@ body {
       flex: 1;
       margin: 0 0 0 4px;
     }
+
+    .status {
+      background-color: $gray;
+      padding: 1px 6px;
+      font-size: 1rem;
+
+      .icon {
+        color: #404040;
+        padding-left: 2px;
+        padding-right: 2px;
+      }
+    }
   }
 
   .vertical-right-divider {

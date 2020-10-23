@@ -404,3 +404,10 @@ export const onChangeSelectedType = (type: Types, module: string) => {
         module: module
     }
 }
+
+export const onChangeSelectedInsideModule = (module: number) => {
+    return {
+        type: NetatmoActionTypes.CHANGE_SELECTED_INSIDE_MODULE,
+        payload: module,
+    }
+}

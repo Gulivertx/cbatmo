@@ -10,6 +10,7 @@ import {ConnectedReduxProps} from "../store";
 import {Orientation} from "../store/application/types";
 import {colorChooser} from "../utils/tools";
 import {Types} from "../models/NetatmoChartsData";
+import {IIndoorModuleNames} from "../models/NetatmoNAMain";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -21,6 +22,9 @@ interface IPropsFromState {
     selected_type: Types
     measure_data: []
     module_name: string
+    number_of_additional_modules?: number
+    selected_indoor_module: number
+    indoor_module_names: IIndoorModuleNames
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -28,6 +32,7 @@ interface IPropsFromDispatch extends WithTranslation {
     [key: string]: any
     fetchMeasure: typeof netatmoActions.fetchMeasure
     onChangeSelectedType: typeof netatmoActions.onChangeSelectedType
+    onChangeSelectedInsideModule: typeof netatmoActions.onChangeSelectedInsideModule
     t: i18next.TFunction
 }
 
@@ -48,6 +53,13 @@ const NetatmoModuleIndoor: React.FunctionComponent<AllProps> = (props) => {
             reachable={props.module_data?.reachable}
             last_seen={props.module_data?.last_seen}
             vertical_divider={props.orientation === 'landscape'}
+            icon='indoor'
+            radioLevel={props.module_data?.radio}
+            batteryLevel={props.module_data?.battery}
+            number_of_additional_modules={props.number_of_additional_modules}
+            onChangeSelectedInsideModule={props.onChangeSelectedInsideModule}
+            selected_indoor_module={props.selected_indoor_module}
+            indoor_module_names={props.indoor_module_names}
         >
             <div className="modules-layout">
                 <div className="row">

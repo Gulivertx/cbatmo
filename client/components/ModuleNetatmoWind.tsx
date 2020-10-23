@@ -35,6 +35,9 @@ const NetatmoModuleWind: React.FunctionComponent<AllProps> = (props) => {
             label={props.module_data?.module_name}
             reachable={props.module_data?.reachable}
             vertical_divider={props.orientation === 'landscape'}
+            icon='wind'
+            radioLevel={props.module_data?.radio}
+            batteryLevel={props.module_data?.battery}
         >
             <div className="modules-layout">
                 <div className="row">

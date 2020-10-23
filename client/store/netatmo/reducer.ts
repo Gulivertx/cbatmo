@@ -30,6 +30,8 @@ const initialState: INetatmoState = {
     station_data: undefined,
     first_fetch: true,
 
+    selected_indoor_module: 0,
+
     loading_measure: false,
     measure_errors: undefined,
     measure_data: [],
@@ -251,6 +253,9 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
                 default:
                     return state;
             }
+
+        case NetatmoActionTypes.CHANGE_SELECTED_INSIDE_MODULE:
+            return { ...state, selected_indoor_module: action.payload };
 
         default:
             return state;

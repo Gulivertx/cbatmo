@@ -34,6 +34,7 @@ interface IPropsFromState {
     tablet?: string
     available_modules: IAvailableModules|undefined
     number_of_additional_modules?: number
+    selected_indoor_module: number
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -118,7 +119,21 @@ class App extends React.Component<AllProps> {
                             {
                                 available_modules?.INDOOR ? (
                                     <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
-                                        <ModuleNetatmoIndoorContainer />
+                                        {
+                                            this.props.selected_indoor_module === 0 ? (
+                                                <ModuleNetatmoIndoorContainer />
+                                            ) : null
+                                        }
+                                        {
+                                            this.props.selected_indoor_module === 1 ? (
+                                                <ModuleNetatmoIndoorSecondContainer />
+                                            ) : null
+                                        }
+                                        {
+                                            this.props.selected_indoor_module === 2 ? (
+                                                <ModuleNetatmoIndoorThirdContainer />
+                                            ) : null
+                                        }
                                     </Box>
                                 ) : null
                             }
