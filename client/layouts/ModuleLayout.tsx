@@ -1,7 +1,7 @@
-import React, {CSSProperties} from 'react';
+import React, {CSSProperties, ReactFragment} from 'react';
 import removeAccents from 'remove-accents';
-import { Flex } from 'reflexbox';
-import { Menu, MenuItem, Popover, Position } from "@blueprintjs/core";
+import {Flex} from 'reflexbox';
+import {Menu, MenuItem, Popover, Position} from "@blueprintjs/core";
 
 import ModuleNetatmoNotReachable from '../components/ModuleNetatmoNotReachable';
 
@@ -59,55 +59,79 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
             case "outdoor":
                 return netatmoOutdoorIcon;
             case 'indoor':
-                return  netatmoIndoorIcon;
+                return netatmoIndoorIcon;
             case 'rain':
                 return netatmoRainIcon;
             case 'wind':
                 return netatmoWindIcon;
         }
     }
+    const indoorSwitchMenuItem = (): ReactFragment => {
+        let a = [];
+        if (props.indoor_module_names?.indoor) {
+            a.push({
+                text: removeAccents(props.indoor_module_names?.indoor || ''),
+                active: props.selected_indoor_module === 0,
+                index: 0
+            });
+        }
+        if (props.indoor_module_names?.indoor_second) {
+            a.push({
+                text: removeAccents(props.indoor_module_names?.indoor_second || ''),
+                active: props.selected_indoor_module === 1,
+                index: 1
+            });
+        }
+        if (props.indoor_module_names?.indoor_third) {
+            a.push({
+                text: removeAccents(props.indoor_module_names?.indoor_third || ''),
+                active: props.selected_indoor_module === 2,
+                index: 2
+            });
+        }
 
-    const indoorSwitchMenu = (
-        <Menu>
-            <MenuItem
-                text={removeAccents(props.indoor_module_names?.indoor || '')}
-                active={props.selected_indoor_module === 0}
-                onClick={() => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(0)}
-            />
-            <MenuItem
-                text={removeAccents(props.indoor_module_names?.indoor_second || '')}
-                active={props.selected_indoor_module === 1}
-                onClick={() => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(1)}
-            />
-            <MenuItem
-                text={removeAccents(props.indoor_module_names?.indoor_third || '')}
-                active={props.selected_indoor_module === 2}
-                onClick={() => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(2)}
-            />
-        </Menu>
-    );
+        return (
+            <React.Fragment>
+                {a.map(item => (
+                    <MenuItem
+                        text={item.text}
+                        active={item.active}
+                        onClick={() => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(item.index)}/>
+                ))}
+            </React.Fragment>
+        );
+    }
+
+    const indoorSwitchMenu = () => {
+        let c = indoorSwitchMenuItem();
+        return (
+            <Menu children={c}/>
+        );
+    }
 
     return (
         <div className="module-container" style={styles(props.fill, props.position)}>
             <div className="item-label">
                 {
-                    <Popover content={indoorSwitchMenu} position={Position.BOTTOM} disabled={props.icon !== 'indoor'} minimal={true}>
-                        <div className="label">{removeAccents(props.label? props.label : '')}</div>
+                    <Popover content={indoorSwitchMenu()} position={Position.BOTTOM} disabled={props.icon !== 'indoor'}
+                             minimal={true}>
+                        <div className="label">{removeAccents(props.label ? props.label : '')}</div>
                     </Popover>
                 }
-                <div className="horizontal-top-divider" />
+                <div className="horizontal-top-divider"/>
 
                 {
                     props.icon ? (
                         <Flex className="status" flexDirection='row' alignItems='flex-end'>
                             {
                                 props.icon !== 'station' ? (
-                                    <span className={`mdi mdi-battery-${props.batteryLevel} icon`} />
+                                    <span className={`mdi mdi-battery-${props.batteryLevel} icon`}/>
                                 ) : null
                             }
-                            <span className={`mdi mdi-wifi-strength-${props.radioLevel} icon`} />
+                            <span className={`mdi mdi-wifi-strength-${props.radioLevel} icon`}/>
                             {/*// @ts-ignore */}
-                            <img src={iconChooser(props.icon)} alt="Icon" style={{width: 16, height: 16, marginBottom: 1, marginTop: 1, paddingLeft: 2}}/>
+                            <img src={iconChooser(props.icon)} alt="Icon"
+                                 style={{width: 16, height: 16, marginBottom: 1, marginTop: 1, paddingLeft: 2}}/>
                         </Flex>
                     ) : null
                 }
@@ -116,12 +140,12 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
                 props.reachable ? (
                     props.children
                 ) : (
-                    <ModuleNetatmoNotReachable last_seen={props.last_seen} />
+                    <ModuleNetatmoNotReachable last_seen={props.last_seen}/>
                 )
             }
             {
                 props.vertical_divider && (
-                    <div className="vertical-right-divider" />
+                    <div className="vertical-right-divider"/>
                 )
             }
         </div>
