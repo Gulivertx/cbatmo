@@ -19,17 +19,22 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "rootDir": "./client"
+    "rootDir": "./src"
   },
   "include": [
-    "./client/"
+    "./src/"
   ],
   "exclude": [
+    "./deploy/",
     "./logs/",
     "./node_modules/",
     "./public/",
     "./rpi/",
     "./screenshots/",
     "./views/"
+  ],
+  "typeRoots": [
+    "./src/types",
+    "./node_modules/@types"
   ]
 }

@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const WebpackShellPlugin = require('webpack-shell-plugin');
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest')
@@ -17,7 +17,7 @@ const plugins = [
     }),
 
     new HtmlWebpackPlugin({
-        template: '!!raw-loader!./client/index.ejs',
+        template: '!!raw-loader!./src/index.ejs',
         filename: path.resolve(__dirname, 'views/index.ejs'),
         inject: 'body'
     }),
@@ -31,11 +31,22 @@ const plugins = [
         crossorigin: null,
         display: 'standalone',
         orientation: 'landscape'
+    }),
+    // Fix for blueprintjs Uncaught ReferenceError: process is not defined
+    new webpack.DefinePlugin({
+        "process.env": "{}",
+        global: {}
     })
 ];
 
 if (process.env.NODE_ENV === 'development') {
-    plugins.push(new WebpackShellPlugin({onBuildEnd: ['node server.js']}));
+    plugins.push(new WebpackShellPluginNext({
+        onBuildEnd: {
+            scripts: ['node server.js'],
+            blocking: false,
+            parallel: true
+        }
+    }));
 }
 
 if (process.env.NODE_ENV === 'analyse') {
@@ -45,7 +56,7 @@ if (process.env.NODE_ENV === 'analyse') {
 module.exports = {
     mode: process.env.NODE_ENV,
     entry: {
-        'bundle': './client/index.tsx',
+        'bundle': './src/index.tsx',
     },
     resolve: {
         extensions: ['.js', '.ts', '.tsx']
@@ -94,7 +105,7 @@ module.exports = {
                     },
                     {
                         loader: 'image-webpack-loader',
-                        query: {
+                        options: {
                             optipng: {
                                 progressive: true,
                                 optimizationLevel: 7,
