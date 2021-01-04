@@ -9,8 +9,8 @@ export enum MODULE_TYPE {
 }
 
 export type WifiLevel = '1'|'2'|'3'|'4';
-export type RadioLevel = '1'|'2'|'3'|'4';
-export type BatteryLevel = '10'|'30'|'50'|'70'|'90'|'charging';
+export type RadioLevel = '1'|'2'|'3'|'4'|'5';
+export type BatteryLevel = 'very-low'|'low'|'medium'|'high'|'full'|'max';
 
 export type ChartScales = '30min'|'1hour'|'3hours'|'1day'|'1week'|'1month';
 

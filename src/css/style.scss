@@ -1,4 +1,3 @@
-@import "~@mdi/font/css/materialdesignicons.css";
 @import "~weather-icons2/css/weather-icons.css";
 @import "~weather-icons2/css/weather-icons-wind.css";
 @import "~reboot.css/dist/reboot.css";
@@ -67,10 +66,9 @@ body {
     .status {
       background-color: $gray;
       padding: 1px 6px;
-      font-size: 1rem;
+      font-size: 1.0rem;
 
       .icon {
-        color: #404040;
         padding-left: 2px;
         padding-right: 2px;
       }

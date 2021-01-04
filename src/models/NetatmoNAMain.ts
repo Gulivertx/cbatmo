@@ -100,16 +100,16 @@ class NetatmoNAMain implements INetatmoNAMain {
         // Set Wifi status
         switch (true) {
             case (data.wifi_status >= 86):
-                this.wifi = '4';
+                this.wifi = '1';
                 break;
-            case (data.wifi_status < 86 && data.wifi_status > 56):
-                this.wifi = '3';
-                break;
-            case (data.wifi_status <= 56):
+            case (data.wifi_status < 86 && data.wifi_status >= 71):
                 this.wifi = '2';
                 break;
+            case (data.wifi_status < 71 && data.wifi_status >= 56):
+                this.wifi = '3';
+                break;
             default:
-                this.wifi = '1';
+                this.wifi = '4';
                 break;
         }
 
