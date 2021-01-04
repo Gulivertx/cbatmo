@@ -54,17 +54,20 @@ class NetatmoNAModule1 implements INetatmoNAModule1{
 
         // Set radio status
         switch (true) {
-            case (data.rf_status <= 60):
-                this.radio = '4';
-                break;
-            case (data.rf_status <= 75 && data.rf_status > 60):
-                this.radio = '3';
-                break;
-            case (data.rf_status < 90 && data.rf_status > 75):
-                this.radio = '2';
-                break;
             case (data.rf_status >= 90):
                 this.radio = '1';
+                break;
+            case (data.rf_status < 90 && data.rf_status > 80):
+                this.radio = '2';
+                break;
+            case (data.rf_status <= 80 && data.rf_status > 70):
+                this.radio = '3';
+                break;
+            case (data.rf_status <= 70 && data.rf_status > 60):
+                    this.radio = '4';
+                    break;
+            default:
+                this.radio = '5';
                 break;
         }
 
@@ -73,22 +76,22 @@ class NetatmoNAModule1 implements INetatmoNAModule1{
         // Set battery status
         switch (true) {
             case (data.battery_vp >= 6000):
-                this.battery = 'charging';
+                this.battery = 'max';
                 break;
             case (data.battery_vp < 6000 && data.battery_vp >= 5500):
-                this.battery = '90';
+                this.battery = 'full';
                 break;
             case (data.battery_vp < 5500 && data.battery_vp >= 5000):
-                this.battery = '70';
+                this.battery = 'high';
                 break;
             case (data.battery_vp < 5000 && data.battery_vp >= 4500):
-                this.battery = '50';
+                this.battery = 'medium';
                 break;
             case (data.battery_vp < 4500 && data.battery_vp >= 4000):
-                this.battery = '30';
+                this.battery = 'low';
                 break;
             case (data.battery_vp < 4000):
-                this.battery = '10';
+                this.battery = 'very-low';
                 break;
         }
 

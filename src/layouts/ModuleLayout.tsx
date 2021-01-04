@@ -1,4 +1,4 @@
-import React, {CSSProperties, ReactFragment} from 'react';
+import React, {CSSProperties, Fragment, ReactFragment} from 'react';
 import removeAccents from 'remove-accents';
 import {Flex} from 'reflexbox';
 import {Menu, MenuItem, Popover, Position} from "@blueprintjs/core";
@@ -10,7 +10,23 @@ import netatmoOutdoorIcon from '../img/netatmo_outdoor_module.svg';
 import netatmoIndoorIcon from '../img/netatmo_indoor_module.svg';
 import netatmoRainIcon from '../img/netatmo_rain_module.svg';
 import netatmoWindIcon from '../img/netatmo_wind_module.svg';
+import wifiSignal1 from '../img/wifi_1.svg';
+import wifiSignal2 from '../img/wifi_2.svg';
+import wifiSignal3 from '../img/wifi_3.svg';
+import wifiSignal4 from '../img/wifi_4.svg';
+import radioSignal1 from '../img/signal_1.svg';
+import radioSignal2 from '../img/signal_2.svg';
+import radioSignal3 from '../img/signal_3.svg';
+import radioSignal4 from '../img/signal_4.svg';
+import radioSignal5 from '../img/signal_5.svg';
+import batteryVeryLow from '../img/battery_very-low.svg';
+import batteryLow from '../img/battery_low.svg';
+import batteryMedium from '../img/battery_medium.svg';
+import batteryHigh from '../img/battery_high.svg';
+import batteryFull from '../img/battery_full.svg';
+import batteryMax from '../img/battery_max.svg';
 import {IIndoorModuleNames} from "../models/NetatmoNAMain";
+import {BatteryLevel, RadioLevel, WifiLevel} from "../types/netatmo";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -21,8 +37,8 @@ interface IPropsFromState {
     vertical_divider?: boolean
     position?: 'fixed-bottom'
     icon?: 'station'|'outdoor'|'indoor'|'rain'|'wind'
-    batteryLevel?: '10'|'30'|'50'|'70'|'90'|'charging'
-    radioLevel?: '1'|'2'|'3'|'4'
+    batteryLevel?: BatteryLevel
+    radioLevel?: RadioLevel
     number_of_additional_modules?: number
     onChangeSelectedInsideModule?: (module: number) => void
     selected_indoor_module?: number
@@ -52,7 +68,7 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
         return {}
     }
 
-    const iconChooser = (icon: 'station'|'outdoor'|'indoor'|'rain'|'wind') => {
+    const moduleIconChooser = (icon: 'station'|'outdoor'|'indoor'|'rain'|'wind') => {
         switch (icon) {
             case "station":
                 return netatmoStationIcon;
@@ -64,6 +80,51 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
                 return netatmoRainIcon;
             case 'wind':
                 return netatmoWindIcon;
+        }
+    }
+
+    const wifiIconChooser = (level: WifiLevel) => {
+        switch (level) {
+            case "1":
+                return wifiSignal1;
+            case "2":
+                return wifiSignal2;
+            case '3':
+                return wifiSignal3;
+            case '4':
+                return wifiSignal4;
+        }
+    }
+
+    const radioIconChooser = (level: RadioLevel) => {
+        switch (level) {
+            case "1":
+                return radioSignal1;
+            case "2":
+                return radioSignal2;
+            case '3':
+                return radioSignal3;
+            case '4':
+                return radioSignal4;
+            case '5':
+                return radioSignal5;
+        }
+    }
+
+    const batteryIconChooser = (level: BatteryLevel) => {
+        switch (level) {
+            case "very-low":
+                return batteryVeryLow;
+            case "low":
+                return batteryLow;
+            case 'medium':
+                return batteryMedium;
+            case 'high':
+                return batteryHigh;
+            case 'full':
+                return batteryFull;
+            case "max":
+                return batteryMax;
         }
     }
 
@@ -131,13 +192,22 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
                         <Flex className="status" flexDirection='row' alignItems='flex-end'>
                             {
                                 props.icon !== 'station' ? (
-                                    <span className={`mdi mdi-battery-${props.batteryLevel} icon`}/>
-                                ) : null
+                                    <Fragment>
+                                        {/*// @ts-ignore */}
+                                        <img src={batteryIconChooser(props.batteryLevel as BatteryLevel)} alt="Battery icon"
+                                             style={{width: 18, height: 18, marginBottom: 0, marginTop: 0, paddingLeft: 0}}/>
+                                        {/*// @ts-ignore */}
+                                        <img src={radioIconChooser(props.radioLevel as RadioLevel)} alt="Radio icon"
+                                             style={{width: 18, height: 18, marginBottom: 0, marginTop: 0, paddingLeft: 0}}/>
+                                    </Fragment>
+                                ) : (
+                                    <Fragment>
+                                        {/*// @ts-ignore */}
+                                        <img src={wifiIconChooser(props.radioLevel as WifiLevel)} alt="Wifi icon"
+                                             style={{width: 18, height: 18, marginBottom: 0, marginTop: 0, paddingLeft: 0}}/>
+                                    </Fragment>
+                                )
                             }
-                            <span className={`mdi mdi-wifi-strength-${props.radioLevel} icon`}/>
-                            {/*// @ts-ignore */}
-                            <img src={iconChooser(props.icon)} alt="Icon"
-                                 style={{width: 16, height: 16, marginBottom: 1, marginTop: 1, paddingLeft: 2}}/>
                         </Flex>
                     ) : null
                 }
