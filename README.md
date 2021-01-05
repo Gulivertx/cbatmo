@@ -13,60 +13,8 @@ Swiss Weather forecast API and WebcamTravel API**. For this public
 release I removed Google Calendar API, WebcamTraval API and change Swiss Weather 
 API by Dark Sky API. The first proposal can be found in the [Netatmo forum](https://forum.netatmo.com/viewtopic.php?f=5&t=14458)
 
-### Change in 2.3.x
-#### 2.3.3
-* Fix issues #26 #41
-The issue 26 where the rain graph make the screen shaking was not finally fix by the version 2.3.2, this new commit should definitively fix this damn issue.
-
-#### 2.3.2
-* Fix issues #31 #38 #35 #33 #32 #26
-* You can now install cbatmo directly from raspberry pi without any build process from another computer as the build is now commit in github! A new install.sh script is on the way and will be soon available
-
-#### 2.3.1
-* Improve mobile portrait layout
-* Bug fix, rain graph, fullscreen layout for Raspberry touch screen
-
-#### 2.3.0
-* Added German language (thanks to [marcol43](https://github.com/marcol123) for the [pull request](https://github.com/Gulivertx/cbatmo/pull/20))
-* Added support for all indoor modules and not only one
-* Improve OpenWeather icons
-* Fix bugs to show correct units and convert data for graphics according to the units
-
-**I also make a big change to support mobile devices!** What does that means?
-Cbatmo can be reach from your mobile and will have an adapted (more and less) UI for landscape and portrait orientation. You
-can pin to your dashboard the app and it will work as PWA (currently no service worker implemented). To use CBatmo outside
-your home, you have to configure port forwarding in your router. I also had to modify how we connect to the app to add
-a login page where you have to fill your Netatmo credential and a secret key that only you know and have to be configured in .env file.
-
-I'm developping this UI adaptation only on an iPhone XR and 7 plus then any feedback from user using other phones will be
-great or even better, pull request with fix for other devices.
-
-Here is a preview on an iPhone XR
-
-[screenshot mobile 1](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_003.png)
-[screenshot mobile 2](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_001.png)
-[screenshot mobile 3](https://raw.githubusercontent.com/Gulivertx/cbatmo/2.3.x/screenshots/cbatmo_mobile_002.png)
-
-
-### Change in 2.2.x
-The version 2.2.0 introduce OpenWeather API in replacement of Darksky which is now part of Apple and close for new subsciption and will be closed for all users from the end of 2021. 
-* Replace Darksky API by OpenWeather API
-* Add i18n translation support for French and English languages
-
-**For users which have used CBatmo with Darksky please do not forget to update the file `.env` after a `git pull` and fill the OpenWeather key**.
-
-Currently the application support English and French language, if you would like to have this application in any other languages please 
-provide me a new translated file based on [english  file](https://github.com/Gulivertx/cbatmo/blob/master/client/i18n/en/common.json).
-
-### Change in 2.1.x
-* Move javascript code to typescript
-* New webpack configuration which is more easy to handle because using the same commands in Windows / MacOS / Linux (no manual OS variable to set anymore)
-* New application design with only one unique view
-
-If you still want to use the version 2.0.0 you can download it here : https://github.com/Gulivertx/cbatmo/releases
-
 ## Development
-This project is a Web APP write in Javascript with **[ReactJS](https://reactjs.org/), [Redux](https://redux.js.org/)** for the frontend and **[ExpressJS](https://expressjs.com/)** for the backend.
+This project is a Web APP write in Javascript / Typescript with **[ReactJS](https://reactjs.org/), [Redux](https://redux.js.org/)** for the frontend and **[ExpressJS](https://expressjs.com/)** for the backend.
 
 The main focus of this app is :
 * Must works well with a Raspberry Pi 3
@@ -78,7 +26,7 @@ The main focus of this app is :
 First you will need to have [NodeJS](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/en/) installed in your main computer and then follow the next steps.
 
 * Clone the repo
-* Install yarn dependencies packages
+* Install yarn dependencies packages (Becareful, if you use a Debian based distributions yarn is usually to old in the official repository, install yarn via npm. `npm install -g yarn` will always the last version and fix the issue)
 * Create a new .env file with API keys
 * Build and run the DEV server
 
@@ -121,6 +69,8 @@ Copy the file `.env.dist` to `.env` if it is not already created and edit it by 
 **Change the first variable `APP_ENV=dev` to `APP_ENV=prod`.**
 
 #### Deploy to the Raspberry Pi - Automatic deployment 
+** DEPRECATED, this is still working but do a build that is not necessary anymore when you never build the app yourself **
+
 **If you work from a MacOS or Linux OS** you can use the script `deploy.sh` to auto build, auto deploy CBatmo to your Raspberry. To use this script you
 need to configure your Raspberry Pi. Just be sure that the followings things are configured correctly in your Raspberry:
 
