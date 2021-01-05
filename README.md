@@ -69,7 +69,7 @@ Copy the file `.env.dist` to `.env` if it is not already created and edit it by 
 **Change the first variable `APP_ENV=dev` to `APP_ENV=prod`.**
 
 #### Deploy to the Raspberry Pi - Automatic deployment 
-** DEPRECATED, this is still working but do a build that is not necessary anymore when you never build the app yourself **
+**DEPRECATED, this is still working but do a build that is not necessary anymore when you never build the app yourself**
 
 **If you work from a MacOS or Linux OS** you can use the script `deploy.sh` to auto build, auto deploy CBatmo to your Raspberry. To use this script you
 need to configure your Raspberry Pi. Just be sure that the followings things are configured correctly in your Raspberry:
