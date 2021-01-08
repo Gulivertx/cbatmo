@@ -17,6 +17,8 @@ VERSION="$(sed -n '3p' < package.json | sed -e 's/^[[:space:]]*//' | cut -d'"' -
 
 CreateCbatmoEnvFile()
 {
+  sleep 3
+
   echo ""
   echo "Create a new ${ENV_FILE} file, please follow and answer each question."
 
@@ -39,6 +41,7 @@ InstallCbatmoPackagesDependencies()
 {
   ### Verify if node/npm/yarn are installed
   if ! [[ -x "$(command -v node)" ]]; then
+      sleep 3
       echo "Node is not installed, install will automatically start"
       echo "NodeJS LTS will be installed via NVM script"
 
@@ -56,6 +59,7 @@ InstallCbatmoPackagesDependencies()
       # Install Node LTS
       nvm install --lts
 
+      sleep 3
       echo ""
       echo "Verify if node and npm are correctly installed"
       if ! [[ -x "$(command -v node)" ]]; then
@@ -87,25 +91,31 @@ ConfigureAndInstallDebianDep()
   sudo echo '
     lcd_rotate=2
     gpu_mem=256
-  '>>/boot/config.txt
+  '>> /boot/config.txt
 
   # Move to Debian testing and upgrade
   echo ""
   echo "Shift Debian stable to Debian testing and upgrade"
 
+  sleep 3
+
   echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
   sudo sed -i 's/buster/testing/' /etc/apt/sources.list
-  sudo apt-get update -yq && sudo apt-get dist-upgrade -yq
+
+  sleep 2
+
+  sudo apt-get update -yqq && sudo apt-get dist-upgrade -yqq
   sudo apt autoremove
 
   # Install needed Debian packages
-  sudo apt-get install -yq weston git ntp gjs gnome-themes-standard libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-37-gtk2 libwebkit2gtk-4.0-dev
-
-  # Enable and start ssh
-  sudo systemctl enable ssh
-  sudo systemctl start ssh
+  echo ""
+  echo "Install window manager and webkit-gtk"
+  sleep 3
+  sudo apt-get install -yqq weston git ntp gjs gnome-themes-standard libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-37-gtk2 libwebkit2gtk-4.0-dev
 
   # Set timezone
+  sleep 3
+  echo ""
   echo "Set timezone to Europe/Zurich"
   echo "If you need to choose another timezone run the command by change Europe/Zurich:"
   echo "sudo timedatectl set-timezone Europe/Zurich"
@@ -113,11 +123,21 @@ ConfigureAndInstallDebianDep()
   echo "To get the list of available timezone run : timedatectl list-timezone"
   sudo timedatectl set-timezone Europe/Zurich
 
+  # Enable and start ssh
+  sleep 3
+  echo ""
+  echo "Enable some serives as ssh and ntp"
+  sudo systemctl enable ssh
+  sudo systemctl start ssh
+
   # Enable and start ntp
   sudo systemctl enable ntp
   sudo systemctl start ntp
 
   # Change hostname
+  sleep 3
+  echo ""
+  echo "Set hostname"
   sudo hostnamectl set-hostname cbatmo
   sudo sed -i 's/raspberrypi/cbatmo/' /etc/hosts
 
@@ -128,9 +148,12 @@ ConfigureAndInstallDebianDep()
 PrepareCbatmo()
 {
   # Install cbatmo npm package dependencies
+  sleep 3
+  echo ""
   echo "Install CBatmo npm packages dependencies"
   yarn install --production
 
+  sleep 3
   echo ""
   echo "Prepare RPI for auto login and start cbatmo WEB server"
   sudo cp deploy/systemd/override.conf /etc/systemd/system/getty@tty1.service.d/override.conf
@@ -140,6 +163,7 @@ PrepareCbatmo()
   sudo systemctl enable cbatmo.service
   sudo systemctl restart cbatmo.service
 
+  sleep 3
   echo ""
   echo "Configure Weston window manager"
   mkdir -p ~/.config
@@ -160,6 +184,8 @@ PrepareCbatmo()
 if [ -d "${CBATMO_DIR}" ]; then
   echo "${CBATMO_DIR} already exist, update the current installation !"
 
+  sleep 3
+
   # Move to cbatmo folder
   cd $CBATMO_DIR
 
@@ -179,6 +205,8 @@ if [ -d "${CBATMO_DIR}" ]; then
 else
   echo "${CBATMO_DIR} does not exist, start a new installation !"
 
+  sleep 3
+
   # Install Debian dependencies
   ConfigureAndInstallDebianDep
 
@@ -192,6 +220,8 @@ else
   CreateCbatmoEnvFile
   InstallCbatmoPackagesDependencies
   PrepareCbatmo
+
+  sleep 3
 
   sudo reboot
 fi
