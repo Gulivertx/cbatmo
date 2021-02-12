@@ -3,7 +3,6 @@ import { ThunkDispatch} from "redux-thunk";
 import { ApplicationState } from "../store";
 import ModuleNetatmoIndoor from "../components/ModuleNetatmoIndoor"
 import * as netatmoActions from "../store/netatmo/actions";
-import {DataTypes, Timelapse} from "../types/netatmo";
 
 const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     module_data: netatmo.station_data?.modules.INDOOR_SECOND,
@@ -19,8 +18,8 @@ const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
-    fetchMeasure: (device: string, module: string, type: string[], timelapse: Timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse)),
-    onChangeSelectedType: (type: DataTypes, module: string) => dispatch(netatmoActions.onChangeSelectedType(type, module)),
+    fetchMeasure: (device: string, module: string, type: string[], timelapse: Netatmo.timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse)),
+    onChangeSelectedType: (type: Netatmo.data_type, module: string) => dispatch(netatmoActions.onChangeSelectedType(type, module)),
     onChangeSelectedInsideModule: (module: number) => dispatch(netatmoActions.onChangeSelectedInsideModule(module)),
 });
 

@@ -5,7 +5,6 @@ import removeAccents from 'remove-accents';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import * as i18next from 'i18next';
 import ModuleLayout from "../layouts/ModuleLayout";
-import {DataTypes, Timelapse} from "../types/netatmo";
 import {colorChooser} from "../utils/tools";
 import {INetatmoNAMain} from "../models/NetatmoNAMain";
 import * as netatmoActions from "../store/netatmo/actions";
@@ -18,9 +17,9 @@ interface IPropsFromState {
     mobile?: string
     orientation: Orientation
     measure_data: []
-    selected_types: DataTypes[]
+    selected_types: Netatmo.data_type[]
     selected_module: string
-    selected_timelapse: Timelapse
+    selected_timelapse: Netatmo.timelapse
     station_data: INetatmoNAMain|undefined
 }
 
@@ -60,7 +59,7 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
         }
     };
 
-    private handleOnclick = (timelapse: Timelapse): void => {
+    private handleOnclick = (timelapse: Netatmo.timelapse): void => {
         this.props.fetchMeasure(this.props.station_data?.id as string, this.props.selected_module, this.props.selected_types, timelapse);
     };
 

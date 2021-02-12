@@ -7,9 +7,10 @@ import NetatmoNAMain from '../../models/NetatmoNAMain';
 import NetatmoUserInformation from "../../models/NetatmoUserInformation";
 import NetatmoChartsData from "../../models/NetatmoChartsData";
 import { NetatmoActionTypes } from "./types";
-import {ChartScales, DataTypes, Timelapse} from "../../types/netatmo";
 
-const CALL_DELAY = 10;
+// This is the delay before next API call to refresh data
+// Netatmo only refresh their API every 10 minutes so call less than 10 is not necessary
+const API_REFRESH_DELAY: number = 10;
 
 export const requestAuth = () => {
     return {
@@ -17,7 +18,7 @@ export const requestAuth = () => {
     }
 };
 
-export const successAuth = (json: any) => {
+export const successAuth = (json: Netatmo.IApiAuthenticationResult) => {
     return {
         type: NetatmoActionTypes.AUTH_SUCCESS,
         payload: json,
@@ -46,9 +47,9 @@ export const fetchAuth = (username: string, password: string, secret: string): T
                 if (!response.ok) throw response;
                 return response.json()
             })
-            .then(json => {
+            .then((json: Netatmo.IApiAuthenticationResult) => {
                 window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
-                window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
+                window.localStorage.setItem('NetatmoExpireIn', (moment().unix() + json.expire_in).toString()); // Todo rename NetatmoExpireIn to NetatmoExpireAt
                 //window.localStorage.setItem('appIsConfigured', 'true');
                 dispatch(successAuth(json));
                 //dispatch(appConfigured(true));
@@ -71,7 +72,7 @@ export const requestRefreshToken = () => {
     }
 };
 
-export const successRefreshToken = (json: any) => {
+export const successRefreshToken = (json: Netatmo.IApiRefreshTokenResult) => {
     return {
         type: NetatmoActionTypes.REFRESH_TOKEN_SUCCESS,
         payload: json,
@@ -100,14 +101,14 @@ export const fetchRefreshToken = (): ThunkAction<void, ApplicationState, null, A
                 if (!response.ok) throw response;
                 return response.json()
             })
-            .then(json => {
+            .then((json: Netatmo.IApiRefreshTokenResult) => {
                 window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
-                window.localStorage.setItem('NetatmoExpireIn', moment().unix() + json.expire_in);
+                window.localStorage.setItem('NetatmoExpireIn', (moment().unix() + json.expire_in).toString()); // Todo rename NetatmoExpireIn to NetatmoExpireAt
                 dispatch(successRefreshToken(json));
                 dispatch(fetchStationData());
             })
             .catch(error => {
-                // Todo types
+                console.log(error)
                 error.json().then((errorMessage: any) => {
                     dispatch(failureRefreshToken(errorMessage))
                 })
@@ -139,12 +140,14 @@ export const failureStationData = (error: any) => {
 export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // If no access token or refresh token is soon expired
-        if (!getState().netatmo.access_token || moment.unix(Number(getState().netatmo.access_token_expire_in)).diff(moment(), 'minute') < CALL_DELAY) {
+        console.log('Here')
+        console.log(API_REFRESH_DELAY)
+        if (!getState().netatmo.access_token || moment.unix(Number(getState().netatmo.access_token_expire_in)).diff(moment(), 'minute') < API_REFRESH_DELAY) {
             // Fetch a new access token from refresh token and then fetch station data
             dispatch(fetchRefreshToken());
         } else {
             // Fetch new data only if last data stored is bigger than 10 minutes
-            if (getState().netatmo.station_data_last_updated === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > CALL_DELAY) {
+            if (getState().netatmo.station_data_last_updated === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > API_REFRESH_DELAY) {
                 dispatch(requestStationData());
 
                 const params = new URLSearchParams();
@@ -162,7 +165,7 @@ export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Ac
                         dispatch(setUserInfo(user))
                     })
                     .catch(error => {
-                        // Todo types
+                        console.log(error)
                         error.json().then((errorMessage: any) => {
                             dispatch(failureStationData(errorMessage))
                         })
@@ -181,7 +184,7 @@ export const requestMeasure = () => {
     }
 };
 
-export const successMeasure = (data: any, module: string, types: string[], timelapse: Timelapse) => {
+export const successMeasure = (data: any, module: string, types: string[], timelapse: Netatmo.timelapse) => {
     return {
         type: NetatmoActionTypes.MEASURE_SUCCESS,
         payload: data,
@@ -199,18 +202,18 @@ export const failureMeasure = (error: any) => {
     }
 };
 
-export const fetchMeasure = (device: string, module: string, types: string[], timelapse: Timelapse): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchMeasure = (device: string, module: string, types: string[], timelapse: Netatmo.timelapse): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if (getState().netatmo.measure_data.length === 0 ||
             (getState().netatmo.selected_types[0] !== types[0] ||
             getState().netatmo.selected_module !== module) ||
             getState().netatmo.selected_timelapse !== timelapse ||
-            moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > CALL_DELAY) {
+            moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > API_REFRESH_DELAY) {
             dispatch(requestMeasure());
 
             let date_begin: number;
-            let scale: ChartScales;
+            let scale: Netatmo.chart_scale;
 
             switch (timelapse) {
                 case "12h":
@@ -284,7 +287,7 @@ export const failureNRainMeasure = (error: any) => {
 export const fetchRainMeasure = (device: string, module: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
-        if (getState().netatmo.measure_rain_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > CALL_DELAY) {
+        if (getState().netatmo.measure_rain_data.length === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > API_REFRESH_DELAY) {
             dispatch(requestRainMeasure());
 
             const params = new URLSearchParams();
@@ -324,7 +327,7 @@ export const requestMeasures = (module: string) => {
     }
 };
 
-export const successMeasures = (data: any, module: string, timelapse: Timelapse) => {
+export const successMeasures = (data: any, module: string, timelapse: Netatmo.timelapse) => {
     return {
         type: NetatmoActionTypes.MEASURES_SUCCESS,
         payload: data,
@@ -341,7 +344,7 @@ export const failureMeasures = (error: any, module: string) => {
     }
 };
 
-export const fetchMeasures = (device: string, module: string, types: DataTypes[], timelapse: '12h'|'1d'|'1m', module_name: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchMeasures = (device: string, module: string, types: Netatmo.data_type[], timelapse: '12h'|'1d'|'1m', module_name: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if ((getState().netatmo.measure_station_data.length === 0 &&
@@ -349,11 +352,11 @@ export const fetchMeasures = (device: string, module: string, types: DataTypes[]
             getState().netatmo.measure_indoor_data.length === 0 &&
             getState().netatmo.measure_indoor_second_data.length === 0 &&
             getState().netatmo.measure_indoor_third_data.length === 0) ||
-            moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > CALL_DELAY) {
+            moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > API_REFRESH_DELAY) {
             dispatch(requestMeasures(module_name));
 
             let date_begin: number;
-            let scale: ChartScales;
+            let scale: Netatmo.chart_scale;
 
             switch (timelapse) {
                 case "12h":
@@ -398,7 +401,7 @@ export const fetchMeasures = (device: string, module: string, types: DataTypes[]
     }
 };
 
-export const onChangeSelectedType = (type: DataTypes, module: string) => {
+export const onChangeSelectedType = (type: Netatmo.data_type, module: string) => {
     return {
         type: NetatmoActionTypes.CHANGE_SELECTED_TYPE,
         payload: type,

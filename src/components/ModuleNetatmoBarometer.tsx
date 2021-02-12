@@ -5,7 +5,6 @@ import ModuleLayout from "../layouts/ModuleLayout";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
 import {Orientation} from "../store/application/types";
-import {Timelapse} from "../types/netatmo";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -13,7 +12,7 @@ interface IPropsFromState {
     pressure?: number
     pressure_unit: string
     device_id: string|undefined
-    selected_timelapse: Timelapse
+    selected_timelapse: Netatmo.timelapse
     pressure_ratio: number
     orientation: Orientation
 }

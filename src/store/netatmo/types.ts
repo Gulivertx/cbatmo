@@ -1,5 +1,4 @@
 import {INetatmoNAMain} from "../../models/NetatmoNAMain";
-import {DataTypes, Timelapse} from "../../types/netatmo";
 
 export enum NetatmoActionTypes {
     AUTH_REQUEST = '@@netatmo/AUTH_REQUEST',
@@ -57,8 +56,8 @@ export interface INetatmoState {
     readonly measure_data: []
     readonly measure_errors: any|undefined
     readonly selected_module: string
-    readonly selected_types: DataTypes[]
-    readonly selected_timelapse: Timelapse
+    readonly selected_types: Netatmo.data_type[]
+    readonly selected_timelapse: Netatmo.timelapse
 
     readonly loading_rain_measure: boolean
     readonly measure_rain_data: []
@@ -67,25 +66,25 @@ export interface INetatmoState {
     readonly loading_indoor_measure: boolean
     readonly measure_indoor_data: []
     readonly measure_indoor_errors: any|undefined
-    readonly selected_indoor_type: DataTypes
+    readonly selected_indoor_type: Netatmo.data_type
 
     readonly loading_indoor_second_measure: boolean
     readonly measure_indoor_second_data: []
     readonly measure_indoor_second_errors: any|undefined
-    readonly selected_indoor_second_type: DataTypes
+    readonly selected_indoor_second_type: Netatmo.data_type
 
     readonly loading_indoor_third_measure: boolean
     readonly measure_indoor_third_data: []
     readonly measure_indoor_third_errors: any|undefined
-    readonly selected_indoor_third_type: DataTypes
+    readonly selected_indoor_third_type: Netatmo.data_type
 
     readonly loading_outdoor_measure: boolean
     readonly measure_outdoor_data: []
     readonly measure_outdoor_errors: any|undefined
-    readonly selected_outdoor_type: DataTypes
+    readonly selected_outdoor_type: Netatmo.data_type
 
     readonly loading_station_measure: boolean
     readonly measure_station_data: []
     readonly measure_station_errors: any|undefined
-    readonly selected_station_type: DataTypes
+    readonly selected_station_type: Netatmo.data_type
 }

@@ -3,7 +3,6 @@ import { ThunkDispatch} from "redux-thunk";
 import { ApplicationState } from "../store";
 import ModuleNetatmoWind from "../components/ModuleNetatmoWind"
 import * as netatmoActions from "../store/netatmo/actions";
-import {Timelapse} from "../types/netatmo";
 
 const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     module_data: netatmo.station_data?.modules.WIND,
@@ -15,7 +14,7 @@ const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
-    fetchMeasure: (device: string, module: string, type: string[], timelapse: Timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse))
+    fetchMeasure: (device: string, module: string, type: string[], timelapse: Netatmo.timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse))
 });
 
 const ModuleNetatmoWindContainer = connect(

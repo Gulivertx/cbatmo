@@ -1,17 +1,16 @@
 import {INetatmoUserInformation} from "./NetatmoUserInformation";
-import {BatteryLevel, DataTypes, RadioLevel} from "../types/netatmo";
 
 export interface INetatmoNAModule3 {
     id: string
     type: string
     module_name: string
-    data_type: DataTypes[]
+    data_type: Netatmo.data_type[]
     reachable: boolean
     last_seen: number
     rf_status: number
-    radio: RadioLevel
+    radio: Netatmo.radio_level
     battery_vp: number
-    battery: BatteryLevel
+    battery: Netatmo.battery_level
     battery_percent: number
     data: IData|undefined
 }
@@ -27,13 +26,13 @@ class NetatmoNAModule3 implements INetatmoNAModule3 {
     id: string;
     type: string;
     module_name: string;
-    data_type: DataTypes[];
+    data_type: Netatmo.data_type[];
     reachable: boolean;
     last_seen: number;
     rf_status: number;
-    radio: RadioLevel;
+    radio: Netatmo.radio_level;
     battery_vp: number;
-    battery: BatteryLevel;
+    battery: Netatmo.battery_level;
     battery_percent: number;
     data: IData|undefined;
 

@@ -1,6 +1,5 @@
 import moment from "moment";
 import {Colors} from "@blueprintjs/core";
-import {DataTypes} from "../types/netatmo";
 
 export const momentWithLocale = (locale: string) => {
     switch (locale) {
@@ -23,7 +22,7 @@ export const momentWithLocale = (locale: string) => {
     return moment;
 };
 
-export const colorChooser = (type: DataTypes): string => {
+export const colorChooser = (type: Netatmo.data_type): string => {
     switch (type) {
         case 'Temperature':
             return Colors.GOLD5;

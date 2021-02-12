@@ -3,7 +3,16 @@ import NetatmoNAModule4, {INetatmoNAModule4} from "./NetatmoNAModule4";
 import NetatmoNAModule3, {INetatmoNAModule3} from "./NetatmoNAModule3";
 import NetatmoNAModule2, {INetatmoNAModule2} from "./NetatmoNAModule2";
 import NetatmoUserInformation, {INetatmoUserInformation} from "./NetatmoUserInformation";
-import {MODULE_TYPE, WifiLevel, DataTypes} from "../types/netatmo";
+
+enum MODULE_TYPE {
+    MAIN = 'NAMain',
+    INDOOR = 'NAModule4',
+    INDOOR_SECOND = 'NAModule4',
+    INDOOR_THIRD = 'NAModule4',
+    OUTDOOR = 'NAModule1',
+    RAIN = 'NAModule3',
+    WIND = 'NAModule2'
+}
 
 export interface INetatmoNAMain {
     id: string
@@ -11,10 +20,10 @@ export interface INetatmoNAMain {
     last_status_store: number
     module_name: string
     wifi_status: string
-    wifi: WifiLevel
+    wifi: Netatmo.wifi_level
     reachable: boolean
     station_name: string
-    data_type: DataTypes[]
+    data_type: Netatmo.data_type[]
     place: IPlace
     data: IData|undefined
     available_modules: IAvailableModules
@@ -76,10 +85,10 @@ class NetatmoNAMain implements INetatmoNAMain {
     last_status_store: number;
     module_name: string;
     wifi_status: string;
-    wifi: WifiLevel;
+    wifi: Netatmo.wifi_level;
     reachable: boolean;
     station_name: string;
-    data_type: DataTypes[];
+    data_type: Netatmo.data_type[];
     place: IPlace;
     data: IData|undefined;
     available_modules: IAvailableModules;
@@ -213,6 +222,8 @@ class NetatmoNAMain implements INetatmoNAMain {
 
         console.debug(this)
     }
+
+
 }
 
 export default NetatmoNAMain

@@ -6,7 +6,6 @@ import * as applicationActions from '../store/application/actions'
 import DashboardLayout from "./DashboardLayout";
 import { ApplicationState } from "../store";
 import {Orientation} from "../store/application/types";
-import {DataTypes} from "../types/netatmo";
 
 const mapStateToProps = ({ netatmo, application }: ApplicationState) => ({
     station_data: netatmo.station_data,
@@ -25,7 +24,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
     fetchOpenWeather: () => dispatch(openweatherActions.fetchOpenWeather()),
     fetchStationData: () => dispatch(netatmoActions.fetchStationData()),
     fetchMeasure: (device: string, module: string, types: string[], timelapse: '12h'|'1d'|'1m') => dispatch(netatmoActions.fetchMeasure(device, module, types, timelapse)),
-    fetchMeasures: (device: string, module: string, types: DataTypes[], timelapse: '12h'|'1d'|'1m', module_name: string) => dispatch(netatmoActions.fetchMeasures(device, module, types, timelapse, module_name)),
+    fetchMeasures: (device: string, module: string, types: Netatmo.data_type[], timelapse: '12h'|'1d'|'1m', module_name: string) => dispatch(netatmoActions.fetchMeasures(device, module, types, timelapse, module_name)),
     fetchRainMeasure: (device: string, module: string) => dispatch(netatmoActions.fetchRainMeasure(device, module)),
     setOrientation: (orientation: Orientation) => dispatch(applicationActions.setOrientation(orientation)),
 });

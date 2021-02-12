@@ -9,7 +9,6 @@
 import { Reducer } from "redux";
 import moment from 'moment';
 import { INetatmoState, NetatmoActionTypes } from "./types";
-import {DataTypes} from "../../types/netatmo";
 
 const initialState: INetatmoState = {
     client_id: '',
@@ -46,27 +45,27 @@ const initialState: INetatmoState = {
     loading_indoor_measure: false,
     measure_indoor_errors: undefined,
     measure_indoor_data: [],
-    selected_indoor_type: window.localStorage.getItem('selected_indoor_type') as DataTypes || 'Temperature',
+    selected_indoor_type: window.localStorage.getItem('selected_indoor_type') as Netatmo.data_type || 'Temperature',
 
     loading_indoor_second_measure: false,
     measure_indoor_second_errors: undefined,
     measure_indoor_second_data: [],
-    selected_indoor_second_type: window.localStorage.getItem('selected_indoor_second_type') as DataTypes || 'Temperature',
+    selected_indoor_second_type: window.localStorage.getItem('selected_indoor_second_type') as Netatmo.data_type || 'Temperature',
 
     loading_indoor_third_measure: false,
     measure_indoor_third_errors: undefined,
     measure_indoor_third_data: [],
-    selected_indoor_third_type: window.localStorage.getItem('selected_indoor_third_type') as DataTypes || 'Temperature',
+    selected_indoor_third_type: window.localStorage.getItem('selected_indoor_third_type') as Netatmo.data_type || 'Temperature',
 
     loading_outdoor_measure: false,
     measure_outdoor_errors: undefined,
     measure_outdoor_data: [],
-    selected_outdoor_type: window.localStorage.getItem('selected_outdoor_type') as DataTypes || 'Temperature',
+    selected_outdoor_type: window.localStorage.getItem('selected_outdoor_type') as Netatmo.data_type || 'Temperature',
 
     loading_station_measure: false,
     measure_station_errors: undefined,
     measure_station_data: [],
-    selected_station_type: window.localStorage.getItem('selected_station_type') as DataTypes || 'Temperature',
+    selected_station_type: window.localStorage.getItem('selected_station_type') as Netatmo.data_type || 'Temperature',
 };
 
 const reducer: Reducer<INetatmoState> = (state = initialState, action) => {

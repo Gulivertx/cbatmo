@@ -26,7 +26,6 @@ import batteryHigh from '../img/battery_high.svg';
 import batteryFull from '../img/battery_full.svg';
 import batteryMax from '../img/battery_max.svg';
 import {IIndoorModuleNames} from "../models/NetatmoNAMain";
-import {BatteryLevel, RadioLevel, WifiLevel} from "../types/netatmo";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -37,8 +36,8 @@ interface IPropsFromState {
     vertical_divider?: boolean
     position?: 'fixed-bottom'
     icon?: 'station'|'outdoor'|'indoor'|'rain'|'wind'
-    batteryLevel?: BatteryLevel
-    radioLevel?: RadioLevel
+    batteryLevel?: Netatmo.battery_level
+    radioLevel?: Netatmo.radio_level
     number_of_additional_modules?: number
     onChangeSelectedInsideModule?: (module: number) => void
     selected_indoor_module?: number
@@ -83,7 +82,7 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
         }
     }
 
-    const wifiIconChooser = (level: WifiLevel) => {
+    const wifiIconChooser = (level: Netatmo.wifi_level) => {
         switch (level) {
             case "1":
                 return wifiSignal1;
@@ -96,7 +95,7 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
         }
     }
 
-    const radioIconChooser = (level: RadioLevel) => {
+    const radioIconChooser = (level: Netatmo.radio_level) => {
         switch (level) {
             case "1":
                 return radioSignal1;
@@ -111,7 +110,7 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
         }
     }
 
-    const batteryIconChooser = (level: BatteryLevel) => {
+    const batteryIconChooser = (level: Netatmo.battery_level) => {
         switch (level) {
             case "very-low":
                 return batteryVeryLow;
@@ -193,17 +192,14 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
                             {
                                 props.icon !== 'station' ? (
                                     <Fragment>
-                                        {/*// @ts-ignore */}
-                                        <img src={batteryIconChooser(props.batteryLevel as BatteryLevel)} alt="Battery icon"
+                                        <img src={batteryIconChooser(props.batteryLevel as Netatmo.battery_level)} alt="Battery icon"
                                              style={{width: 18, height: 18, marginBottom: 0, marginTop: 0, paddingLeft: 0}}/>
-                                        {/*// @ts-ignore */}
-                                        <img src={radioIconChooser(props.radioLevel as RadioLevel)} alt="Radio icon"
+                                        <img src={radioIconChooser(props.radioLevel as Netatmo.radio_level)} alt="Radio icon"
                                              style={{width: 18, height: 18, marginBottom: 0, marginTop: 0, paddingLeft: 0}}/>
                                     </Fragment>
                                 ) : (
                                     <Fragment>
-                                        {/*// @ts-ignore */}
-                                        <img src={wifiIconChooser(props.radioLevel as WifiLevel)} alt="Wifi icon"
+                                        <img src={wifiIconChooser(props.radioLevel as Netatmo.wifi_level)} alt="Wifi icon"
                                              style={{width: 18, height: 18, marginBottom: 0, marginTop: 0, paddingLeft: 0}}/>
                                     </Fragment>
                                 )

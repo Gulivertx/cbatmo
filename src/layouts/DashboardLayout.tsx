@@ -5,20 +5,19 @@ import * as applicationActions from "../store/application/actions";
 import { ConnectedReduxProps } from "../store";
 import { INetatmoNAMain } from "../models/NetatmoNAMain";
 import {Orientation} from "../store/application/types";
-import {DataTypes, Timelapse} from "../types/netatmo";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     children: ReactNode
     station_data: INetatmoNAMain|undefined
     selected_module: string
-    selected_types: DataTypes[]
-    selected_station_type: DataTypes
-    selected_outdoor_type: DataTypes
-    selected_indoor_type: DataTypes
-    selected_indoor_second_type: DataTypes
-    selected_indoor_third_type: DataTypes
-    selected_timelapse: Timelapse
+    selected_types: Netatmo.data_type[]
+    selected_station_type: Netatmo.data_type
+    selected_outdoor_type: Netatmo.data_type
+    selected_indoor_type: Netatmo.data_type
+    selected_indoor_second_type: Netatmo.data_type
+    selected_indoor_third_type: Netatmo.data_type
+    selected_timelapse: Netatmo.timelapse
     mobile?: string
 }
 
@@ -78,19 +77,19 @@ class DashboardLayout extends React.Component<AllProps> {
 
     private _fetchNetatmoModulesMeasures = (): void => {
        if (!!this.props.mobile) {
-           this.props.fetchMeasures(this.props.station_data?.id as string, this.props.station_data?.id as string, this.props.station_data?.data_type as DataTypes[], '1d', 'station');
+           this.props.fetchMeasures(this.props.station_data?.id as string, this.props.station_data?.id as string, this.props.station_data?.data_type as Netatmo.data_type[], '1d', 'station');
 
            if (this.props.station_data?.available_modules.OUTDOOR) {
-               this.props.fetchMeasures(this.props.station_data?.id as string, this.props.station_data.modules.OUTDOOR?.id as string, this.props.station_data.modules.OUTDOOR?.data_type as DataTypes[], '1d', 'outdoor');
+               this.props.fetchMeasures(this.props.station_data?.id as string, this.props.station_data.modules.OUTDOOR?.id as string, this.props.station_data.modules.OUTDOOR?.data_type as Netatmo.data_type[], '1d', 'outdoor');
            }
            if (this.props.station_data?.available_modules.INDOOR) {
-               this.props.fetchMeasures(this.props.station_data?.id as string, this.props.station_data.modules.INDOOR?.id as string, this.props.station_data.modules.INDOOR?.data_type as DataTypes[], '1d', 'indoor');
+               this.props.fetchMeasures(this.props.station_data?.id as string, this.props.station_data.modules.INDOOR?.id as string, this.props.station_data.modules.INDOOR?.data_type as Netatmo.data_type[], '1d', 'indoor');
            }
            if (this.props.station_data?.available_modules.INDOOR_SECOND) {
-               this.props.fetchMeasures(this.props.station_data?.id as string, this.props.station_data.modules.INDOOR_SECOND?.id as string, this.props.station_data.modules.INDOOR_SECOND?.data_type as DataTypes[], '1d', 'indoor_second');
+               this.props.fetchMeasures(this.props.station_data?.id as string, this.props.station_data.modules.INDOOR_SECOND?.id as string, this.props.station_data.modules.INDOOR_SECOND?.data_type as Netatmo.data_type[], '1d', 'indoor_second');
            }
            if (this.props.station_data?.available_modules.INDOOR_THIRD) {
-               this.props.fetchMeasures(this.props.station_data?.id as string, this.props.station_data.modules.INDOOR_THIRD?.id as string, this.props.station_data.modules.INDOOR_THIRD?.data_type as DataTypes[], '1d', 'indoor_third');
+               this.props.fetchMeasures(this.props.station_data?.id as string, this.props.station_data.modules.INDOOR_THIRD?.id as string, this.props.station_data.modules.INDOOR_THIRD?.data_type as Netatmo.data_type[], '1d', 'indoor_third');
            }
        }
 

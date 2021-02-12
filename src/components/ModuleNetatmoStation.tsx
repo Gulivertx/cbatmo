@@ -9,16 +9,15 @@ import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
 import {Orientation} from "../store/application/types";
 import {colorChooser} from "../utils/tools";
-import {DataTypes, Timelapse} from "../types/netatmo";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     station_data: INetatmoNAMain|undefined
-    selected_timelapse: Timelapse
+    selected_timelapse: Netatmo.timelapse
     temperature_unit: string
     pressure_unit: string
     orientation: Orientation
-    selected_type: DataTypes
+    selected_type: Netatmo.data_type
     measure_data: []
 }
 
