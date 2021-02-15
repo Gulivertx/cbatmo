@@ -1,34 +1,15 @@
-import {module, type, trend, wind_unit, unit, pressure_unit, measure_timelapse, measure_type} from "../types";
+import {module, type, trend, wind_unit, unit, pressure_unit} from "../types";
 
 export interface ApiStationDataQuery {
     readonly device_id?: string
     readonly get_favorites?: boolean
 }
 
-export interface ApiStationDataResponse extends ApiStationDataBaseResponse {
+export interface ApiStationDataResponse {
     readonly body: {
         readonly devices: Device[]
         readonly user: User
     }
-}
-
-export interface ApiMeasureQuery {
-    readonly device_id: string
-    readonly module_id: string
-    readonly scale: measure_timelapse
-    readonly type: measure_type
-    readonly date_begin: number // Default is null
-    readonly date_end: number // Default is null
-    readonly limit?: number // Default is 1024
-    readonly optimize?: boolean // Default is true
-    readonly real_time?: boolean // Default is false. If scale different than max, timestamps are by default offset + scale/2. To get exact timestamps, use true.
-}
-
-export interface ApiMeasureResponse extends ApiStationDataBaseResponse {
-    readonly body: [] // Todo type
-}
-
-interface ApiStationDataBaseResponse {
     readonly status: string
     readonly time_exec: number
     readonly time_server: number

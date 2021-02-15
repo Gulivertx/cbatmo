@@ -7,21 +7,12 @@
  * NAModule4 = INDOOR module
  */
 import { Reducer } from "redux";
-import moment from 'moment';
 import { INetatmoState, NetatmoActionTypes } from "./types";
 
 const initialState: INetatmoState = {
-    client_id: '',
-    client_secret: '',
-    username: '',
-    password: '',
-
     loading_auth: false,
     loading_refresh_token: false,
     auth_errors: undefined,
-    access_token: '',
-    refresh_token: window.localStorage.getItem('NetatmoRefreshToken') || '',
-    access_token_expire_in: 0,
 
     loading_station_data: true,
     station_data_last_updated: 0,
@@ -83,13 +74,7 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
             return { ...state, loading_auth: true };
 
         case NetatmoActionTypes.AUTH_SUCCESS:
-            return { ...state,
-                loading_auth: false,
-                auth_errors: undefined,
-                access_token: action.payload.access_token,
-                refresh_token: action.payload.refresh_token,
-                access_token_expire_in: moment().unix() + action.payload.expire_in
-            };
+            return { ...state, loading_auth: false, auth_errors: undefined };
 
         case NetatmoActionTypes.AUTH_FAILURE:
             return { ...state, loading_auth: false, auth_errors: action.error };
@@ -99,13 +84,7 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
             return { ...state, loading_auth: true };
 
         case NetatmoActionTypes.REFRESH_TOKEN_SUCCESS:
-            return { ...state,
-                loading_auth: false,
-                auth_errors: undefined,
-                access_token: action.payload.access_token,
-                refresh_token: action.payload.refresh_token,
-                access_token_expire_in: moment().unix() + action.payload.expire_in
-            };
+            return { ...state, loading_auth: false, auth_errors: undefined };
 
         case NetatmoActionTypes.REFRESH_TOKEN_FAILURE:
             return { ...state, loading_auth: false, auth_errors: action.error };

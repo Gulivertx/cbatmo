@@ -32,17 +32,9 @@ export enum NetatmoActionTypes {
 
 // The complete state for the store
 export interface INetatmoState {
-    readonly client_id: string
-    readonly client_secret: string
-    readonly username: string
-    readonly password: string
-
     readonly loading_auth: boolean
     readonly loading_refresh_token: boolean
     readonly auth_errors: any|undefined
-    readonly access_token: string|null
-    readonly refresh_token: string|null
-    readonly access_token_expire_in: number
 
     readonly loading_station_data: boolean
     readonly station_data_last_updated: number

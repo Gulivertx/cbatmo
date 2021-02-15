@@ -7,10 +7,15 @@ import NetatmoNAMain from '../../models/NetatmoNAMain';
 import NetatmoUserInformation from "../../models/NetatmoUserInformation";
 import NetatmoChartsData from "../../models/NetatmoChartsData";
 import { NetatmoActionTypes } from "./types";
+import NetatmoClient from "../../apis/netatmo";
+import {ApiStationDataResponse} from "../../apis/netatmo/interfaces/ApiStationData";
+import {ApiTokenResponse} from "../../apis/netatmo/interfaces/ApiOAuth";
 
 // This is the delay before next API call to refresh data
 // Netatmo only refresh their API every 10 minutes so call less than 10 is not necessary
 const API_REFRESH_DELAY: number = 10;
+
+const netatmoClient = new NetatmoClient();
 
 export const requestAuth = () => {
     return {
@@ -18,10 +23,9 @@ export const requestAuth = () => {
     }
 };
 
-export const successAuth = (json: Netatmo.IApiAuthenticationResult) => {
+export const successAuth = () => {
     return {
         type: NetatmoActionTypes.AUTH_SUCCESS,
-        payload: json,
         receivedAt: Date.now()
     }
 };
@@ -37,32 +41,14 @@ export const fetchAuth = (username: string, password: string, secret: string): T
     return (dispatch, getState) => {
         dispatch(requestAuth());
 
-        const params = new URLSearchParams();
-        params.append('username', username);
-        params.append('password', password);
-        params.append('secret', secret);
-
-        return fetch('/netatmo-auth', {method: 'POST', body: params})
-            .then(response => {
-                if (!response.ok) throw response;
-                return response.json()
-            })
-            .then((json: Netatmo.IApiAuthenticationResult) => {
-                window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
-                window.localStorage.setItem('NetatmoExpireIn', (moment().unix() + json.expire_in).toString()); // Todo rename NetatmoExpireIn to NetatmoExpireAt
-                //window.localStorage.setItem('appIsConfigured', 'true');
-                dispatch(successAuth(json));
-                //dispatch(appConfigured(true));
-                console.log('Fetch station data')
+        return netatmoClient.auth(username, password, secret)
+            .then(() => {
+                dispatch(successAuth());
                 dispatch(fetchStationData());
             })
             .catch(error => {
-                // Todo types
-                error.json().then((errorMessage: any) => {
-                    dispatch(failureAuth(errorMessage))
-                })
-            });
-
+                dispatch(failureAuth(error))
+            })
     }
 };
 
@@ -72,10 +58,9 @@ export const requestRefreshToken = () => {
     }
 };
 
-export const successRefreshToken = (json: Netatmo.IApiRefreshTokenResult) => {
+export const successRefreshToken = () => {
     return {
         type: NetatmoActionTypes.REFRESH_TOKEN_SUCCESS,
-        payload: json,
         receivedAt: Date.now()
     }
 };
@@ -91,28 +76,14 @@ export const fetchRefreshToken = (): ThunkAction<void, ApplicationState, null, A
     return (dispatch, getState) => {
         dispatch(requestRefreshToken());
 
-        const current_refresh_token = window.localStorage.getItem('NetatmoRefreshToken');
-
-        const params = new URLSearchParams();
-        params.append('refresh_token', current_refresh_token ? current_refresh_token : '');
-
-        return fetch('/netatmo-refresh-token', {method: 'POST', body: params})
-            .then(response => {
-                if (!response.ok) throw response;
-                return response.json()
-            })
-            .then((json: Netatmo.IApiRefreshTokenResult) => {
-                window.localStorage.setItem('NetatmoRefreshToken', json.refresh_token);
-                window.localStorage.setItem('NetatmoExpireIn', (moment().unix() + json.expire_in).toString()); // Todo rename NetatmoExpireIn to NetatmoExpireAt
-                dispatch(successRefreshToken(json));
+        return netatmoClient.refreshToken()
+            .then(() => {
+                dispatch(successRefreshToken());
                 dispatch(fetchStationData());
             })
             .catch(error => {
-                console.log(error)
-                error.json().then((errorMessage: any) => {
-                    dispatch(failureRefreshToken(errorMessage))
-                })
-            });
+                dispatch(failureRefreshToken(error))
+            })
     }
 };
 
@@ -139,40 +110,22 @@ export const failureStationData = (error: any) => {
 
 export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
-        // If no access token or refresh token is soon expired
-        console.log('Here')
-        console.log(API_REFRESH_DELAY)
-        if (!getState().netatmo.access_token || moment.unix(Number(getState().netatmo.access_token_expire_in)).diff(moment(), 'minute') < API_REFRESH_DELAY) {
-            // Fetch a new access token from refresh token and then fetch station data
-            dispatch(fetchRefreshToken());
+        // Fetch new data only if last data stored is bigger than 10 minutes
+        if (getState().netatmo.station_data_last_updated === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > API_REFRESH_DELAY) {
+            dispatch(requestStationData());
+
+            return netatmoClient.fetchStationData()
+                .then(resp => {
+                    const data = new NetatmoNAMain(resp.body.devices[0], resp.body.user);
+                    const user = new NetatmoUserInformation(resp.body.user);
+                    dispatch(successStationData(data))
+                    dispatch(setUserInfo(user))
+                })
+                .catch(error => {
+                    dispatch(failureStationData(error))
+                })
         } else {
-            // Fetch new data only if last data stored is bigger than 10 minutes
-            if (getState().netatmo.station_data_last_updated === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > API_REFRESH_DELAY) {
-                dispatch(requestStationData());
-
-                const params = new URLSearchParams();
-                params.append('access_token', getState().netatmo.access_token as string);
-
-                return fetch('/netatmo-station-data', {method: 'POST', body: params})
-                    .then(response => {
-                        if (!response.ok) throw response;
-                        return response.json()
-                    })
-                    .then(json => {
-                        const data = new NetatmoNAMain(json.body.devices[0], json.body.user);
-                        const user = new NetatmoUserInformation(json.body.user);
-                        dispatch(successStationData(data))
-                        dispatch(setUserInfo(user))
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        error.json().then((errorMessage: any) => {
-                            dispatch(failureStationData(errorMessage))
-                        })
-                    });
-            } else {
-                console.debug('No new Netatmo station data to fetch')
-            }
+            console.debug('Netatmo data is up to date')
         }
     }
 };
@@ -233,7 +186,7 @@ export const fetchMeasure = (device: string, module: string, types: string[], ti
             const date_end = moment().unix();
 
             const params = new URLSearchParams();
-            params.append('access_token', getState().netatmo.access_token as string);
+            //params.append('access_token', getState().netatmo.access_token as string);
             params.append('device_id', device);
             params.append('module_id', module);
             params.append('scale', scale);
@@ -291,7 +244,7 @@ export const fetchRainMeasure = (device: string, module: string): ThunkAction<vo
             dispatch(requestRainMeasure());
 
             const params = new URLSearchParams();
-            params.append('access_token', getState().netatmo.access_token as string);
+            //params.append('access_token', getState().netatmo.access_token as string);
             params.append('device_id', device);
             params.append('module_id', module);
             params.append('scale', '1hour');
@@ -374,7 +327,7 @@ export const fetchMeasures = (device: string, module: string, types: Netatmo.dat
             }
 
             const params = new URLSearchParams();
-            params.append('access_token', getState().netatmo.access_token as string);
+            //params.append('access_token', getState().netatmo.access_token as string);
             params.append('device_id', device);
             params.append('module_id', module);
             params.append('scale', scale);

@@ -19,6 +19,7 @@
     "watch": "webpack --watch"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "body-parser": "^1.18.3",
     "body-scroll-lock": "^3.0.2",
     "compression": "^1.7.3",

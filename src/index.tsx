@@ -16,7 +16,7 @@ i18next
     .use(initReactI18next)
     .init({
         interpolation: { escapeValue: false },
-        debug: true,
+        debug: false,
         resources: {
             en: { common: common_en },
             fr: { common: common_fr },
