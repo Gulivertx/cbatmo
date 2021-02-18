@@ -12,7 +12,7 @@ import * as applicationActions from '../store/application/actions';
 import * as netatmoActions from "../store/netatmo/actions";
 import { ConnectedReduxProps } from '../store';
 import { IApplicationInfoState } from "../store/application/types";
-import { INetatmoUserInformation } from "../models/NetatmoUserInformation";
+import UserData from "../apis/netatmo/models/UserData";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -22,18 +22,17 @@ interface IPropsFromState {
     mobile?: string
     phone?: string
     tablet: string
-    user: INetatmoUserInformation
+    user: UserData
+    isConfigured: boolean
     station_data_errors: any
-    refresh_token: string|null
-    access_token: string|null
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
 interface IPropsFromDispatch extends WithTranslation {
     [key: string]: any
+    setIsStarting: typeof applicationActions.setIsStarting
     fetchAuth: typeof netatmoActions.fetchAuth
     fetchStationData: typeof netatmoActions.fetchStationData
-    appConfigured: typeof applicationActions.appConfigured
     t: i18next.TFunction
     i18n: i18n
 }
@@ -55,21 +54,12 @@ class AppStarting extends React.Component<AllProps, IState> {
     }
 
     public componentDidMount(): void {
-        if (this.props.refresh_token) {
+        if (this.props.isConfigured) {
             this.props.fetchStationData();
         }
     }
 
     public componentDidUpdate(prevProps: Readonly<AllProps>, prevState: Readonly<{}>, snapshot?: any): void {
-        if (prevProps.loading_station_data && prevProps.loading_station_data !== this.props.loading_station_data) {
-            if (!this.props.station_data_errors) {
-                this.context.addToast('tick-circle', this.props.t('notifications.configuration_success'), Intent.SUCCESS);
-                setTimeout(() => this.props.appConfigured(true), 2000);
-            } else {
-                this.context.addToast('error', this.props.t('notifications.configuration_error'), Intent.DANGER);
-            }
-        }
-
         // If the locale change we want to set the lang in localStorage and React app
         if (prevProps.user.lang !== this.props.user.lang && this.props.i18n.language !== this.props.user.lang) {
             console.debug('Change language to', this.props.user.lang);
@@ -87,12 +77,17 @@ class AppStarting extends React.Component<AllProps, IState> {
             return;
         }
 
-        // Todo use async and await with try and catch to handle error notification
-        this.props.fetchAuth(this.state.username, this.state.password, this.state.secret);
+        try {
+            await this.props.fetchAuth(this.state.username, this.state.password, this.state.secret);
+            //this.context.addToast('tick-circle', this.props.t('notifications.configuration_success'), Intent.SUCCESS);
+            //this.props.setIsStarting(false);
+        } catch (e) {
+            this.context.addToast('error', this.props.t('notifications.configuration_error') + '. ' + e.msg, Intent.DANGER);
+        }
     }
 
     public render() {
-        const { info, station_data_errors, refresh_token, mobile, loading_auth } = this.props;
+        const { info, station_data_errors, isConfigured, mobile, loading_auth } = this.props;
 
         return (
             <div className="starting-page-layout">
@@ -100,7 +95,7 @@ class AppStarting extends React.Component<AllProps, IState> {
                     <h1 className="title">{info?.name}</h1>
                     <h4 style={{ color: Colors.GRAY4 }}>{this.props.t('app_info.version')} {info?.version}</h4>
                     {
-                        refresh_token ? (
+                        isConfigured ? (
                             <>
                                 <div className="description">{this.props.t('app_info.description')}</div>
                                 <div className="loader">

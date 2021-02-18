@@ -13,15 +13,14 @@ const mapStateToProps =  ({ application, netatmo}: ApplicationState) => ({
     phone: application.phone,
     info: application.info,
     user: application.user,
-    station_data_errors: netatmo.station_data_errors,
-    refresh_token: netatmo.refresh_token,
-    access_token: netatmo.access_token,
+    isConfigured: application.isConfigured,
+    station_data_errors: netatmo.station_data_errors
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
+    setIsStarting: (value: boolean) => dispatch(applicationActions.setIsStarting(value)),
     fetchAuth: (username: string, password: string, secret: string) => dispatch(netatmoActions.fetchAuth(username, password, secret)),
-    fetchStationData: () => dispatch(netatmoActions.fetchStationData()),
-    appConfigured: (value: boolean) => dispatch(applicationActions.appConfigured(value))
+    fetchStationData: () => dispatch(netatmoActions.fetchStationData())
 });
 
 const AppStartingContainer = connect(

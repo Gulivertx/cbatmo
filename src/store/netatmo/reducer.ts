@@ -8,6 +8,7 @@
  */
 import { Reducer } from "redux";
 import { INetatmoState, NetatmoActionTypes } from "./types";
+import {measure_timelapse, type} from "../../apis/netatmo/types";
 
 const initialState: INetatmoState = {
     loading_auth: false,
@@ -15,10 +16,8 @@ const initialState: INetatmoState = {
     auth_errors: undefined,
 
     loading_station_data: true,
-    station_data_last_updated: 0,
     station_data_errors: undefined,
     station_data: undefined,
-    first_fetch: true,
 
     selected_indoor_module: 0,
 
@@ -27,36 +26,36 @@ const initialState: INetatmoState = {
     measure_data: [],
     selected_module: window.localStorage.getItem('selected_module') || '',
     selected_types: window.localStorage.getItem('selected_types') ? JSON.parse(window.localStorage.getItem('selected_types') as string) : ['Temperature'],
-    selected_timelapse: window.localStorage.getItem('selected_timelapse') as '12h'|'1d'|'1m' || '12h',
+    selected_timelapse: window.localStorage.getItem('selected_timelapse') as measure_timelapse || '1day',
 
     loading_rain_measure: false,
     measure_rain_errors: undefined,
     measure_rain_data: [],
 
-    loading_indoor_measure: false,
-    measure_indoor_errors: undefined,
-    measure_indoor_data: [],
-    selected_indoor_type: window.localStorage.getItem('selected_indoor_type') as Netatmo.data_type || 'Temperature',
+    loading_indoor1_measure: false,
+    measure_indoor1_errors: undefined,
+    measure_indoor1_data: [],
+    selected_indoor1_type: window.localStorage.getItem('selected_indoor_type') as type || 'Temperature',
 
-    loading_indoor_second_measure: false,
-    measure_indoor_second_errors: undefined,
-    measure_indoor_second_data: [],
-    selected_indoor_second_type: window.localStorage.getItem('selected_indoor_second_type') as Netatmo.data_type || 'Temperature',
+    loading_indoor2_measure: false,
+    measure_indoor2_errors: undefined,
+    measure_indoor2_data: [],
+    selected_indoor2_type: window.localStorage.getItem('selected_indoor_second_type') as type || 'Temperature',
 
-    loading_indoor_third_measure: false,
-    measure_indoor_third_errors: undefined,
-    measure_indoor_third_data: [],
-    selected_indoor_third_type: window.localStorage.getItem('selected_indoor_third_type') as Netatmo.data_type || 'Temperature',
+    loading_indoor3_measure: false,
+    measure_indoor3_errors: undefined,
+    measure_indoor3_data: [],
+    selected_indoor3_type: window.localStorage.getItem('selected_indoor_third_type') as type || 'Temperature',
 
     loading_outdoor_measure: false,
     measure_outdoor_errors: undefined,
     measure_outdoor_data: [],
-    selected_outdoor_type: window.localStorage.getItem('selected_outdoor_type') as Netatmo.data_type || 'Temperature',
+    selected_outdoor_type: window.localStorage.getItem('selected_outdoor_type') as type || 'Temperature',
 
     loading_station_measure: false,
     measure_station_errors: undefined,
     measure_station_data: [],
-    selected_station_type: window.localStorage.getItem('selected_station_type') as Netatmo.data_type || 'Temperature',
+    selected_station_type: window.localStorage.getItem('selected_station_type') as type || 'Temperature',
 };
 
 const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
@@ -97,10 +96,8 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
             return { ...state,
                 loading_station_data: false,
                 station_data: action.payload,
-                station_data_last_updated: action.receivedAt,
                 station_data_errors: undefined,
-                first_fetch: false,
-                selected_module: state.selected_module || action.payload.modules.OUTDOOR.id
+                //selected_module: state.selected_module || action.payload.modules.OUTDOOR.id
             };
 
         case NetatmoActionTypes.STATION_DATA_FAILURE:
@@ -198,11 +195,11 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
         case NetatmoActionTypes.MEASURES_FAILURE:
             switch (action.module) {
                 case 'indoor':
-                    return { ...state, loading_indoor_measure: false, measure_indoor_errors: action.error };
+                    return { ...state, loading_indoor1_measure: false, measure_indoor1_errors: action.error };
                 case 'indoor_second':
-                    return { ...state, loading_indoor_second_measure: false, measure_indoor_second_errors: action.error };
+                    return { ...state, loading_indoor2_measure: false, measure_indoor2_errors: action.error };
                 case 'indoor_third':
-                    return { ...state, loading_indoor_third_measure: false, measure_indoor_third_errors: action.error };
+                    return { ...state, loading_indoor3_measure: false, measure_indoor3_errors: action.error };
                 case 'outdoor':
                     return { ...state, loading_outdoor_measure: false, measure_outdoor_errors: action.error };
                 case 'station':

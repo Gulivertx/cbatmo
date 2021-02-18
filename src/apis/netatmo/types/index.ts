@@ -115,3 +115,7 @@ export type measure_type = measure_types.temperature|measure_types.co2|measure_t
     measure_types.min_hum|measure_types.max_hum|measure_types.min_pressure|measure_types.max_pressure|measure_types.min_noise|measure_types.max_noise|
     measure_types.sum_rain|measure_types.date_max_gust|measure_types.date_max_hum|measure_types.date_min_pressure|measure_types.date_max_pressure|measure_types.date_min_noise|
     measure_types.date_max_noise|measure_types.date_min_co2|measure_types.date_max_co2
+
+export type wifi_level = 'low'|'medium'|'high'|'full';
+export type radio_level = 'low'|'medium'|'high'|'full'|'max';
+export type battery_level = 'very-low'|'low'|'medium'|'high'|'full'|'max';

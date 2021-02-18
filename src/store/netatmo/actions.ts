@@ -2,14 +2,14 @@ import { Action } from 'redux'
 import { ApplicationState } from '../index'
 import { ThunkAction } from 'redux-thunk'
 import moment from 'moment';
-import { setUserInfo } from "../application/actions";
+import { setUserInfo, setIsStarting } from "../application/actions";
 import NetatmoNAMain from '../../models/NetatmoNAMain';
-import NetatmoUserInformation from "../../models/NetatmoUserInformation";
 import NetatmoChartsData from "../../models/NetatmoChartsData";
 import { NetatmoActionTypes } from "./types";
 import NetatmoClient from "../../apis/netatmo";
 import {ApiStationDataResponse} from "../../apis/netatmo/interfaces/ApiStationData";
 import {ApiTokenResponse} from "../../apis/netatmo/interfaces/ApiOAuth";
+import MainModuleData from "../../apis/netatmo/models/MainModuleData";
 
 // This is the delay before next API call to refresh data
 // Netatmo only refresh their API every 10 minutes so call less than 10 is not necessary
@@ -47,7 +47,8 @@ export const fetchAuth = (username: string, password: string, secret: string): T
                 dispatch(fetchStationData());
             })
             .catch(error => {
-                dispatch(failureAuth(error))
+                dispatch(failureAuth(error));
+                throw error;
             })
     }
 };
@@ -93,7 +94,7 @@ export const requestStationData = () => {
     }
 };
 
-export const successStationData = (json: any) => {
+export const successStationData = (json: MainModuleData) => {
     return {
         type: NetatmoActionTypes.STATION_DATA_SUCCESS,
         payload: json,
@@ -110,23 +111,21 @@ export const failureStationData = (error: any) => {
 
 export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
-        // Fetch new data only if last data stored is bigger than 10 minutes
-        if (getState().netatmo.station_data_last_updated === 0 || moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > API_REFRESH_DELAY) {
-            dispatch(requestStationData());
+        dispatch(requestStationData());
 
-            return netatmoClient.fetchStationData()
-                .then(resp => {
-                    const data = new NetatmoNAMain(resp.body.devices[0], resp.body.user);
-                    const user = new NetatmoUserInformation(resp.body.user);
-                    dispatch(successStationData(data))
-                    dispatch(setUserInfo(user))
-                })
-                .catch(error => {
-                    dispatch(failureStationData(error))
-                })
-        } else {
-            console.debug('Netatmo data is up to date')
-        }
+        return netatmoClient.fetchStationData()
+            .then(resp => {
+                //const data = new NetatmoNAMain(resp.body.devices[0], resp.body.user);
+                const userData = netatmoClient.getUserInformation();
+                const mainModule = netatmoClient.getMainModuleData(0, userData); // Todo get 0 from redux state, this is the selected station from UI
+                dispatch(successStationData(mainModule))
+                dispatch(setUserInfo(userData))
+                dispatch(setIsStarting(false))
+            })
+            .catch(error => {
+                console.log(error)
+                dispatch(failureStationData(error))
+            })
     }
 };
 

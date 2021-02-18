@@ -2,7 +2,7 @@ import NetatmoNAModule1, {INetatmoNAModule1} from "./NetatmoNAModule1";
 import NetatmoNAModule4, {INetatmoNAModule4} from "./NetatmoNAModule4";
 import NetatmoNAModule3, {INetatmoNAModule3} from "./NetatmoNAModule3";
 import NetatmoNAModule2, {INetatmoNAModule2} from "./NetatmoNAModule2";
-import NetatmoUserInformation, {INetatmoUserInformation} from "./NetatmoUserInformation";
+import UserData, {IUserData} from "../apis/netatmo/models/UserData";
 
 enum MODULE_TYPE {
     MAIN = 'NAMain',
@@ -98,7 +98,7 @@ class NetatmoNAMain implements INetatmoNAMain {
 
     constructor(data: any, user: any) {
         // We need user information object to get conversion ratio
-        const userInfo: INetatmoUserInformation = new NetatmoUserInformation(user);
+        const userInfo: IUserData = new UserData(user);
 
         this.id = data._id;
         this.type = data.type;

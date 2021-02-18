@@ -28,6 +28,7 @@ import { Orientation } from "../store/application/types";
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
     isConfigured: boolean
+    isStarting: boolean
     orientation?: Orientation
     mobile?: string
     phone?: string
@@ -66,7 +67,7 @@ class App extends React.Component<AllProps> {
         return (
             <MainLayout>
                 {
-                    this.props.isConfigured ? (
+                    !this.props.isStarting ? (
                         <DashboardLayoutContainer>
                             {
                                 this._layoutChooser(mobile, phone, tablet, orientation, available_modules, number_of_additional_modules)

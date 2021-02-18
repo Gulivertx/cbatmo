@@ -79,11 +79,13 @@ const handleRequestPromise = (res, next, options) => {
             return res.json(result)
         })
         .catch(error => {
-            console.log(error)
             // If no error we still want to check the status code
             if (error.statusCode !== 500) {
-                const exception = error.error;
-                return res.status(error.statusCode).json({status: 'error', msg: exception.message});
+                if (error.message) {
+                    return res.status(error.statusCode).json({status: 'error', msg: error.error.error});
+                } else {
+                    return res.status(error.statusCode).json({status: 'error', msg: error});
+                }
             }
             return next(error);
         });

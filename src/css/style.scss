@@ -14,6 +14,11 @@
   url('digital-7 (mono).svg#Digital-7') format('svg');
 }
 
+@font-face {
+  font-family: 'Noto';
+  src: url('NotoSans-Regular.ttf') format('truetype');
+}
+
 body {
   width: 100%;
   height: 100%;
@@ -26,10 +31,16 @@ body {
   line-height: 1;
   background-color: $dark;
   position: absolute;
+  position: absolute;
   background-image: url('../img/world_map_800x480.png');
   //background-repeat: no-repeat;
   background-size: cover;
   //z-index: 1;
+}
+
+input[type="email"], input[type="password"], input[type="text"]
+{
+  font-family: 'Noto',sans-serif;
 }
 
 /** Module container **/

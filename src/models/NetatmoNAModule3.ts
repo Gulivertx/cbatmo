@@ -1,4 +1,4 @@
-import {INetatmoUserInformation} from "./NetatmoUserInformation";
+import {IUserData} from "../apis/netatmo/models/UserData";
 
 export interface INetatmoNAModule3 {
     id: string
@@ -36,7 +36,7 @@ class NetatmoNAModule3 implements INetatmoNAModule3 {
     battery_percent: number;
     data: IData|undefined;
 
-    constructor(data: any, userInfo: INetatmoUserInformation) {
+    constructor(data: any, userInfo: IUserData) {
         this.id = data._id;
         this.type = data.type;
         this.module_name = data.module_name || 'Rain'; // Default name in case of no module name given

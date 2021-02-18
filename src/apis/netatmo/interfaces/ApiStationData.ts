@@ -15,7 +15,7 @@ export interface ApiStationDataResponse {
     readonly time_server: number
 }
 
-interface Device extends BaseModule {
+export interface Device extends BaseModule {
     readonly co2_calibrating: boolean
     readonly date_setup: number
     readonly home_id: string
@@ -27,18 +27,18 @@ interface Device extends BaseModule {
     readonly modules: Module[]
 }
 
-interface BaseModule {
+export interface BaseModule {
     readonly _id: string
     readonly type: module
     readonly module_name: string
-    readonly reachable: true
+    readonly reachable: boolean
     readonly firmware: number
     readonly last_setup: number
     readonly data_type: type[]
     readonly dashboard_data: DashboardData
 }
 
-interface Module extends BaseModule {
+export interface Module extends BaseModule {
     readonly battery_percent: number
     readonly battery_vp: number
     readonly last_message: number
@@ -46,13 +46,14 @@ interface Module extends BaseModule {
     readonly rf_status: number
 }
 
-interface DashboardData {
+export interface DashboardData {
     readonly time_utc: number
     readonly AbsolutePressure?: number
     readonly CO2?: number
     readonly Humidity?: number
     readonly Noise?: number
     readonly Temperature?: number
+    readonly Pressure?: number
     readonly date_max_temp?: number
     readonly date_min_temp?: number
     readonly max_temp?: number
@@ -70,7 +71,7 @@ interface DashboardData {
     readonly max_wind_str?: number
 }
 
-interface Place {
+export interface Place {
     readonly altitude: number
     readonly city: number
     readonly country: number
@@ -78,12 +79,12 @@ interface Place {
     readonly timezone: number
 }
 
-interface User {
+export interface User {
     readonly administrative: Administrative
     readonly mail: string
 }
 
-interface Administrative {
+export interface Administrative {
     readonly feel_like_algo: number
     readonly lang: string
     readonly reg_locale: string

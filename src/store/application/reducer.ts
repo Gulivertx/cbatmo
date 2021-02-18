@@ -9,7 +9,8 @@ const initialState: IApplicationState = {
     tablet: md.tablet(),
     mobile: md.mobile(),
     orientation: 'landscape',
-    isConfigured: false,
+    isConfigured: !!window.localStorage.getItem('NetatmoRefreshToken'),
+    isStarting: true,
     info: {
         name: '',
         description: '',
@@ -24,13 +25,12 @@ const initialState: IApplicationState = {
         unit: '',
         temperature_unit: '',
         distance_unit: '',
-        windunit: '',
+        wind_unit: '',
         temperature_ratio: '',
         pressure_ratio: 1,
         wind_ratio: 1,
         rain_ratio: 1
-    },
-    loading: true
+    }
 };
 
 const reducer: Reducer<IApplicationState> = (state = initialState, action) => {
@@ -43,8 +43,8 @@ const reducer: Reducer<IApplicationState> = (state = initialState, action) => {
     }
 
     switch (action.type) {
-        case ApplicationActionTypes.APP_CONFIGURED:
-            return { ...state, isConfigured: action.payload };
+        case ApplicationActionTypes.SET_IS_STARTING:
+            return { ...state, isStarting: action.payload };
 
         /** SET user info from Netatmo API **/
         case ApplicationActionTypes.USER_INFO:

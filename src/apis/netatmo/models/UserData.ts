@@ -1,55 +1,43 @@
-/**
- * unit : 0 -> metric system, 1 -> imperial system
- * windunit: 0 -> kph, 1 -> mph, 2 -> ms, 3 -> beaufort, 4 -> knot
- * pressureunit: 0 -> mbar, 1 -> inHg, 2 -> mmHg
- * lang: user locale
- * reg_locale: user regional preferences (used for displaying date)
- * feel_like: algorithm used to compute feel like temperature, 0 -> humidex, 1 -> heat-index
- */
+import {Administrative, User} from "../interfaces/ApiStationData";
 
-export interface INetatmoUserInformation {
-    mail: string
-    lang: string
-    locale: string
-    pressure_unit: string
-    unit: string
-    temperature_unit: string
-    distance_unit: string
-    windunit: string
-    temperature_ratio: string
-    wind_ratio: number
-    pressure_ratio: number
-    rain_ratio: number
-}
+class UserData {
+    public mail: string
+    public locale: string
+    public lang!: string
+    public pressure_unit!: string
+    public unit!: string
+    public temperature_unit!: string
+    public distance_unit!: string
+    public wind_unit!: string
+    public temperature_ratio!: string
+    public wind_ratio!: number
+    public pressure_ratio!: number
+    public rain_ratio!: number
 
-
-class NetatmoUserInformation implements INetatmoUserInformation{
-    mail: string
-    lang: string
-    locale: string
-    pressure_unit: string
-    unit: string
-    temperature_unit: string
-    distance_unit: string
-    windunit: string
-    temperature_ratio: string
-    wind_ratio: number
-    pressure_ratio: number
-    rain_ratio: number
-
-    constructor(data: any) {
+    constructor(data: User) {
         this.mail = data.mail;
         this.locale = data.administrative.reg_locale;
+        this.setUserLanguage(data.administrative);
+        this.setUnits(data.administrative);
 
-        if (data.administrative.lang.includes('fr')) {
-            this.lang = 'fr';
-        } else if (data.administrative.lang.includes('de')) {
-            this.lang = 'de';
-        } else {
-            this.lang = 'en';
+        console.debug(this)
+    }
+
+    private setUserLanguage = (administrative: Administrative): void => {
+        console.log(administrative.lang.substr(0, 2))
+        switch (administrative.lang.substr(0, 2)) {
+            case 'fr':
+            case 'de':
+                this.lang = administrative.lang.substr(0, 2);
+                break;
+            default:
+                this.lang = 'en';
+                break;
         }
+    }
 
-        switch (data.administrative.pressureunit) {
+    private setUnits = (administrative: Administrative): void => {
+        switch (administrative.pressureunit) {
             case 0:
                 this.pressure_unit = 'mbar';
                 this.pressure_ratio = 1;
@@ -68,7 +56,7 @@ class NetatmoUserInformation implements INetatmoUserInformation{
                 break;
         }
 
-        switch (data.administrative.unit) {
+        switch (administrative.unit) {
             case 0:
                 this.unit = 'si';
                 this.temperature_unit = 'C';
@@ -92,53 +80,34 @@ class NetatmoUserInformation implements INetatmoUserInformation{
                 break;
         }
 
-        switch (data.administrative.windunit) {
+        switch (administrative.windunit) {
             case 0:
-                this.windunit = 'km/h';
+                this.wind_unit = 'km/h';
                 this.wind_ratio = 1;
                 break;
             case 1:
-                this.windunit = 'mp/h';
+                this.wind_unit = 'mp/h';
                 this.wind_ratio = 0.621371;
                 break;
             case 2:
-                this.windunit = 'ms';
+                this.wind_unit = 'ms';
                 this.wind_ratio = 0.2777778;
                 break;
             case 3:
-                this.windunit = 'beaufort';
+                this.wind_unit = 'beaufort';
                 this.wind_ratio = 1; // TODO
                 // Currently not supported : https://www.meteosuisse.admin.ch/content/dam/meteoswiss/fr/Wetter/Prognosen/Wetterbegriffe/Doc/wetter-tabelle-force-des-vents.pdf
                 break;
             case 4:
-                this.windunit = 'kts';
+                this.wind_unit = 'kts';
                 this.wind_ratio = 0.5399568;
                 break;
             default:
-                this.windunit = 'km/h';
+                this.wind_unit = 'km/h';
                 this.wind_ratio = 1;
                 break;
         }
-
-
-        console.debug(this)
-    }
-
-    public getTemperatureRatio = (): string => {
-        return this.temperature_ratio
-    }
-
-    public getWindRatio = (): number => {
-        return this.wind_ratio
-    }
-
-    public getPressureRatio = (): number => {
-        return this.pressure_ratio
-    }
-
-    public getRainRatio = (): number => {
-        return this.pressure_ratio
     }
 }
 
-export default NetatmoUserInformation
+export default UserData

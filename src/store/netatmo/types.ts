@@ -1,4 +1,5 @@
-import {INetatmoNAMain} from "../../models/NetatmoNAMain";
+import MainModuleData from "../../apis/netatmo/models/MainModuleData";
+import {measure_timelapse, type} from "../../apis/netatmo/types";
 
 export enum NetatmoActionTypes {
     AUTH_REQUEST = '@@netatmo/AUTH_REQUEST',
@@ -34,49 +35,47 @@ export enum NetatmoActionTypes {
 export interface INetatmoState {
     readonly loading_auth: boolean
     readonly loading_refresh_token: boolean
-    readonly auth_errors: any|undefined
+    readonly auth_errors: any
 
     readonly loading_station_data: boolean
-    readonly station_data_last_updated: number
     readonly station_data_errors: any
-    readonly station_data: INetatmoNAMain|undefined
-    readonly first_fetch: boolean
+    readonly station_data: MainModuleData|undefined
 
     readonly selected_indoor_module: 0|1|2
 
     readonly loading_measure: boolean
     readonly measure_data: []
-    readonly measure_errors: any|undefined
+    readonly measure_errors: any
     readonly selected_module: string
-    readonly selected_types: Netatmo.data_type[]
-    readonly selected_timelapse: Netatmo.timelapse
+    readonly selected_types: type[]
+    readonly selected_timelapse: measure_timelapse
 
     readonly loading_rain_measure: boolean
     readonly measure_rain_data: []
     readonly measure_rain_errors: any|undefined
 
-    readonly loading_indoor_measure: boolean
-    readonly measure_indoor_data: []
-    readonly measure_indoor_errors: any|undefined
-    readonly selected_indoor_type: Netatmo.data_type
+    readonly loading_indoor1_measure: boolean
+    readonly measure_indoor1_data: []
+    readonly measure_indoor1_errors: any|undefined
+    readonly selected_indoor1_type: type
 
-    readonly loading_indoor_second_measure: boolean
-    readonly measure_indoor_second_data: []
-    readonly measure_indoor_second_errors: any|undefined
-    readonly selected_indoor_second_type: Netatmo.data_type
+    readonly loading_indoor2_measure: boolean
+    readonly measure_indoor2_data: []
+    readonly measure_indoor2_errors: any|undefined
+    readonly selected_indoor2_type: type
 
-    readonly loading_indoor_third_measure: boolean
-    readonly measure_indoor_third_data: []
-    readonly measure_indoor_third_errors: any|undefined
-    readonly selected_indoor_third_type: Netatmo.data_type
+    readonly loading_indoor3_measure: boolean
+    readonly measure_indoor3_data: []
+    readonly measure_indoor3_errors: any|undefined
+    readonly selected_indoor3_type: type
 
     readonly loading_outdoor_measure: boolean
     readonly measure_outdoor_data: []
     readonly measure_outdoor_errors: any|undefined
-    readonly selected_outdoor_type: Netatmo.data_type
+    readonly selected_outdoor_type: type
 
     readonly loading_station_measure: boolean
     readonly measure_station_data: []
     readonly measure_station_errors: any|undefined
-    readonly selected_station_type: Netatmo.data_type
+    readonly selected_station_type: type
 }

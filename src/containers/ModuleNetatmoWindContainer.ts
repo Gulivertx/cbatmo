@@ -7,7 +7,7 @@ import * as netatmoActions from "../store/netatmo/actions";
 const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     module_data: netatmo.station_data?.modules.WIND,
     device_id: netatmo.station_data?.id,
-    unit: application.user.windunit,
+    unit: application.user.wind_unit,
     selected_timelapse: netatmo.selected_timelapse,
     wind_ratio: application.user.wind_ratio,
     orientation: application.orientation,

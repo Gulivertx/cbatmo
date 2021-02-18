@@ -2,6 +2,8 @@ import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from "axios";
 import moment from "moment";
 import {ApiTokenResponse} from "./interfaces/ApiOAuth";
 import {ApiStationDataResponse} from "./interfaces/ApiStationData";
+import UserData from "./models/UserData";
+import MainModuleData from "./models/MainModuleData";
 
 const API_OAUTH_TOKEN: string = '/netatmo-auth';
 const API_REFRESH_TOKEN: string = '/netatmo-refresh-token';
@@ -18,10 +20,12 @@ class NetatmoClient {
     private refresh_token!: string;
     private expires_at!: number;
 
+    private station_data!: ApiStationDataResponse;
+
     public constructor() {
         this.httpClient = axios.create();
 
-        const refresh_token = window.localStorage.getItem('NetatmoRefreshToken')
+        const refresh_token = window.localStorage.getItem('NetatmoRefreshToken');
         if (null !== refresh_token) {
             this.refresh_token = refresh_token;
         }
@@ -45,6 +49,7 @@ class NetatmoClient {
     }
 
     public refreshToken = async (): Promise<void> => {
+        // Only refresh the access token if the valid time is expired or less than 10 minutes
         if (!this.access_token || moment.unix(this.expires_at).diff(moment(), 'minute') < 10) {
             try {
                 const response = await this.httpClient.post<ApiTokenResponse>(
@@ -63,20 +68,25 @@ class NetatmoClient {
         }
     }
 
-    public fetchStationData = async (): Promise<ApiStationDataResponse> => {
-        await this.refreshToken();
+    public fetchStationData = async (): Promise<void> => {
+        // Only fetch new station data if the last data fetched was did more than 10 minutes
+        if (this.station_data === undefined || moment().diff(moment.unix(Number(this.station_data.time_server)), 'minute') > API_REFRESH_DELAY) {
+            await this.refreshToken();
 
-        try {
-            const response = await this.httpClient.post<ApiStationDataResponse>(
-                API_FETCH_STATION_DATA,
-                {
-                    'access_token': this.access_token
-                }
-            );
+            try {
+                const response = await this.httpClient.post<ApiStationDataResponse>(
+                    API_FETCH_STATION_DATA,
+                    {
+                        'access_token': this.access_token
+                    }
+                );
 
-            return response.data;
-        } catch (error) {
-            throw this.handleFetchError(error);
+                this.station_data = response.data;
+            } catch (error) {
+                throw this.handleFetchError(error);
+            }
+        } else {
+            console.debug('Station data is up to date.')
         }
     }
 
@@ -122,6 +132,14 @@ class NetatmoClient {
         }
 
         return errorResponse;
+    }
+
+    public getUserInformation = (): UserData => {
+        return new UserData(this.station_data.body.user);
+    }
+
+    public getMainModuleData = (deviceIndex: number, userData: UserData): MainModuleData => {
+        return new MainModuleData(this.station_data.body.devices[deviceIndex], userData);
     }
 }
 

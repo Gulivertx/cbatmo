@@ -1,15 +1,15 @@
 import {ApplicationActionTypes, Orientation} from './types'
-import {INetatmoUserInformation} from "../../models/NetatmoUserInformation";
+import {IUserData} from "../../apis/netatmo/models/UserData";
 
 /** Application actions **/
-export const appConfigured = (value: boolean) => {
+export const setIsStarting = (value: boolean) => {
     return {
-        type: ApplicationActionTypes.APP_CONFIGURED,
+        type: ApplicationActionTypes.SET_IS_STARTING,
         payload: value
     }
 };
 
-export const setUserInfo = (user: INetatmoUserInformation) => {
+export const setUserInfo = (user: IUserData) => {
     return {
         type: ApplicationActionTypes.USER_INFO,
         payload: user

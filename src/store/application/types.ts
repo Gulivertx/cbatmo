@@ -1,9 +1,9 @@
-import {INetatmoUserInformation} from "../../models/NetatmoUserInformation";
+import {IUserData} from "../../apis/netatmo/models/UserData";
 
 export enum ApplicationActionTypes {
-    APP_CONFIGURED = '@@application/APP_CONFIGURED',
-    USER_INFO = '@@application/USER_INFO',
-    DEVICE_ORIENTATION = '@@application/DEVICE_ORIENTATION',
+    SET_IS_STARTING = '@@APP/SET_IS_STARTING',
+    USER_INFO = '@@APP/USER_INFO',
+    DEVICE_ORIENTATION = '@@APP/DEVICE_ORIENTATION',
 }
 
 export type Orientation = 'portrait' | 'landscape';
@@ -22,7 +22,7 @@ export interface IApplicationState {
     readonly mobile?: string
     readonly orientation?: Orientation
     readonly isConfigured: boolean
+    readonly isStarting: boolean
     readonly info: IApplicationInfoState
-    readonly user: INetatmoUserInformation
-    readonly loading: boolean
+    readonly user: IUserData
 }
