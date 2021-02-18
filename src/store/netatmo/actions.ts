@@ -1,15 +1,15 @@
 import { Action } from 'redux'
-import { ApplicationState } from '../index'
+import {ApplicationState, AppThunk} from '../index'
 import { ThunkAction } from 'redux-thunk'
 import moment from 'moment';
 import { setUserInfo, setIsStarting } from "../application/actions";
-import NetatmoNAMain from '../../models/NetatmoNAMain';
 import NetatmoChartsData from "../../models/NetatmoChartsData";
 import { NetatmoActionTypes } from "./types";
 import NetatmoClient from "../../apis/netatmo";
 import {ApiStationDataResponse} from "../../apis/netatmo/interfaces/ApiStationData";
 import {ApiTokenResponse} from "../../apis/netatmo/interfaces/ApiOAuth";
-import MainModuleData from "../../apis/netatmo/models/MainModuleData";
+import StationData from "../../apis/netatmo/models/StationData";
+import {measure_timelapse} from "../../apis/netatmo/types";
 
 // This is the delay before next API call to refresh data
 // Netatmo only refresh their API every 10 minutes so call less than 10 is not necessary
@@ -37,20 +37,18 @@ export const failureAuth = (error: any) => {
     }
 };
 
-export const fetchAuth = (username: string, password: string, secret: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
-    return (dispatch, getState) => {
-        dispatch(requestAuth());
+export const fetchAuth = (username: string, password: string, secret: string): AppThunk => async (dispatch, getState) => {
+    dispatch(requestAuth());
 
-        return netatmoClient.auth(username, password, secret)
-            .then(() => {
-                dispatch(successAuth());
-                dispatch(fetchStationData());
-            })
-            .catch(error => {
-                dispatch(failureAuth(error));
-                throw error;
-            })
-    }
+    return netatmoClient.auth(username, password, secret)
+        .then(() => {
+            dispatch(successAuth());
+            dispatch(fetchStationData());
+        })
+        .catch(error => {
+            dispatch(failureAuth(error));
+            throw error;
+        })
 };
 
 export const requestRefreshToken = () => {
@@ -73,19 +71,17 @@ export const failureRefreshToken = (error: any) => {
     }
 };
 
-export const fetchRefreshToken = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
-    return (dispatch, getState) => {
-        dispatch(requestRefreshToken());
+export const fetchRefreshToken = (): AppThunk => async (dispatch, getState) => {
+    dispatch(requestRefreshToken());
 
-        return netatmoClient.refreshToken()
-            .then(() => {
-                dispatch(successRefreshToken());
-                dispatch(fetchStationData());
-            })
-            .catch(error => {
-                dispatch(failureRefreshToken(error))
-            })
-    }
+    return netatmoClient.refreshToken()
+        .then(() => {
+            dispatch(successRefreshToken());
+            dispatch(fetchStationData());
+        })
+        .catch(error => {
+            dispatch(failureRefreshToken(error))
+        })
 };
 
 export const requestStationData = () => {
@@ -94,10 +90,10 @@ export const requestStationData = () => {
     }
 };
 
-export const successStationData = (json: MainModuleData) => {
+export const successStationData = (mainModule: StationData) => {
     return {
         type: NetatmoActionTypes.STATION_DATA_SUCCESS,
-        payload: json,
+        mainModule: mainModule,
         receivedAt: Date.now()
     }
 };
@@ -109,24 +105,23 @@ export const failureStationData = (error: any) => {
     }
 };
 
-export const fetchStationData = (): ThunkAction<void, ApplicationState, null, Action<string>> => {
-    return (dispatch, getState) => {
-        dispatch(requestStationData());
+export const fetchStationData = (): AppThunk => async (dispatch, getState) => {
+    dispatch(requestStationData());
 
-        return netatmoClient.fetchStationData()
-            .then(resp => {
-                //const data = new NetatmoNAMain(resp.body.devices[0], resp.body.user);
+    return netatmoClient.fetchStationData()
+        .then(resp => {
+            if (resp) {
                 const userData = netatmoClient.getUserInformation();
-                const mainModule = netatmoClient.getMainModuleData(0, userData); // Todo get 0 from redux state, this is the selected station from UI
-                dispatch(successStationData(mainModule))
+                const stationData = netatmoClient.getStationData(0, userData); // Todo get 0 from redux state, this is the selected station from UI
+                dispatch(successStationData(stationData))
                 dispatch(setUserInfo(userData))
                 dispatch(setIsStarting(false))
-            })
-            .catch(error => {
-                console.log(error)
-                dispatch(failureStationData(error))
-            })
-    }
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            dispatch(failureStationData(error))
+        })
 };
 
 
@@ -154,7 +149,7 @@ export const failureMeasure = (error: any) => {
     }
 };
 
-export const fetchMeasure = (device: string, module: string, types: string[], timelapse: Netatmo.timelapse): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchMeasure = (device: string, module: string, types: string[], timelapse: Netatmo.timelapse = '12h'): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if (getState().netatmo.measure_data.length === 0 ||
@@ -165,7 +160,7 @@ export const fetchMeasure = (device: string, module: string, types: string[], ti
             dispatch(requestMeasure());
 
             let date_begin: number;
-            let scale: Netatmo.chart_scale;
+            let scale: measure_timelapse;
 
             switch (timelapse) {
                 case "12h":
@@ -179,6 +174,10 @@ export const fetchMeasure = (device: string, module: string, types: string[], ti
                 case "1m":
                     date_begin = moment().subtract(1, 'months').unix();
                     scale = '1day';
+                    break;
+                default:
+                    date_begin = moment().subtract(720, 'minutes').unix();
+                    scale = '30min';
                     break;
             }
 

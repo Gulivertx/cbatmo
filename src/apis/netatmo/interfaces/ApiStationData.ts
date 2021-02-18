@@ -22,7 +22,7 @@ export interface Device extends BaseModule {
     readonly home_name: string
     readonly last_status_store: number
     readonly last_upgrade: number
-    readonly Place: Place
+    readonly place: Place
     readonly wifi_status: number
     readonly modules: Module[]
 }
@@ -64,6 +64,7 @@ export interface DashboardData {
     readonly sum_rain_1?: number
     readonly sum_rain_24?: number
     readonly GustAngle?: number
+    readonly GustStrength?: number
     readonly WindAngle?: number
     readonly WindStrength?: number
     readonly date_max_wind_str?: number
@@ -73,10 +74,10 @@ export interface DashboardData {
 
 export interface Place {
     readonly altitude: number
-    readonly city: number
-    readonly country: number
+    readonly city: string
+    readonly country: string
     readonly location: [number, number]
-    readonly timezone: number
+    readonly timezone: string
 }
 
 export interface User {
@@ -91,4 +92,13 @@ export interface Administrative {
     readonly pressureunit: pressure_unit
     readonly unit: unit
     readonly windunit: wind_unit
+}
+
+export interface AvailableModules {
+    outdoor: boolean
+    indoor1: boolean
+    indoor2: boolean
+    indoor3: boolean
+    rain: boolean
+    wind: boolean
 }

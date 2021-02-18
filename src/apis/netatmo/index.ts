@@ -3,7 +3,7 @@ import moment from "moment";
 import {ApiTokenResponse} from "./interfaces/ApiOAuth";
 import {ApiStationDataResponse} from "./interfaces/ApiStationData";
 import UserData from "./models/UserData";
-import MainModuleData from "./models/MainModuleData";
+import StationData from "./models/StationData";
 
 const API_OAUTH_TOKEN: string = '/netatmo-auth';
 const API_REFRESH_TOKEN: string = '/netatmo-refresh-token';
@@ -68,7 +68,7 @@ class NetatmoClient {
         }
     }
 
-    public fetchStationData = async (): Promise<void> => {
+    public fetchStationData = async (): Promise<boolean> => {
         // Only fetch new station data if the last data fetched was did more than 10 minutes
         if (this.station_data === undefined || moment().diff(moment.unix(Number(this.station_data.time_server)), 'minute') > API_REFRESH_DELAY) {
             await this.refreshToken();
@@ -82,11 +82,13 @@ class NetatmoClient {
                 );
 
                 this.station_data = response.data;
+                return true;
             } catch (error) {
                 throw this.handleFetchError(error);
             }
         } else {
-            console.debug('Station data is up to date.')
+            console.debug('Station data is up to date.');
+            return false;
         }
     }
 
@@ -138,8 +140,8 @@ class NetatmoClient {
         return new UserData(this.station_data.body.user);
     }
 
-    public getMainModuleData = (deviceIndex: number, userData: UserData): MainModuleData => {
-        return new MainModuleData(this.station_data.body.devices[deviceIndex], userData);
+    public getStationData = (deviceIndex: number, userData: UserData): StationData => {
+        return new StationData(this.station_data.body.devices[deviceIndex], userData);
     }
 }
 

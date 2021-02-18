@@ -2,43 +2,9 @@ import React, {FormEvent} from 'react';
 import removeAccents from 'remove-accents';
 import { Button, Colors, Icon, Spinner, Intent, InputGroup } from '@blueprintjs/core';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import * as i18next from 'i18next';
-import {i18n} from 'i18next';
 import { Flex } from 'reflexbox';
-
 import { ContextMainLayout } from "../layouts/MainLayout";
-
-import * as applicationActions from '../store/application/actions';
-import * as netatmoActions from "../store/netatmo/actions";
-import { ConnectedReduxProps } from '../store';
-import { IApplicationInfoState } from "../store/application/types";
-import UserData from "../apis/netatmo/models/UserData";
-
-// Separate state props + dispatch props to their own interfaces.
-interface IPropsFromState {
-    loading_auth: boolean
-    loading_station_data: boolean
-    info?: IApplicationInfoState
-    mobile?: string
-    phone?: string
-    tablet: string
-    user: UserData
-    isConfigured: boolean
-    station_data_errors: any
-}
-
-// We can use `typeof` here to map our dispatch types to the props, like so.
-interface IPropsFromDispatch extends WithTranslation {
-    [key: string]: any
-    setIsStarting: typeof applicationActions.setIsStarting
-    fetchAuth: typeof netatmoActions.fetchAuth
-    fetchStationData: typeof netatmoActions.fetchStationData
-    t: i18next.TFunction
-    i18n: i18n
-}
-
-// Combine both state + dispatch props - as well as any props we want to pass - in a union type.
-type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
+import {PropsFromRedux} from "./AppStarting.container";
 
 interface IState {
     username: string
@@ -46,7 +12,7 @@ interface IState {
     secret: string
 }
 
-class AppStarting extends React.Component<AllProps, IState> {
+class AppStarting extends React.Component<PropsFromRedux & WithTranslation, IState> {
     state: IState = {
         username: '',
         password: '',
@@ -59,7 +25,7 @@ class AppStarting extends React.Component<AllProps, IState> {
         }
     }
 
-    public componentDidUpdate(prevProps: Readonly<AllProps>, prevState: Readonly<{}>, snapshot?: any): void {
+    public componentDidUpdate(prevProps: Readonly<PropsFromRedux & WithTranslation>, prevState: Readonly<{}>, snapshot?: any): void {
         // If the locale change we want to set the lang in localStorage and React app
         if (prevProps.user.lang !== this.props.user.lang && this.props.i18n.language !== this.props.user.lang) {
             console.debug('Change language to', this.props.user.lang);

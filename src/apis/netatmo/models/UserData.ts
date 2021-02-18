@@ -24,7 +24,6 @@ class UserData {
     }
 
     private setUserLanguage = (administrative: Administrative): void => {
-        console.log(administrative.lang.substr(0, 2))
         switch (administrative.lang.substr(0, 2)) {
             case 'fr':
             case 'de':

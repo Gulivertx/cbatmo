@@ -1,4 +1,4 @@
-import {connect} from 'react-redux'
+import {connect, ConnectedProps} from 'react-redux'
 import { ThunkDispatch } from "redux-thunk";
 import * as netatmoActions from "../store/netatmo/actions";
 import * as applicationActions from "../store/application/actions";
@@ -23,9 +23,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
     fetchStationData: () => dispatch(netatmoActions.fetchStationData())
 });
 
-const AppStartingContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AppStarting);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const AppStartingContainer = connector(AppStarting);
 
 export default AppStartingContainer

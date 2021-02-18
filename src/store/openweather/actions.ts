@@ -55,7 +55,7 @@ export const fetchOpenWeather = (): ThunkAction<void, ApplicationState, null, Ac
                     })
                 });
         } else {
-            console.debug('No new OpenWeather data to fetch')
+            console.debug('OpenWeather data is up to date.')
         }
     }
 };

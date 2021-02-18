@@ -17,6 +17,7 @@ const initialState: INetatmoState = {
 
     loading_station_data: true,
     station_data_errors: undefined,
+
     station_data: undefined,
 
     selected_indoor_module: 0,
@@ -95,7 +96,7 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
         case NetatmoActionTypes.STATION_DATA_SUCCESS:
             return { ...state,
                 loading_station_data: false,
-                station_data: action.payload,
+                station_data: action.mainModule,
                 station_data_errors: undefined,
                 //selected_module: state.selected_module || action.payload.modules.OUTDOOR.id
             };

@@ -1,4 +1,4 @@
-import MainModuleData from "../../apis/netatmo/models/MainModuleData";
+import StationData from "../../apis/netatmo/models/StationData";
 import {measure_timelapse, type} from "../../apis/netatmo/types";
 
 export enum NetatmoActionTypes {
@@ -39,7 +39,7 @@ export interface INetatmoState {
 
     readonly loading_station_data: boolean
     readonly station_data_errors: any
-    readonly station_data: MainModuleData|undefined
+    readonly station_data: StationData|undefined
 
     readonly selected_indoor_module: 0|1|2
 
@@ -48,7 +48,7 @@ export interface INetatmoState {
     readonly measure_errors: any
     readonly selected_module: string
     readonly selected_types: type[]
-    readonly selected_timelapse: measure_timelapse
+    readonly selected_timelapse: Netatmo.timelapse
 
     readonly loading_rain_measure: boolean
     readonly measure_rain_data: []

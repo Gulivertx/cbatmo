@@ -1,4 +1,4 @@
-import {IUserData} from "../../apis/netatmo/models/UserData";
+import UserData from "../../apis/netatmo/models/UserData";
 
 export enum ApplicationActionTypes {
     SET_IS_STARTING = '@@APP/SET_IS_STARTING',
@@ -24,5 +24,5 @@ export interface IApplicationState {
     readonly isConfigured: boolean
     readonly isStarting: boolean
     readonly info: IApplicationInfoState
-    readonly user: IUserData
+    readonly user: UserData
 }

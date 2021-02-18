@@ -4,20 +4,21 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import * as i18next from 'i18next';
 import {Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis} from "recharts";
 import ModuleLayout from "../layouts/ModuleLayout";
-import { INetatmoNAMain } from "../models/NetatmoNAMain";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
 import {Orientation} from "../store/application/types";
 import {colorChooser} from "../utils/tools";
+import MainModuleData from "../apis/netatmo/models/MainModuleData";
+import {type} from "../apis/netatmo/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
-    station_data: INetatmoNAMain|undefined
+    main_data: MainModuleData
     selected_timelapse: Netatmo.timelapse
     temperature_unit: string
     pressure_unit: string
     orientation: Orientation
-    selected_type: Netatmo.data_type
+    selected_type: type
     measure_data: []
 }
 
@@ -36,45 +37,45 @@ type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 const NetatmoModuleStation: React.FunctionComponent<AllProps> = (props) => {
     const _onClick = (type: string) => {
         if (props.orientation !== 'portrait') {
-            props.fetchMeasure(props.station_data?.id as string, props.station_data?.id as string, [type], props.selected_timelapse);
+            props.fetchMeasure(props.main_data?.id as string, props.main_data?.id as string, [type], props.selected_timelapse);
         }
     }
 
     return (
         <ModuleLayout
-            label={props.station_data?.module_name}
-            reachable={props.station_data?.reachable}
+            label={props.main_data?.module_name}
+            reachable={props.main_data?.reachable}
             vertical_divider={props.orientation === 'landscape'}
             icon='station'
-            radioLevel={props.station_data?.wifi}
+            radioLevel={props.main_data?.wifi_level}
         >
             <div className="modules-layout">
                 <div className="row">
                     <div className="temperature" onClick={() => _onClick('Temperature')}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>{props.t('netatmo.temperature')}</div>
-                        {props.station_data?.data?.temperature}<small>°{props.temperature_unit}</small>
+                        {props.main_data?.temperature}<small>°{props.temperature_unit}</small>
                     </div>
                     {
                         props.orientation === 'portrait' && (
                             <div className="pressure" onClick={() => _onClick('Pressure')} style={{textAlign: 'center'}}>
                                 <div className="sub-label" style={{ color: Colors.GRAY4 }}>{props.t('netatmo.barometer')}</div>
-                                {props.station_data?.data?.pressure}<small>{props.pressure_unit}</small>
+                                {props.main_data?.pressure}<small>{props.pressure_unit}</small>
                             </div>
                         )
                     }
                     <div className="humidity" onClick={() => _onClick('Humidity')} style={{textAlign: 'right'}}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.humidity')}</div>
-                        {props.station_data?.data?.humidity}<small>%</small>
+                        {props.main_data?.humidity}<small>%</small>
                     </div>
                 </div>
                 <div className="row">
                     <div className="co2" onClick={() => _onClick('CO2')}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>co2</div>
-                        {props.station_data?.data?.co2}<small>ppm</small>
+                        {props.main_data?.co2}<small>ppm</small>
                     </div>
                     <div className="noise" onClick={() => _onClick('Noise')} style={{textAlign: 'right'}}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.noise')}</div>
-                        {props.station_data?.data?.noise}<small>dB</small>
+                        {props.main_data?.noise}<small>dB</small>
                     </div>
                 </div>
                 {
@@ -82,7 +83,7 @@ const NetatmoModuleStation: React.FunctionComponent<AllProps> = (props) => {
                         <>
                             <ButtonGroup minimal={true} style={{paddingTop: 8}}>
                                 {
-                                    props.station_data?.data_type.map((type, index) =>
+                                    props.main_data?.data_type.map((type, index) =>
                                         <Button
                                             key={type}
                                             active={props.selected_type === type}
