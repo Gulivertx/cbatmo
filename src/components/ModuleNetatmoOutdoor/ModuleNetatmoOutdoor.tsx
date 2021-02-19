@@ -1,40 +1,18 @@
 import React from 'react';
 import {Button, ButtonGroup, Colors} from "@blueprintjs/core";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import * as i18next from 'i18next';
-import ModuleLayout from "../layouts/ModuleLayout";
-import { INetatmoNAModule1 } from "../models/NetatmoNAModule1";
-import * as netatmoActions from "../store/netatmo/actions";
-import {ConnectedReduxProps} from "../store";
-import {Orientation} from "../store/application/types";
+import ModuleLayout from "../../layouts/ModuleLayout";
 import {Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis} from "recharts";
-import {colorChooser} from "../utils/tools";
+import {colorChooser} from "../../utils/tools";
+import {PropsFromRedux} from "./ModuleNetatmoOutdoor.container";
+import OutdoorModuleData from "../../apis/netatmo/models/OutdoorModuleData";
 
-// Separate state props + dispatch props to their own interfaces.
-interface IPropsFromState {
-    module_data: INetatmoNAModule1|undefined
-    device_id: string|undefined
-    selected_timelapse: Netatmo.timelapse
-    temperature_ratio: string
-    temperature_unit: string
-    orientation: Orientation
-    selected_type: Netatmo.data_type
-    measure_data: []
+interface IProps {
+    module_data: OutdoorModuleData
 }
-
-// We can use `typeof` here to map our dispatch types to the props, like so.
-interface IPropsFromDispatch extends WithTranslation {
-    [key: string]: any
-    fetchMeasure: typeof netatmoActions.fetchMeasure
-    onChangeSelectedType: typeof netatmoActions.onChangeSelectedType
-    t: i18next.TFunction
-}
-
-// Combine both state + dispatch props - as well as any props we want to pass - in a union type.
-type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 
 /** Outdoor module */
-const NetatmoModuleOutdoor: React.FunctionComponent<AllProps> = (props) => {
+const NetatmoModuleOutdoor: React.FunctionComponent<PropsFromRedux & WithTranslation & IProps> = (props) => {
     const _onClick = (type: string) => {
         if (props.orientation !== 'portrait') {
             props.fetchMeasure(props.device_id as string, props.module_data?.id as string, [type], props.selected_timelapse);
@@ -48,18 +26,18 @@ const NetatmoModuleOutdoor: React.FunctionComponent<AllProps> = (props) => {
             last_seen={props.module_data?.last_seen}
             vertical_divider={props.orientation === 'landscape'}
             icon='outdoor'
-            radioLevel={props.module_data?.radio}
-            batteryLevel={props.module_data?.battery}
+            radioLevel={props.module_data?.radio_level}
+            batteryLevel={props.module_data?.battery_level}
         >
             <div className="modules-layout">
                 <div className="row">
                     <div className="temperature" onClick={() => _onClick('Temperature')}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>{props.t('netatmo.temperature')}</div>
-                        {props.module_data?.data?.temperature}<small>°{props.temperature_unit}</small>
+                        {props.module_data?.temperature}<small>°{props.temperature_unit}</small>
                     </div>
                     <div className="humidity" onClick={() => _onClick('Humidity')} style={{textAlign: 'right'}}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.humidity')}</div>
-                        {props.module_data?.data?.humidity}<small>%</small>
+                        {props.module_data?.humidity}<small>%</small>
                     </div>
                 </div>
                 {

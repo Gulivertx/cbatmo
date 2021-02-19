@@ -1,12 +1,12 @@
-import { connect } from 'react-redux'
+import {connect, ConnectedProps} from 'react-redux'
 import { ThunkDispatch} from "redux-thunk";
-import { ApplicationState } from "../store";
-import ModuleNetatmoOutdoor from "../components/ModuleNetatmoOutdoor"
-import * as netatmoActions from "../store/netatmo/actions";
+import { ApplicationState } from "../../store";
+import ModuleNetatmoOutdoor from "./ModuleNetatmoOutdoor"
+import * as netatmoActions from "../../store/netatmo/actions";
+import {type} from "../../apis/netatmo/types";
 
 const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
-    module_data: netatmo.station_data?.modules.OUTDOOR,
-    device_id: netatmo.station_data?.id,
+    device_id: netatmo.station_data?.main_data.id,
     selected_timelapse: netatmo.selected_timelapse,
     temperature_ratio: application.user.temperature_ratio,
     temperature_unit: application.user.temperature_unit,
@@ -17,12 +17,13 @@ const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
     fetchMeasure: (device: string, module: string, type: string[], timelapse: Netatmo.timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse)),
-    onChangeSelectedType: (type: Netatmo.data_type, module: string) => dispatch(netatmoActions.onChangeSelectedType(type, module)),
+    onChangeSelectedType: (type: type, module: string) => dispatch(netatmoActions.onChangeSelectedType(type, module)),
 });
 
-const ModuleNetatmoOutdoorContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ModuleNetatmoOutdoor);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const ModuleNetatmoOutdoorContainer = connector(ModuleNetatmoOutdoor);
 
 export default ModuleNetatmoOutdoorContainer

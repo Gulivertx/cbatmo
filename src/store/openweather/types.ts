@@ -1,9 +1,9 @@
 import {IOpenWeatherData} from "../../models/OpenWeatherData";
 
 export enum OpenWeatherActionTypes {
-    REQUEST = '@@openweather/REQUEST',
-    SUCCESS = '@@openweather/SUCCESS',
-    FAILURE = '@@openweather/FAILURE'
+    REQUEST = '@@WEATHER/REQUEST',
+    SUCCESS = '@@WEATHER/SUCCESS',
+    FAILURE = '@@WEATHER/FAILURE'
 }
 
 // The complete state for the store

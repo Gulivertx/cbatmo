@@ -3,26 +3,9 @@ import { Colors } from '@blueprintjs/core';
 import cx from 'classnames';
 import removeAccents from 'remove-accents';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import * as i18next from 'i18next';
-import { momentWithLocale } from '../utils/tools';
-import {ConnectedReduxProps} from "../store";
-import ModuleLayout from "../layouts/ModuleLayout";
-import {Orientation} from "../store/application/types";
-
-// Separate state props + dispatch props to their own interfaces.
-interface IPropsFromState {
-    locale: string
-    sunset_time: number
-    sunrise_time: number
-    orientation: Orientation
-}
-
-interface IpropsFromDispatch extends WithTranslation {
-    [key: string]: any
-    t: i18next.TFunction
-}
-
-type AllProps = IPropsFromState & IpropsFromDispatch & ConnectedReduxProps;
+import { momentWithLocale } from '../../utils/tools';
+import ModuleLayout from "../../layouts/ModuleLayout";
+import {PropsFromRedux} from "./ModuleDateTime.container";
 
 interface IState {
     hour: string
@@ -31,7 +14,7 @@ interface IState {
     date: string
 }
 
-class ModuleDateTime extends React.Component<AllProps, IState> {
+class ModuleDateTime extends React.Component<PropsFromRedux & WithTranslation, IState> {
     private interval: number | undefined;
 
     public state: IState = {

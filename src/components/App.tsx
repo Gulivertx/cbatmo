@@ -8,22 +8,25 @@ import DashboardLayoutContainer from "../layouts/DashboardLayout.container";
 
 /** React components **/
 import AppStartingContainer from "./AppStarting.container";
-import ModuleNetatmoInformationContainer from "../containers/ModuleNetatmoInformationContainer";
-import ModuleDateTimeContainer from "../containers/ModuleDateTimeContainer";
-import ModuleNetatmoStationContainer from "../containers/ModuleNetatmoStationContainer";
-import ModuleNetatmoOutdoorContainer from "../containers/ModuleNetatmoOutdoorContainer";
-import ModuleNetatmoIndoorContainer from "../containers/ModuleNetatmoIndoorContainer";
-import ModuleNetatmoIndoorSecondContainer from "../containers/ModuleNetatmoIndoorSecondContainer";
-import ModuleNetatmoIndoorThirdContainer from "../containers/ModuleNetatmoIndoorThirdContainer";
-import ModuleNetatmoRainContainer from "../containers/ModuleNetatmoRainContainer";
-import ModuleNetatmoWindContainer from "../containers/ModuleNetatmoWindContainer";
-import ModuleNetatmoBarometerContainer from "../containers/ModuleNetatmoBarometerContainer";
-import ModuleForecastContainer from "../containers/ModuleForecastContainer";
+import ModuleNetatmoInformationContainer from "./ModuleNetatmoInfo/ModuleNetatmoInformation.container";
+import ModuleDateTimeContainer from "./ModuleDateTime/ModuleDateTime.container";
+import ModuleNetatmoMainContainer from "./ModuleNetatmoMain/ModuleNetatmoMain.container";
+import ModuleNetatmoOutdoorContainer from "./ModuleNetatmoOutdoor/ModuleNetatmoOutdoor.container";
+import ModuleNetatmoIndoorContainer from "./ModuleNetatmoIndoor/ModuleNetatmoIndoor.container";
+import ModuleNetatmoRainContainer from "./ModuleNetatmoRain/ModuleNetatmoRain.container";
+import ModuleNetatmoWindContainer from "./ModuleNetatmoWind/ModuleNetatmoWind.container";
+import ModuleNetatmoBarometerContainer from "./ModuleNetatmoBarometer/ModuleNetatmoBarometer.container";
+import ModuleForecastContainer from "./ModuleForecast/ModuleForecast.container";
 import ModuleNetatmoGraphContainer from "../containers/ModuleNetatmoGraphContainer";
 
 import { Orientation } from "../store/application/types";
 import {PropsFromRedux} from "./App.container";
 import {AvailableModules} from "../apis/netatmo/interfaces/ApiStationData";
+import {modules} from "../apis/netatmo/types";
+import IndoorModuleData from "../apis/netatmo/models/IndoorModuleData";
+import OutdoorModuleData from "../apis/netatmo/models/OutdoorModuleData";
+import RainModuleData from "../apis/netatmo/models/RainModuleData";
+import WindModuleData from "../apis/netatmo/models/WindModuleData";
 
 class App extends React.Component<PropsFromRedux> {
     private lockScrollElement: RefObject<any> = React.createRef();
@@ -86,62 +89,55 @@ class App extends React.Component<PropsFromRedux> {
             available_modules?.rain ||
             available_modules?.wind) {
             return (
-                <>
+                <React.Fragment>
                     <Flex flexDirection='column' width={[ '100%', '35%' ]}>
                         <ModuleDateTimeContainer/>
-                        <ModuleNetatmoStationContainer />
-                        <ModuleNetatmoOutdoorContainer />
+                        <ModuleNetatmoMainContainer />
+                        <ModuleNetatmoOutdoorContainer module_data={this.props.modules?.find(module => module.type === modules.outdoor) as OutdoorModuleData} />
                         <ModuleNetatmoBarometerContainer />
                     </Flex>
                     <Flex flexDirection='column' width={[ '100%', '65%' ]}>
                         <Flex flexWrap='wrap' flex={1}>
                             <ModuleForecastContainer />
+
                             {
-                                available_modules?.indoor1 ? (
-                                    <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
+                                available_modules?.indoor1 && (
+                                    <Box width={number_of_additional_modules !== 1 ? [ '100%', '50%' ] : '100%'}>
                                         {
-                                            this.props.selected_indoor_module === 0 ? (
-                                                <ModuleNetatmoIndoorContainer />
-                                            ) : null
-                                        }
-                                        {
-                                            this.props.selected_indoor_module === 1 ? (
-                                                <ModuleNetatmoIndoorSecondContainer />
-                                            ) : null
-                                        }
-                                        {
-                                            this.props.selected_indoor_module === 2 ? (
-                                                <ModuleNetatmoIndoorThirdContainer />
-                                            ) : null
+                                            this.props.modules?.filter(module => module.type === modules.indoor).map((module, index) =>
+                                                    this.props.selected_indoor_module === index && (
+                                                        <ModuleNetatmoIndoorContainer module_data={module as IndoorModuleData} />
+                                                    )
+                                                )
                                         }
                                     </Box>
-                                ) : null
+                                )
                             }
+
                             {
-                                available_modules?.indoor2 && number_of_additional_modules as number <= 3 ? (
-                                    <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
-                                        <ModuleNetatmoIndoorSecondContainer />
-                                    </Box>
-                                ) : null
+                                (available_modules?.indoor2 || available_modules?.indoor3) && number_of_additional_modules as number <= 3 && (
+                                    this.props.modules?.filter(module => module.type === modules.indoor).map((module, index) =>
+                                            index !== 0 && (
+                                            <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
+                                                <ModuleNetatmoIndoorContainer module_data={module as IndoorModuleData} />
+                                            </Box>
+                                        )
+                                    )
+                                )
                             }
-                            {
-                                available_modules?.indoor3 && number_of_additional_modules as number <= 3 ? (
-                                    <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
-                                        <ModuleNetatmoIndoorThirdContainer />
-                                    </Box>
-                                ) : null
-                            }
+
                             {
                                 available_modules?.rain ? (
                                     <Box width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
-                                        <ModuleNetatmoRainContainer />
+                                        <ModuleNetatmoRainContainer module_data={this.props.modules?.find(module => module.type === modules.rain) as RainModuleData} />
                                     </Box>
                                 ) : null
                             }
+
                             {
                                 available_modules?.wind ? (
                                     <Box  width={number_of_additional_modules as number !== 1 ? [ '100%', '50%' ] : '100%'}>
-                                        <ModuleNetatmoWindContainer />
+                                        <ModuleNetatmoWindContainer module_data={this.props.modules?.find(module => module.type === modules.wind) as WindModuleData} />
                                     </Box>
                                 ) : null
                             }
@@ -152,16 +148,16 @@ class App extends React.Component<PropsFromRedux> {
                         </Flex>
                         <ModuleNetatmoInformationContainer />
                     </Flex>
-                </>
+                </React.Fragment>
             )
         } else {
             // No additional modules
             return (
-                <>
+                <React.Fragment>
                     <Flex flexDirection='column' width={[ '100%', '35%' ]}>
                         <ModuleDateTimeContainer/>
-                        <ModuleNetatmoStationContainer />
-                        <ModuleNetatmoOutdoorContainer />
+                        <ModuleNetatmoMainContainer />
+                        <ModuleNetatmoOutdoorContainer module_data={this.props.modules?.find(module => module.type === modules.outdoor) as OutdoorModuleData} />
                         <ModuleNetatmoBarometerContainer />
                     </Flex>
                     <Flex flexDirection='column' width={[ '100%', '65%' ]}>
@@ -169,7 +165,7 @@ class App extends React.Component<PropsFromRedux> {
                         <ModuleNetatmoGraphContainer />
                         <ModuleNetatmoInformationContainer />
                     </Flex>
-                </>
+                </React.Fragment>
             )
         }
     }
@@ -183,31 +179,21 @@ class App extends React.Component<PropsFromRedux> {
             <Flex flexDirection='column' width={'100%'}>
                 <Flex flexDirection='column' ref={this.lockScrollElement} style={{overflowY: 'auto'}}>
                     <ModuleNetatmoInformationContainer />
-                    <ModuleNetatmoOutdoorContainer />
-                    <ModuleNetatmoStationContainer />
+                    <ModuleNetatmoOutdoorContainer module_data={this.props.modules?.find(module => module.type === modules.outdoor) as OutdoorModuleData} />
+                    <ModuleNetatmoMainContainer />
                     {
-                        available_modules?.indoor1 && (
-                            <ModuleNetatmoIndoorContainer module_name='indoor' />
-                        )
-                    }
-                    {
-                        available_modules?.indoor2 && (
-                            <ModuleNetatmoIndoorSecondContainer module_name='indoor_second' />
-                        )
-                    }
-                    {
-                        available_modules?.indoor3 && (
-                            <ModuleNetatmoIndoorThirdContainer module_name='indoor_third' />
+                        this.props.modules && this.props.modules.filter(module => module.type === modules.indoor).map((module,index) =>
+                            <ModuleNetatmoIndoorContainer module_data={module as IndoorModuleData} />
                         )
                     }
                     {
                         available_modules?.rain && (
-                            <ModuleNetatmoRainContainer />
+                            <ModuleNetatmoRainContainer module_data={this.props.modules?.find(module => module.type === modules.rain) as RainModuleData} />
                         )
                     }
                     {
                         available_modules?.wind && (
-                            <ModuleNetatmoWindContainer />
+                            <ModuleNetatmoWindContainer module_data={this.props.modules?.find(module => module.type === modules.wind) as WindModuleData} />
                         )
                     }
                 </Flex>

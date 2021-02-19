@@ -1,45 +1,18 @@
 import React from 'react';
 import {Alignment, Button, ButtonGroup, Colors} from "@blueprintjs/core";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import * as i18next from 'i18next';
 import { AreaChart, Area, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-import ModuleLayout from "../layouts/ModuleLayout";
-import { INetatmoNAModule4 } from "../models/NetatmoNAModule4";
-import * as netatmoActions from "../store/netatmo/actions";
-import {ConnectedReduxProps} from "../store";
-import {Orientation} from "../store/application/types";
-import {colorChooser} from "../utils/tools";
-import {IIndoorModuleNames} from "../models/NetatmoNAMain";
+import ModuleLayout from "../../layouts/ModuleLayout";
+import {colorChooser} from "../../utils/tools";
+import {PropsFromRedux} from "./ModuleNetatmoIndoor.container";
+import IndoorModuleData from "../../apis/netatmo/models/IndoorModuleData";
 
-// Separate state props + dispatch props to their own interfaces.
-interface IPropsFromState {
-    module_data: INetatmoNAModule4|undefined
-    device_id: string|undefined
-    selected_timelapse: Netatmo.timelapse
-    temperature_unit: string
-    orientation: Orientation
-    selected_type: Netatmo.data_type
-    measure_data: []
-    module_name: string
-    number_of_additional_modules?: number
-    selected_indoor_module: number
-    indoor_module_names: IIndoorModuleNames
+interface IProps {
+    module_data: IndoorModuleData
 }
-
-// We can use `typeof` here to map our dispatch types to the props, like so.
-interface IPropsFromDispatch extends WithTranslation {
-    [key: string]: any
-    fetchMeasure: typeof netatmoActions.fetchMeasure
-    onChangeSelectedType: typeof netatmoActions.onChangeSelectedType
-    onChangeSelectedInsideModule: typeof netatmoActions.onChangeSelectedInsideModule
-    t: i18next.TFunction
-}
-
-// Combine both state + dispatch props - as well as any props we want to pass - in a union type.
-type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 
 /** Outdoor module */
-const NetatmoModuleIndoor: React.FunctionComponent<AllProps> = (props) => {
+const NetatmoModuleIndoor: React.FunctionComponent<PropsFromRedux & WithTranslation & IProps> = (props) => {
     const _onClick = (type: string) => {
         if (props.orientation !== 'portrait') {
             props.fetchMeasure(props.device_id as string, props.module_data?.id as string, [type], props.selected_timelapse);
@@ -53,8 +26,8 @@ const NetatmoModuleIndoor: React.FunctionComponent<AllProps> = (props) => {
             last_seen={props.module_data?.last_seen}
             vertical_divider={props.orientation === 'landscape'}
             icon='indoor'
-            radioLevel={props.module_data?.radio}
-            batteryLevel={props.module_data?.battery}
+            radioLevel={props.module_data?.radio_level}
+            batteryLevel={props.module_data?.battery_level}
             number_of_additional_modules={props.number_of_additional_modules}
             onChangeSelectedInsideModule={props.onChangeSelectedInsideModule}
             selected_indoor_module={props.selected_indoor_module}
@@ -64,19 +37,19 @@ const NetatmoModuleIndoor: React.FunctionComponent<AllProps> = (props) => {
                 <div className="row">
                     <div className="temperature" onClick={() => _onClick('Temperature')}>
                         <div className="sub-label" style={{ color: Colors.GRAY4 }}>{props.t('netatmo.temperature')}</div>
-                        {props.module_data?.data?.temperature}<small>°{props.temperature_unit}</small>
+                        {props.module_data?.temperature}<small>°{props.temperature_unit}</small>
                     </div>
                     {
                         props.orientation === 'portrait' && (
                             <div className="co2" onClick={() => _onClick('CO2')} style={{textAlign: 'center'}}>
                                 <div className="sub-label" style={{ color: Colors.GRAY4 }}>co2</div>
-                                {props.module_data?.data?.co2}<small>ppm</small>
+                                {props.module_data?.co2}<small>ppm</small>
                             </div>
                         )
                     }
                     <div className="humidity" onClick={() => _onClick('Humidity')} style={{textAlign: 'right'}}>
                         <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.humidity')}</div>
-                        {props.module_data?.data?.humidity}<small>%</small>
+                        {props.module_data?.humidity}<small>%</small>
                     </div>
                 </div>
                 {
@@ -84,7 +57,7 @@ const NetatmoModuleIndoor: React.FunctionComponent<AllProps> = (props) => {
                         <div className="row">
                             <div className="co2" onClick={() => _onClick('CO2')}>
                                 <div className="sub-label" style={{ color: Colors.GRAY4 }}>co2</div>
-                                {props.module_data?.data?.co2}<small>ppm</small>
+                                {props.module_data?.co2}<small>ppm</small>
                             </div>
 
                         </div>

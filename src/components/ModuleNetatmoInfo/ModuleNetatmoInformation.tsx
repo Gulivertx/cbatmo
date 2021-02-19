@@ -2,25 +2,15 @@ import React from 'react';
 import { Colors } from "@blueprintjs/core";
 import removeAccents from 'remove-accents';
 import { Flex  } from 'reflexbox'
-import { IPlace } from "../models/NetatmoNAMain";
-import { momentWithLocale } from "../utils/tools";
-import ModuleLayout from "../layouts/ModuleLayout";
-import {Orientation} from "../store/application/types";
-
-interface IPropsFromState {
-    station_name?: string
-    last_status_store?: number
-    place?: IPlace
-    reachable?: boolean
-    locale: string
-    orientation?: Orientation
-}
+import { momentWithLocale } from "../../utils/tools";
+import ModuleLayout from "../../layouts/ModuleLayout";
+import {PropsFromRedux} from "./ModuleNetatmoInformation.container";
 
 interface IState {
     last_status_store: string
 }
 
-class ModuleNetatmoInformation extends React.Component<IPropsFromState, IState> {
+class ModuleNetatmoInformation extends React.Component<PropsFromRedux, IState> {
     private interval: number | undefined;
 
     public state = {
@@ -39,7 +29,7 @@ class ModuleNetatmoInformation extends React.Component<IPropsFromState, IState> 
         clearInterval(this.interval);
     }
 
-    public componentDidUpdate(prevProps: Readonly<IPropsFromState>, prevState: Readonly<IState>, snapshot?: any) {
+    public componentDidUpdate(prevProps: Readonly<PropsFromRedux>, prevState: Readonly<IState>, snapshot?: any) {
         if (prevProps.last_status_store !== this.props.last_status_store) {
             this.lastStatusStore();
         }

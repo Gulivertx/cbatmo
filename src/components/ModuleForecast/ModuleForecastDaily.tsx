@@ -4,8 +4,8 @@ import { Colors } from "@blueprintjs/core";
 import cx from 'classnames';
 
 import WeatherIcon from "./WeatherIcon";
-import { momentWithLocale } from '../utils/tools'
-import { IDailyData } from "../models/WeatherInterface";
+import { momentWithLocale } from '../../utils/tools'
+import { IDailyData } from "../../models/WeatherInterface";
 
 interface IPropsFromState {
     data: IDailyData|undefined

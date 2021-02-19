@@ -1,7 +1,7 @@
-import { connect } from 'react-redux'
+import {connect, ConnectedProps} from 'react-redux'
 import { ThunkDispatch} from "redux-thunk";
-import { ApplicationState } from "../store";
-import ModuleForecast from "../components/ModuleForecast"
+import { ApplicationState } from "../../store";
+import ModuleForecast from "./ModuleForecast"
 
 const mapStateToProps = ({ openweather, application}: ApplicationState) => ({
     openweather: openweather,
@@ -14,9 +14,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
 
 });
 
-const ModuleForecastContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ModuleForecast);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const ModuleForecastContainer = connector(ModuleForecast);
 
 export default ModuleForecastContainer

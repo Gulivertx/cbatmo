@@ -1,46 +1,25 @@
 import React from 'react';
 import { Colors } from "@blueprintjs/core";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import * as i18next from 'i18next';
 import {Flex} from 'reflexbox';
-import ModuleNetatmoRainGraphContainer from "../containers/ModuleNetatmoRainGraphContainer";
-import ModuleLayout from "../layouts/ModuleLayout";
+import ModuleNetatmoRainGraphContainer from "../../containers/ModuleNetatmoRainGraphContainer";
+import ModuleLayout from "../../layouts/ModuleLayout";
+import {PropsFromRedux} from "./ModuleNetatmoRain.container";
+import RainModuleData from "../../apis/netatmo/models/RainModuleData";
 
-import { INetatmoNAModule3 } from "../models/NetatmoNAModule3";
-import * as netatmoActions from "../store/netatmo/actions";
-import {ConnectedReduxProps} from "../store";
-import {Orientation} from "../store/application/types";
-
-// Separate state props + dispatch props to their own interfaces.
-interface IPropsFromState {
-    module_data: INetatmoNAModule3|undefined
-    device_id: string|undefined
-    selected_timelapse: '12h'|'1d'|'1m'
-    distance_unit: string
-    rain_ratio: number
-    orientation: Orientation
+interface IProps {
+    module_data: RainModuleData
 }
 
-// We can use `typeof` here to map our dispatch types to the props, like so.
-interface IPropsFromDispatch extends WithTranslation {
-    [key: string]: any
-    fetchMeasure: typeof netatmoActions.fetchMeasure
-    t: i18next.TFunction
-}
-
-// Combine both state + dispatch props - as well as any props we want to pass - in a union type.
-type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
-
-/** Rain module */
-const NetatmoModuleRain: React.FunctionComponent<AllProps> = (props) => {
+const NetatmoModuleRain: React.FunctionComponent<PropsFromRedux & WithTranslation & IProps> = (props) => {
     return (
         <ModuleLayout
             label={props.module_data?.module_name}
             reachable={props.module_data?.reachable}
             vertical_divider={props.orientation === 'landscape'}
             icon='rain'
-            radioLevel={props.module_data?.radio}
-            batteryLevel={props.module_data?.battery}
+            radioLevel={props.module_data?.radio_level}
+            batteryLevel={props.module_data?.battery_level}
         >
             <div className="modules-layout">
                 <Flex flexDirection='row'>
@@ -50,11 +29,11 @@ const NetatmoModuleRain: React.FunctionComponent<AllProps> = (props) => {
                     <Flex flexDirection='column' style={{width: props.orientation === 'portrait' ? '22%' : '40%'}}>
                         <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)} style={{textAlign: 'right'}}>
                             <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.t('netatmo.cumulative')}</div>
-                            {props.module_data?.data?.sum_rain_24}<small>{props.distance_unit}</small>
+                            {props.module_data?.sum_rain_24}<small>{props.distance_unit}</small>
                         </div>
                         <div onClick={() => props.fetchMeasure(props.device_id as string, props.module_data?.id as string, ['Rain'], props.selected_timelapse)} style={{textAlign: 'right'}}>
                             <div className="sub-label" style={{ color: Colors.GRAY4, textAlign: "right" }}>{props.distance_unit}/h</div>
-                            {props.module_data?.data?.sum_rain_1}
+                            {props.module_data?.sum_rain_1}
                         </div>
                     </Flex>
                 </Flex>

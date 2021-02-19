@@ -11,6 +11,7 @@ const mapStateToProps = ({ application, netatmo}: ApplicationState) => ({
     phone: application.phone,
     tablet: application.tablet,
     available_modules: netatmo.station_data?.available_modules,
+    modules: netatmo.station_data?.modules,
     number_of_additional_modules: netatmo.station_data?.modules.length,
     selected_indoor_module: netatmo.selected_indoor_module,
 });

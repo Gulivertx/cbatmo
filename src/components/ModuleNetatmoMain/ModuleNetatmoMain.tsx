@@ -1,40 +1,12 @@
 import React from 'react';
 import {Button, ButtonGroup, Colors} from "@blueprintjs/core";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import * as i18next from 'i18next';
 import {Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis} from "recharts";
-import ModuleLayout from "../layouts/ModuleLayout";
-import * as netatmoActions from "../store/netatmo/actions";
-import {ConnectedReduxProps} from "../store";
-import {Orientation} from "../store/application/types";
-import {colorChooser} from "../utils/tools";
-import MainModuleData from "../apis/netatmo/models/MainModuleData";
-import {type} from "../apis/netatmo/types";
+import ModuleLayout from "../../layouts/ModuleLayout";
+import {colorChooser} from "../../utils/tools";
+import {PropsFromRedux} from "./ModuleNetatmoMain.container";
 
-// Separate state props + dispatch props to their own interfaces.
-interface IPropsFromState {
-    main_data: MainModuleData
-    selected_timelapse: Netatmo.timelapse
-    temperature_unit: string
-    pressure_unit: string
-    orientation: Orientation
-    selected_type: type
-    measure_data: []
-}
-
-// We can use `typeof` here to map our dispatch types to the props, like so.
-interface IPropsFromDispatch extends WithTranslation {
-    [key: string]: any
-    fetchMeasure: typeof netatmoActions.fetchMeasure
-    onChangeSelectedType: typeof netatmoActions.onChangeSelectedType
-    t: i18next.TFunction
-}
-
-// Combine both state + dispatch props - as well as any props we want to pass - in a union type.
-type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
-
-/** Main station */
-const NetatmoModuleStation: React.FunctionComponent<AllProps> = (props) => {
+const NetatmoModuleMain: React.FunctionComponent<PropsFromRedux & WithTranslation> = (props) => {
     const _onClick = (type: string) => {
         if (props.orientation !== 'portrait') {
             props.fetchMeasure(props.main_data?.id as string, props.main_data?.id as string, [type], props.selected_timelapse);
@@ -120,4 +92,4 @@ const NetatmoModuleStation: React.FunctionComponent<AllProps> = (props) => {
     )
 };
 
-export default withTranslation('common')(NetatmoModuleStation)
+export default withTranslation('common')(NetatmoModuleMain)

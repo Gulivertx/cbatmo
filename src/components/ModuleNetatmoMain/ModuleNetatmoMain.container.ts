@@ -1,9 +1,9 @@
-import { connect } from 'react-redux'
+import {connect, ConnectedProps} from 'react-redux'
 import { ThunkDispatch} from "redux-thunk";
-import { ApplicationState } from "../store";
-import ModuleNetatmoStation from "../components/ModuleNetatmoStation"
-import * as netatmoActions from "../store/netatmo/actions";
-import {type} from "../apis/netatmo/types";
+import { ApplicationState } from "../../store";
+import ModuleNetatmoMain from "./ModuleNetatmoMain"
+import * as netatmoActions from "../../store/netatmo/actions";
+import {type} from "../../apis/netatmo/types";
 
 const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     main_data: netatmo.station_data?.main_data,
@@ -20,9 +20,10 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
     onChangeSelectedType: (type: type, module: string) => dispatch(netatmoActions.onChangeSelectedType(type, module)),
 });
 
-const ModuleNetatmoStationContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ModuleNetatmoStation);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default ModuleNetatmoStationContainer
+export type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const ModuleNetatmoMainContainer = connector(ModuleNetatmoMain);
+
+export default ModuleNetatmoMainContainer

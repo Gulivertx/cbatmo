@@ -1,9 +1,9 @@
 import React, {CSSProperties, Fragment, ReactFragment} from 'react';
 import removeAccents from 'remove-accents';
 import {Flex} from 'reflexbox';
-import {Menu, MenuItem, Popover, Position} from "@blueprintjs/core";
+import {IMenuItemProps, Menu, MenuItem, Popover, Position} from "@blueprintjs/core";
 
-import ModuleNetatmoNotReachable from '../components/ModuleNetatmoNotReachable';
+import ModuleNetatmoNotReachable from '../components/ModuleNetatmoNotReachable/ModuleNetatmoNotReachable';
 
 import netatmoStationIcon from '../img/netatmo_station.svg';
 import netatmoOutdoorIcon from '../img/netatmo_outdoor_module.svg';
@@ -25,7 +25,7 @@ import batteryMedium from '../img/battery_medium.svg';
 import batteryHigh from '../img/battery_high.svg';
 import batteryFull from '../img/battery_full.svg';
 import batteryMax from '../img/battery_max.svg';
-import {IIndoorModuleNames} from "../models/NetatmoNAMain";
+import {battery_level, radio_level, wifi_level} from "../apis/netatmo/types";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -36,12 +36,12 @@ interface IPropsFromState {
     vertical_divider?: boolean
     position?: 'fixed-bottom'
     icon?: 'station'|'outdoor'|'indoor'|'rain'|'wind'
-    batteryLevel?: Netatmo.battery_level
-    radioLevel?: Netatmo.radio_level
+    batteryLevel?: battery_level
+    radioLevel?: radio_level
     number_of_additional_modules?: number
     onChangeSelectedInsideModule?: (module: number) => void
     selected_indoor_module?: number
-    indoor_module_names?: IIndoorModuleNames
+    indoor_module_names?: string[]
 }
 
 const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
@@ -82,35 +82,35 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
         }
     }
 
-    const wifiIconChooser = (level: Netatmo.wifi_level) => {
+    const wifiIconChooser = (level: wifi_level) => {
         switch (level) {
-            case "1":
+            case "low":
                 return wifiSignal1;
-            case "2":
+            case "medium":
                 return wifiSignal2;
-            case '3':
+            case 'high':
                 return wifiSignal3;
-            case '4':
+            case 'full':
                 return wifiSignal4;
         }
     }
 
-    const radioIconChooser = (level: Netatmo.radio_level) => {
+    const radioIconChooser = (level: radio_level) => {
         switch (level) {
-            case "1":
+            case "low":
                 return radioSignal1;
-            case "2":
+            case "medium":
                 return radioSignal2;
-            case '3':
+            case 'high':
                 return radioSignal3;
-            case '4':
+            case 'full':
                 return radioSignal4;
-            case '5':
+            case 'max':
                 return radioSignal5;
         }
     }
 
-    const batteryIconChooser = (level: Netatmo.battery_level) => {
+    const batteryIconChooser = (level: battery_level) => {
         switch (level) {
             case "very-low":
                 return batteryVeryLow;
@@ -128,39 +128,23 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
     }
 
     const indoorSwitchMenuItem = (): ReactFragment => {
-        const menuItems = [];
+        const menuItems: IMenuItemProps[] = [];
 
-        if (props.indoor_module_names?.indoor) {
+        props.indoor_module_names?.map((name, index) => {
             menuItems.push({
-                text: removeAccents(props.indoor_module_names?.indoor || ''),
-                active: props.selected_indoor_module === 0,
-                index: 0
+                text: removeAccents(name),
+                active: props.selected_indoor_module === index,
+                onClick: () => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(index)
             });
-        }
-        if (props.indoor_module_names?.indoor_second) {
-            menuItems.push({
-                text: removeAccents(props.indoor_module_names?.indoor_second || ''),
-                active: props.selected_indoor_module === 1,
-                index: 1
-            });
-        }
-        if (props.indoor_module_names?.indoor_third) {
-            menuItems.push({
-                text: removeAccents(props.indoor_module_names?.indoor_third || ''),
-                active: props.selected_indoor_module === 2,
-                index: 2
-            });
-        }
+        });
 
         return (
             <React.Fragment>
                 {
                     menuItems.map(item => (
                     <MenuItem
-                        text={item.text}
-                        active={item.active}
-                        onClick={() => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(item.index)}
-                        key={item.index}
+                        {...item}
+                        key={item.text as string}
                     />
                     ))
                 }
@@ -192,14 +176,14 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
                             {
                                 props.icon !== 'station' ? (
                                     <Fragment>
-                                        <img src={batteryIconChooser(props.batteryLevel as Netatmo.battery_level)} alt="Battery icon"
+                                        <img src={batteryIconChooser(props.batteryLevel as battery_level)} alt="Battery icon"
                                              style={{width: 18, height: 18, marginBottom: 0, marginTop: 0, paddingLeft: 0}}/>
-                                        <img src={radioIconChooser(props.radioLevel as Netatmo.radio_level)} alt="Radio icon"
+                                        <img src={radioIconChooser(props.radioLevel as radio_level)} alt="Radio icon"
                                              style={{width: 18, height: 18, marginBottom: 0, marginTop: 0, paddingLeft: 0}}/>
                                     </Fragment>
                                 ) : (
                                     <Fragment>
-                                        <img src={wifiIconChooser(props.radioLevel as Netatmo.wifi_level)} alt="Wifi icon"
+                                        <img src={wifiIconChooser(props.radioLevel as wifi_level)} alt="Wifi icon"
                                              style={{width: 18, height: 18, marginBottom: 0, marginTop: 0, paddingLeft: 0}}/>
                                     </Fragment>
                                 )

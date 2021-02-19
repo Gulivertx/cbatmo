@@ -1,26 +1,15 @@
 import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import * as i18next from 'i18next';
 import {Colors} from "@blueprintjs/core";
 import ModuleForecastDaily from "./ModuleForecastDaily";
 import moment from "moment";
 import {Flex} from "reflexbox";
 import cx from "classnames";
 
-import ModuleLayout from "../layouts/ModuleLayout";
-import { IOpenWeatherState } from "../store/openweather/types";
-import { Orientation } from "../store/application/types";
+import ModuleLayout from "../../layouts/ModuleLayout";
+import {PropsFromRedux} from "./ModuleForecast.container";
 
-// Separate state props + dispatch props to their own interfaces.
-interface IPropsFromState extends WithTranslation  {
-    openweather: IOpenWeatherState
-    locale: string
-    phone?: string
-    orientation?: Orientation
-    t: i18next.TFunction
-}
-
-const ModuleDate: React.FunctionComponent<IPropsFromState> = (props) => {
+const ModuleDate: React.FunctionComponent<PropsFromRedux & WithTranslation> = (props) => {
     return (
         <ModuleLayout label={props.t('forecast.forecast')} reachable={true} fill={true} position={!!props.phone && props.orientation === 'portrait' ? 'fixed-bottom' : undefined} vertical_divider={props.orientation === 'landscape'}>
             <div className="module-forecast">
