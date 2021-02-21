@@ -2,14 +2,16 @@ import { Action } from 'redux'
 import {ApplicationState, AppThunk} from '../index'
 import { ThunkAction } from 'redux-thunk'
 import moment from 'moment';
-import { setUserInfo, setIsStarting } from "../application/actions";
+import {setUserInfo, setIsStarting, setDevicesName} from "../application/actions";
 import NetatmoChartsData from "../../models/NetatmoChartsData";
 import { NetatmoActionTypes } from "./types";
 import NetatmoClient from "../../apis/netatmo";
-import {ApiStationDataResponse} from "../../apis/netatmo/interfaces/ApiStationData";
+import {ApiStationDataResponse, User} from "../../apis/netatmo/interfaces/ApiStationData";
 import {ApiTokenResponse} from "../../apis/netatmo/interfaces/ApiOAuth";
 import StationData from "../../apis/netatmo/models/StationData";
-import {measure_timelapse} from "../../apis/netatmo/types";
+import {measure_timelapse, type} from "../../apis/netatmo/types";
+import graph_timelapse = Cbatmo.graph_timelapse;
+import UserData from "../../apis/netatmo/models/UserData";
 
 // This is the delay before next API call to refresh data
 // Netatmo only refresh their API every 10 minutes so call less than 10 is not necessary
@@ -90,10 +92,10 @@ export const requestStationData = () => {
     }
 };
 
-export const successStationData = (mainModule: StationData) => {
+export const successStationData = (stationData: StationData) => {
     return {
         type: NetatmoActionTypes.STATION_DATA_SUCCESS,
-        mainModule: mainModule,
+        stationData: stationData,
         receivedAt: Date.now()
     }
 };
@@ -112,10 +114,20 @@ export const fetchStationData = (): AppThunk => async (dispatch, getState) => {
         .then(resp => {
             if (resp) {
                 const userData = netatmoClient.getUserInformation();
-                const stationData = netatmoClient.getStationData(0, userData); // Todo get 0 from redux state, this is the selected station from UI
-                dispatch(successStationData(stationData))
-                dispatch(setUserInfo(userData))
-                dispatch(setIsStarting(false))
+                const devicesName = netatmoClient.getDevicesName();
+
+                const selected_device_id = getState().netatmo.selected_device ? getState().netatmo.selected_device as string : devicesName[0].id;
+                const stationData = netatmoClient.getStationDataByDeviceId(selected_device_id);
+
+                // Regitre some station information is application was starting only
+                if (getState().application.isStarting) {
+                    dispatch(setUserInfo(userData))
+                    dispatch(setDevicesName(devicesName))
+                    dispatch(successStationData(stationData))
+                    dispatch(setIsStarting(false))
+                } else {
+                    dispatch(successStationData(stationData))
+                }
             }
         })
         .catch(error => {
@@ -131,7 +143,7 @@ export const requestMeasure = () => {
     }
 };
 
-export const successMeasure = (data: any, module: string, types: string[], timelapse: Netatmo.timelapse) => {
+export const successMeasure = (data: any, module: string, types: string[], timelapse: Cbatmo.graph_timelapse) => {
     return {
         type: NetatmoActionTypes.MEASURE_SUCCESS,
         payload: data,
@@ -149,7 +161,7 @@ export const failureMeasure = (error: any) => {
     }
 };
 
-export const fetchMeasure = (device: string, module: string, types: string[], timelapse: Netatmo.timelapse = '12h'): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchMeasure = (device: string, module: string, types: string[], timelapse: Cbatmo.graph_timelapse = '12h'): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if (getState().netatmo.measure_data.length === 0 ||
@@ -198,7 +210,7 @@ export const fetchMeasure = (device: string, module: string, types: string[], ti
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoChartsData(json.body, types, getState().application.user);
+                    const dataChart = new NetatmoChartsData(json.body, types, getState().application.user as UserData);
                     dispatch(successMeasure(dataChart.data, module, types, timelapse))
                 })
                 .catch(error => {
@@ -256,7 +268,7 @@ export const fetchRainMeasure = (device: string, module: string): ThunkAction<vo
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoChartsData(json.body, ['Rain'], getState().application.user);
+                    const dataChart = new NetatmoChartsData(json.body, ['Rain'], getState().application.user as UserData);
                     dispatch(successRainMeasure(dataChart.data))
                 })
                 .catch(error => {
@@ -278,7 +290,7 @@ export const requestMeasures = (module: string) => {
     }
 };
 
-export const successMeasures = (data: any, module: string, timelapse: Netatmo.timelapse) => {
+export const successMeasures = (data: any, module: string, timelapse: Cbatmo.graph_timelapse) => {
     return {
         type: NetatmoActionTypes.MEASURES_SUCCESS,
         payload: data,
@@ -295,19 +307,19 @@ export const failureMeasures = (error: any, module: string) => {
     }
 };
 
-export const fetchMeasures = (device: string, module: string, types: Netatmo.data_type[], timelapse: '12h'|'1d'|'1m', module_name: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
+export const fetchMeasures = (device: string, module: string, types: type[], timelapse: '12h'|'1d'|'1m', module_name: string): ThunkAction<void, ApplicationState, null, Action<string>> => {
     return (dispatch, getState) => {
         // Get measure only if we have no data or if the last fetch is bigger than 10 minutes
         if ((getState().netatmo.measure_station_data.length === 0 &&
             getState().netatmo.measure_outdoor_data.length === 0 &&
-            getState().netatmo.measure_indoor_data.length === 0 &&
-            getState().netatmo.measure_indoor_second_data.length === 0 &&
-            getState().netatmo.measure_indoor_third_data.length === 0) ||
+            getState().netatmo.measure_indoor1_data.length === 0 &&
+            getState().netatmo.measure_indoor2_data.length === 0 &&
+            getState().netatmo.measure_indoor3_data.length === 0) ||
             moment().diff(moment.unix(Number(getState().netatmo.station_data?.last_status_store)), 'minute') > API_REFRESH_DELAY) {
             dispatch(requestMeasures(module_name));
 
             let date_begin: number;
-            let scale: Netatmo.chart_scale;
+            let scale: measure_timelapse;
 
             switch (timelapse) {
                 case "12h":
@@ -339,7 +351,7 @@ export const fetchMeasures = (device: string, module: string, types: Netatmo.dat
                     return response.json()
                 })
                 .then(json => {
-                    const dataChart = new NetatmoChartsData(json.body, types, getState().application.user);
+                    const dataChart = new NetatmoChartsData(json.body, types, getState().application.user as UserData);
                     dispatch(successMeasures(dataChart.data, module_name, timelapse))
                 })
                 .catch(error => {
@@ -352,7 +364,7 @@ export const fetchMeasures = (device: string, module: string, types: Netatmo.dat
     }
 };
 
-export const onChangeSelectedType = (type: Netatmo.data_type, module: string) => {
+export const onChangeSelectedType = (type: type, module: string) => {
     return {
         type: NetatmoActionTypes.CHANGE_SELECTED_TYPE,
         payload: type,
@@ -364,5 +376,16 @@ export const onChangeSelectedInsideModule = (module: number) => {
     return {
         type: NetatmoActionTypes.CHANGE_SELECTED_INSIDE_MODULE,
         payload: module,
+    }
+}
+
+export const onChangeSelectedDevice = (home_id: string) => {
+    const device = netatmoClient.getStationDataByDeviceId(home_id);
+    console.log(device)
+
+    return {
+        type: NetatmoActionTypes.CHANGE_SELECTED_DEVICE,
+        payload: device,
+        home_id: home_id
     }
 }

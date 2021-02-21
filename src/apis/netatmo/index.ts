@@ -1,7 +1,7 @@
 import axios, {AxiosError, AxiosInstance, AxiosRequestConfig} from "axios";
 import moment from "moment";
 import {ApiTokenResponse} from "./interfaces/ApiOAuth";
-import {ApiStationDataResponse} from "./interfaces/ApiStationData";
+import {ApiStationDataResponse, Device} from "./interfaces/ApiStationData";
 import UserData from "./models/UserData";
 import StationData from "./models/StationData";
 
@@ -107,7 +107,6 @@ class NetatmoClient {
         this.addHttpClientToken(data.access_token);
 
         window.localStorage.setItem('NetatmoRefreshToken', data.refresh_token);
-        console.log(this.access_token, this.refresh_token, moment.unix(this.expires_at).format('DD.MM.YYYY'))
     }
 
     private handleFetchError = (error: any): any => {
@@ -140,8 +139,15 @@ class NetatmoClient {
         return new UserData(this.station_data.body.user);
     }
 
-    public getStationData = (deviceIndex: number, userData: UserData): StationData => {
-        return new StationData(this.station_data.body.devices[deviceIndex], userData);
+    public getDevicesName = (): Cbatmo.DevicesName[] => {
+        const devices: Cbatmo.DevicesName[] = [];
+        this.station_data.body.devices.map(device => devices.push({id: device.home_id, name: device.home_name}));
+
+        return devices;
+    }
+
+    public getStationDataByDeviceId = (home_id: string): StationData => {
+        return new StationData(this.station_data.body.devices.find(device => device.home_id === home_id) as Device, this.getUserInformation());
     }
 }
 

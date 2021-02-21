@@ -1,9 +1,11 @@
 import UserData from "../../apis/netatmo/models/UserData";
+import DevicesName = Cbatmo.DevicesName;
 
 export enum ApplicationActionTypes {
     SET_IS_STARTING = '@@APP/SET_IS_STARTING',
     USER_INFO = '@@APP/USER_INFO',
     DEVICE_ORIENTATION = '@@APP/DEVICE_ORIENTATION',
+    SET_DEVICES_NAME = '@@APP/SET_DEVICES_NAME'
 }
 
 export type Orientation = 'portrait' | 'landscape';
@@ -24,5 +26,6 @@ export interface IApplicationState {
     readonly isConfigured: boolean
     readonly isStarting: boolean
     readonly info: IApplicationInfoState
-    readonly user: UserData
+    readonly user: UserData|undefined
+    readonly netatmo_devices: DevicesName[]
 }

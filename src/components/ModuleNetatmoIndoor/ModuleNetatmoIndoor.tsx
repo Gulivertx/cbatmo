@@ -1,9 +1,7 @@
 import React from 'react';
-import {Alignment, Button, ButtonGroup, Colors} from "@blueprintjs/core";
+import {Colors} from "@blueprintjs/core";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { AreaChart, Area, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import ModuleLayout from "../../layouts/ModuleLayout";
-import {colorChooser} from "../../utils/tools";
 import {PropsFromRedux} from "./ModuleNetatmoIndoor.container";
 import IndoorModuleData from "../../apis/netatmo/models/IndoorModuleData";
 
@@ -61,41 +59,6 @@ const NetatmoModuleIndoor: React.FunctionComponent<PropsFromRedux & WithTranslat
                             </div>
 
                         </div>
-                    )
-                }
-                {
-                    props.orientation === 'portrait' && (
-                        <>
-                            <ButtonGroup minimal={true} style={{paddingTop: 8}}>
-                                {
-                                    props.module_data?.data_type.map((type, index) =>
-                                        <Button
-                                            key={type}
-                                            active={props.selected_type === type}
-                                            onClick={() => props.onChangeSelectedType(type, props.module_name)}
-                                        >{props.t('netatmo.' + type.toLowerCase())}</Button>
-                                    )
-                                }
-                            </ButtonGroup>
-                            <ResponsiveContainer height={110}>
-                                <AreaChart
-                                    key={props.selected_type}
-                                    data={props.measure_data}
-                                    margin={{top: 14, right: 10, left: -30, bottom: 0}}
-                                >
-                                    <CartesianGrid stroke={Colors.GRAY1} />
-                                    <YAxis tick={{fontSize: '10px', fill: Colors.GRAY4}} minTickGap={1} domain={['dataMin', 'dataMax']} />
-                                    <XAxis tick={{fontSize: '8px', fill: Colors.GRAY4}} dataKey='name' hide={false} minTickGap={1} interval={4}/>
-                                    <Area
-                                        type='monotone'
-                                        dataKey={props.selected_type}
-                                        stroke={colorChooser(props.selected_type)}
-                                        fill={colorChooser(props.selected_type)}
-                                        strokeWidth={2} isAnimationActive={true}
-                                    />
-                                </AreaChart>
-                            </ResponsiveContainer>
-                        </>
                     )
                 }
             </div>

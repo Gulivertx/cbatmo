@@ -8,7 +8,8 @@
  */
 import { Reducer } from "redux";
 import { INetatmoState, NetatmoActionTypes } from "./types";
-import {measure_timelapse, type} from "../../apis/netatmo/types";
+import {type} from "../../apis/netatmo/types";
+import graph_timelapse = Cbatmo.graph_timelapse;
 
 const initialState: INetatmoState = {
     loading_auth: false,
@@ -21,13 +22,14 @@ const initialState: INetatmoState = {
     station_data: undefined,
 
     selected_indoor_module: 0,
+    selected_device: undefined,
 
     loading_measure: false,
     measure_errors: undefined,
     measure_data: [],
     selected_module: window.localStorage.getItem('selected_module') || '',
     selected_types: window.localStorage.getItem('selected_types') ? JSON.parse(window.localStorage.getItem('selected_types') as string) : ['Temperature'],
-    selected_timelapse: window.localStorage.getItem('selected_timelapse') as measure_timelapse || '1day',
+    selected_timelapse: window.localStorage.getItem('selected_timelapse') as graph_timelapse || '1day',
 
     loading_rain_measure: false,
     measure_rain_errors: undefined,
@@ -96,7 +98,8 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
         case NetatmoActionTypes.STATION_DATA_SUCCESS:
             return { ...state,
                 loading_station_data: false,
-                station_data: action.mainModule,
+                station_data: action.stationData,
+                selected_device: action.stationData.home_id,
                 station_data_errors: undefined,
                 //selected_module: state.selected_module || action.payload.modules.OUTDOOR.id
             };
@@ -232,6 +235,9 @@ const reducer: Reducer<INetatmoState> = (state = initialState, action) => {
 
         case NetatmoActionTypes.CHANGE_SELECTED_INSIDE_MODULE:
             return { ...state, selected_indoor_module: action.payload };
+
+        case NetatmoActionTypes.CHANGE_SELECTED_DEVICE:
+            return { ...state, station_data: action.payload, selected_device: action.home_id };
 
         default:
             return state;

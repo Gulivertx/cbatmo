@@ -28,7 +28,8 @@ export enum NetatmoActionTypes {
 
     CHANGE_SELECTED_TYPE = '@@NETATMO/CHANGE_SELECTED_TYPE',
 
-    CHANGE_SELECTED_INSIDE_MODULE = '@@NETATMO/CHANGE_SELECTED_INSIDE_MODULE'
+    CHANGE_SELECTED_INSIDE_MODULE = '@@NETATMO/CHANGE_SELECTED_INSIDE_MODULE',
+    CHANGE_SELECTED_DEVICE = '@@NETATMO/CHANGE_SELECTED_DEVICE'
 }
 
 // The complete state for the store
@@ -42,13 +43,14 @@ export interface INetatmoState {
     readonly station_data: StationData|undefined
 
     readonly selected_indoor_module: 0|1|2
+    readonly selected_device: string|undefined
 
     readonly loading_measure: boolean
     readonly measure_data: []
     readonly measure_errors: any
     readonly selected_module: string
     readonly selected_types: type[]
-    readonly selected_timelapse: Netatmo.timelapse
+    readonly selected_timelapse: Cbatmo.graph_timelapse
 
     readonly loading_rain_measure: boolean
     readonly measure_rain_data: []

@@ -7,15 +7,15 @@ import * as netatmoActions from "../../store/netatmo/actions";
 const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     reachable: netatmo.station_data?.main_data.reachable,
     pressure: netatmo.station_data?.main_data?.pressure,
-    pressure_unit: application.user.pressure_unit,
+    pressure_unit: application.user?.pressure_unit,
     device_id: netatmo.station_data?.main_data.id,
     selected_timelapse: netatmo.selected_timelapse,
-    pressure_ratio: application.user.pressure_ratio,
+    pressure_ratio: application.user?.pressure_ratio,
     orientation: application.orientation,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
-    fetchMeasure: (device: string, module: string, type: string[], timelapse: Netatmo.timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse))
+    fetchMeasure: (device: string, module: string, type: string[], timelapse: Cbatmo.graph_timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse))
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

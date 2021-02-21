@@ -6,10 +6,11 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import * as i18next from 'i18next';
 import ModuleLayout from "../layouts/ModuleLayout";
 import {colorChooser} from "../utils/tools";
-import {INetatmoNAMain} from "../models/NetatmoNAMain";
 import * as netatmoActions from "../store/netatmo/actions";
 import {ConnectedReduxProps} from "../store";
 import { Orientation } from "../store/application/types";
+import {type} from "../apis/netatmo/types";
+import StationData from "../apis/netatmo/models/StationData";
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -17,10 +18,10 @@ interface IPropsFromState {
     mobile?: string
     orientation: Orientation
     measure_data: []
-    selected_types: Netatmo.data_type[]
+    selected_types: type[]
     selected_module: string
-    selected_timelapse: Netatmo.timelapse
-    station_data: INetatmoNAMain|undefined
+    selected_timelapse: Cbatmo.graph_timelapse
+    station_data: StationData
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -37,30 +38,20 @@ type AllProps = IPropsFromState & IPropsFromDispatch & ConnectedReduxProps;
 class NetatmoModuleGraph extends React.Component<AllProps> {
 
     private findModuleName = (module_id: string) => {
-        // @ts-ignore
         const { modules } = this.props.station_data;
 
-        if (module_id === this.props.station_data?.id) {
-            return this.props.station_data.module_name;
-        } else if (module_id === modules.INDOOR?.id) {
-            return modules.INDOOR.module_name;
-        } else if (module_id === modules.INDOOR_SECOND?.id) {
-            return modules.INDOOR_SECOND.module_name;
-        } else if (module_id === modules.INDOOR_THIRD?.id) {
-            return modules.INDOOR_THIRD.module_name;
-        } else if (module_id === modules.OUTDOOR?.id) {
-            return modules.OUTDOOR.module_name;
-        } else if (module_id === modules.RAIN?.id) {
-            return modules.RAIN.module_name;
-        } else if (module_id === modules.WIND?.id) {
-            return modules.WIND.module_name;
-        } else {
-            return '';
+        if (module_id === this.props.station_data?.main_data.id) {
+            return this.props.station_data.main_data.module_name;
         }
+
+        const module = modules.find(module => module.id === module_id);
+        if (module) return module.module_name;
+
+        return ''
     };
 
-    private handleOnclick = (timelapse: Netatmo.timelapse): void => {
-        this.props.fetchMeasure(this.props.station_data?.id as string, this.props.selected_module, this.props.selected_types, timelapse);
+    private handleOnclick = (timelapse: Cbatmo.graph_timelapse): void => {
+        this.props.fetchMeasure(this.props.station_data?.main_data.id as string, this.props.selected_module, this.props.selected_types, timelapse);
     };
 
     private _setGraphHeight = (phone: boolean, orientation: Orientation, number_of_additional_modules: number): number => {
@@ -104,7 +95,7 @@ class NetatmoModuleGraph extends React.Component<AllProps> {
                             onClick={() => this.handleOnclick('1m')}
                         >1 {this.props.t('netatmo.month')}</Button>
                     </ButtonGroup>
-                    <ResponsiveContainer height={this._setGraphHeight(!!this.props.phone, this.props.orientation, this.props.station_data?.number_of_additional_modules as number)}>
+                    <ResponsiveContainer height={this._setGraphHeight(!!this.props.phone, this.props.orientation, this.props.station_data.modules.length)}>
                         <AreaChart
                             //width={240}
                             //height={this.props.phone ? 94 : 122}

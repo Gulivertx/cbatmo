@@ -12,7 +12,7 @@ interface IPropsFromState {
     pressure?: number
     pressure_unit: string
     device_id: string|undefined
-    selected_timelapse: Netatmo.timelapse
+    selected_timelapse: Cbatmo.graph_timelapse
     pressure_ratio: number
     orientation: Orientation
 }

@@ -5,7 +5,7 @@ import ModuleForecast from "./ModuleForecast"
 
 const mapStateToProps = ({ openweather, application}: ApplicationState) => ({
     openweather: openweather,
-    locale: application.user.lang,
+    locale: application.user?.lang,
     phone: application.phone,
     orientation: application.orientation
 });

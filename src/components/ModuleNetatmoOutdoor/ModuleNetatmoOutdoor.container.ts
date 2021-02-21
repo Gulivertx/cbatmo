@@ -8,15 +8,15 @@ import {type} from "../../apis/netatmo/types";
 const mapStateToProps = ({ netatmo, application}: ApplicationState) => ({
     device_id: netatmo.station_data?.main_data.id,
     selected_timelapse: netatmo.selected_timelapse,
-    temperature_ratio: application.user.temperature_ratio,
-    temperature_unit: application.user.temperature_unit,
+    temperature_ratio: application.user?.temperature_ratio,
+    temperature_unit: application.user?.temperature_unit,
     orientation: application.orientation,
     selected_type: netatmo.selected_outdoor_type,
     measure_data: netatmo.measure_outdoor_data
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
-    fetchMeasure: (device: string, module: string, type: string[], timelapse: Netatmo.timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse)),
+    fetchMeasure: (device: string, module: string, type: string[], timelapse: Cbatmo.graph_timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, type, timelapse)),
     onChangeSelectedType: (type: type, module: string) => dispatch(netatmoActions.onChangeSelectedType(type, module)),
 });
 

@@ -24,8 +24,8 @@ const mapStateToProps = ({ netatmo, application }: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, any>) => ({
     fetchOpenWeather: () => dispatch(openweatherActions.fetchOpenWeather()),
     fetchStationData: () => dispatch(netatmoActions.fetchStationData()),
-    fetchMeasure: (device: string, module: string, types: string[], timelapse: Netatmo.timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, types, timelapse)),
-    fetchMeasures: (device: string, module: string, types: type[], timelapse: Netatmo.timelapse, module_name: string) => dispatch(netatmoActions.fetchMeasures(device, module, types, timelapse, module_name)),
+    fetchMeasure: (device: string, module: string, types: string[], timelapse: Cbatmo.graph_timelapse) => dispatch(netatmoActions.fetchMeasure(device, module, types, timelapse)),
+    fetchMeasures: (device: string, module: string, types: type[], timelapse: Cbatmo.graph_timelapse, module_name: string) => dispatch(netatmoActions.fetchMeasures(device, module, types, timelapse, module_name)),
     fetchRainMeasure: (device: string, module: string) => dispatch(netatmoActions.fetchRainMeasure(device, module)),
     setOrientation: (orientation: Orientation) => dispatch(applicationActions.setOrientation(orientation)),
 });

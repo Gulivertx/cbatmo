@@ -27,10 +27,10 @@ class AppStarting extends React.Component<PropsFromRedux & WithTranslation, ISta
 
     public componentDidUpdate(prevProps: Readonly<PropsFromRedux & WithTranslation>, prevState: Readonly<{}>, snapshot?: any): void {
         // If the locale change we want to set the lang in localStorage and React app
-        if (prevProps.user.lang !== this.props.user.lang && this.props.i18n.language !== this.props.user.lang) {
-            console.debug('Change language to', this.props.user.lang);
-            window.localStorage.setItem('locale', this.props.user.lang);
-            this.props.i18n.changeLanguage(this.props.user.lang)
+        if (prevProps.user?.lang !== this.props.user?.lang && this.props.i18n.language !== this.props.user?.lang) {
+            console.debug('Change language to', this.props.user?.lang);
+            window.localStorage.setItem('locale', this.props.user?.lang as string);
+            this.props.i18n.changeLanguage(this.props.user?.lang as string)
                 .catch(error => console.debug(error));
         }
     }

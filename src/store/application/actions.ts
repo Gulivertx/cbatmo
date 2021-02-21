@@ -1,5 +1,6 @@
 import {ApplicationActionTypes, Orientation} from './types'
-import {IUserData} from "../../apis/netatmo/models/UserData";
+import UserData from "../../apis/netatmo/models/UserData";
+import DevicesName = Cbatmo.DevicesName;
 
 /** Application actions **/
 export const setIsStarting = (value: boolean) => {
@@ -9,7 +10,7 @@ export const setIsStarting = (value: boolean) => {
     }
 };
 
-export const setUserInfo = (user: IUserData) => {
+export const setUserInfo = (user: UserData) => {
     return {
         type: ApplicationActionTypes.USER_INFO,
         payload: user
@@ -22,3 +23,11 @@ export const setOrientation = (orientation: Orientation) => {
         payload: orientation
     }
 };
+
+export const setDevicesName = (devices: DevicesName[]) => {
+    return {
+        type: ApplicationActionTypes.SET_DEVICES_NAME,
+        payload: devices
+    }
+};
+

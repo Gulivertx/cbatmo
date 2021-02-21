@@ -67,7 +67,9 @@ THE SOFTWARE.
 
 /*! Production::    css_value : VWS */
 
-/*! Production::    css_variable : CSS_VAR */
+/*! Production::    css_variable : CSS_VAR LPAREN CSS_CPROP COMMA math_expression RPAREN */
+
+/*! Production::    css_variable : CSS_VAR LPAREN CSS_CPROP RPAREN */
 
 /*! Production::    expression : math_expression EOF */
 
@@ -96,6 +98,8 @@ THE SOFTWARE.
 /*! Production::    value : SUB NUMBER */
 
 /*! Rule::       $ */
+
+/*! Rule::       (--[0-9a-z-A-Z-]*) */
 
 /*! Rule::       ([0-9]+(\.[0-9]*)?|\.[0-9]+)% */
 
@@ -155,7 +159,9 @@ THE SOFTWARE.
 
 /*! Rule::       (calc) */
 
-/*! Rule::       (var\([^\)]*\)) */
+/*! Rule::       (var) */
+
+/*! Rule::       , */
 
 /*! Rule::       - */
 

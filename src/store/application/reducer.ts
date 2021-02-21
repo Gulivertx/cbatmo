@@ -17,20 +17,8 @@ const initialState: IApplicationState = {
         version: '',
         author: '',
     },
-    user: {
-        mail: '',
-        lang: '',
-        locale: '',
-        pressure_unit: '',
-        unit: '',
-        temperature_unit: '',
-        distance_unit: '',
-        wind_unit: '',
-        temperature_ratio: '',
-        pressure_ratio: 1,
-        wind_ratio: 1,
-        rain_ratio: 1
-    }
+    user: undefined,
+    netatmo_devices: []
 };
 
 const reducer: Reducer<IApplicationState> = (state = initialState, action) => {
@@ -52,6 +40,9 @@ const reducer: Reducer<IApplicationState> = (state = initialState, action) => {
 
         case ApplicationActionTypes.DEVICE_ORIENTATION:
             return { ...state, orientation: action.payload };
+
+        case ApplicationActionTypes.SET_DEVICES_NAME:
+            return { ...state, netatmo_devices: action.payload };
 
         default:
             return state;

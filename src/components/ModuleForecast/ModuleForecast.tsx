@@ -13,12 +13,12 @@ const ModuleDate: React.FunctionComponent<PropsFromRedux & WithTranslation> = (p
     return (
         <ModuleLayout label={props.t('forecast.forecast')} reachable={true} fill={true} position={!!props.phone && props.orientation === 'portrait' ? 'fixed-bottom' : undefined} vertical_divider={props.orientation === 'landscape'}>
             <div className="module-forecast">
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[0]} locale={props.locale} phone={props.phone} />
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[1]} locale={props.locale} phone={props.phone} />
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[2]} locale={props.locale} phone={props.phone} />
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[3]} locale={props.locale} phone={props.phone} />
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[4]} locale={props.locale} phone={props.phone} />
-                <ModuleForecastDaily data={props.openweather.data?.daily.data[5]} locale={props.locale} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[0]} locale={props.locale as string} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[1]} locale={props.locale as string} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[2]} locale={props.locale as string} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[3]} locale={props.locale as string} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[4]} locale={props.locale as string} phone={props.phone} />
+                <ModuleForecastDaily data={props.openweather.data?.daily.data[5]} locale={props.locale as string} phone={props.phone} />
             </div>
             {
                 props.phone && props.orientation === 'portrait' && (

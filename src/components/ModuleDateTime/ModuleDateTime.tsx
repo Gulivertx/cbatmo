@@ -37,7 +37,7 @@ class ModuleDateTime extends React.Component<PropsFromRedux & WithTranslation, I
     }
 
     private clock = (): void => {
-        let moment = momentWithLocale(this.props.locale);
+        let moment = momentWithLocale(this.props.locale as string);
         const date = moment();
 
         this.setState({
@@ -49,7 +49,7 @@ class ModuleDateTime extends React.Component<PropsFromRedux & WithTranslation, I
     };
 
     render() {
-        let moment = momentWithLocale(this.props.locale);
+        let moment = momentWithLocale(this.props.locale as string);
 
         return (
             <ModuleLayout label={this.props.t('netatmo.time')} reachable={true} vertical_divider={this.props.orientation === 'landscape'}>

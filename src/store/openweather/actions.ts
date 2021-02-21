@@ -36,8 +36,8 @@ export const fetchOpenWeather = (): ThunkAction<void, ApplicationState, null, Ac
             // Take latitude and longitude from Netatmo station
             const lat = getState().netatmo.station_data?.place.latitude;
             const lng = getState().netatmo.station_data?.place.longitude;
-            const locale = getState().application.user.lang;
-            const unit = getState().application.user.unit;
+            const locale = getState().application.user?.lang;
+            const unit = getState().application.user?.unit;
 
             return fetch(`/openweather/${lat}/${lng}/${locale}/${unit}`)
                 .then(response => {

@@ -1,5 +1,6 @@
 import moment from "moment";
 import {Colors} from "@blueprintjs/core";
+import {type, types} from "../apis/netatmo/types";
 
 export const momentWithLocale = (locale: string) => {
     switch (locale) {
@@ -22,17 +23,20 @@ export const momentWithLocale = (locale: string) => {
     return moment;
 };
 
-export const colorChooser = (type: Netatmo.data_type): string => {
+export const colorChooser = (type: type): string => {
     switch (type) {
-        case 'Temperature':
+        case types.temperature:
             return Colors.GOLD5;
-        case 'Humidity':
+        case types.humidity:
             return Colors.BLUE5;
-        case 'CO2':
+        case types.co2:
             return Colors.GREEN5;
-        case 'Noise':
+        case types.noise:
             return Colors.RED5;
-        case 'Pressure':
+        case types.pressure:
             return Colors.COBALT5;
+        default:
+            console.debug('Unhandled type for color chooser!')
+            return Colors.GOLD5;
     }
 };

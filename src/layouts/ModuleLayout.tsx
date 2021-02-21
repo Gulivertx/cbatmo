@@ -26,6 +26,7 @@ import batteryHigh from '../img/battery_high.svg';
 import batteryFull from '../img/battery_full.svg';
 import batteryMax from '../img/battery_max.svg';
 import {battery_level, radio_level, wifi_level} from "../apis/netatmo/types";
+import DevicesName = Cbatmo.DevicesName;
 
 // Separate state props + dispatch props to their own interfaces.
 interface IPropsFromState {
@@ -40,8 +41,11 @@ interface IPropsFromState {
     radioLevel?: radio_level
     number_of_additional_modules?: number
     onChangeSelectedInsideModule?: (module: number) => void
+    onChangeSelectedDevice?: (devideId: string) => void
     selected_indoor_module?: number
     indoor_module_names?: string[]
+    devices_name?: DevicesName[]
+    selected_device?: string
 }
 
 const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
@@ -127,16 +131,30 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
         }
     }
 
-    const indoorSwitchMenuItem = (): ReactFragment => {
+    const switchMenuItems = (): ReactFragment => {
         const menuItems: IMenuItemProps[] = [];
 
-        props.indoor_module_names?.map((name, index) => {
-            menuItems.push({
-                text: removeAccents(name),
-                active: props.selected_indoor_module === index,
-                onClick: () => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(index)
+        // build menu for indoor modules
+        if (props.indoor_module_names) {
+            props.indoor_module_names.map((name, index) => {
+                menuItems.push({
+                    text: removeAccents(name),
+                    active: props.selected_indoor_module === index,
+                    onClick: () => props.onChangeSelectedInsideModule && props.onChangeSelectedInsideModule(index)
+                });
             });
-        });
+        }
+
+        // build menu for devices
+        if (props.devices_name) {
+            props.devices_name.map((device, index) => {
+                menuItems.push({
+                    text: removeAccents(device.name),
+                    active: props.selected_device === device.id,
+                    onClick: () => props.onChangeSelectedDevice && props.onChangeSelectedDevice(device.id)
+                });
+            });
+        }
 
         return (
             <React.Fragment>
@@ -152,8 +170,8 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
         );
     }
 
-    const indoorSwitchMenu = (): JSX.Element => {
-        const children = indoorSwitchMenuItem();
+    const switchMenu = (): JSX.Element => {
+        const children = switchMenuItems();
         return (
             <Menu children={children}/>
         );
@@ -163,8 +181,12 @@ const ModuleLayout: React.FunctionComponent<IPropsFromState> = (props) => {
         <div className="module-container" style={styles(props.fill, props.position)}>
             <div className="item-label">
                 {
-                    <Popover content={indoorSwitchMenu()} position={Position.BOTTOM} disabled={props.icon !== 'indoor'}
-                             minimal={true}>
+                    <Popover
+                        content={switchMenu()}
+                        position={Position.BOTTOM}
+                        disabled={props.devices_name === undefined && props.indoor_module_names === undefined}
+                        minimal={true}
+                    >
                         <div className="label">{removeAccents(props.label ? props.label : '')}</div>
                     </Popover>
                 }

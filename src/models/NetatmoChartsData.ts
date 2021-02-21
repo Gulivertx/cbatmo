@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {IUserData} from "../apis/netatmo/models/UserData";
+import UserData from "../apis/netatmo/models/UserData";
 
 export interface INetatmoChartData {
     data: any[]
@@ -9,7 +9,7 @@ export interface INetatmoChartData {
 class NetatmoModuleChartData implements INetatmoChartData {
     data = [];
 
-    constructor(data: any, type: string[], userInfo: IUserData) {
+    constructor(data: any, type: string[], userInfo: UserData) {
         this.data = [];
 
         Object.entries(data).map((obj: any) => {
