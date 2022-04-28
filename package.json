@@ -51,7 +51,7 @@
     "awesome-typescript-loader": "^5.2.1",
     "classnames": "^2.2.6",
     "concurrently": "^5.0.1",
-    "cross-fetch": "^3.0.1",
+    "cross-fetch": "^3.1.5",
     "css-loader": "^5.0.1",
     "file-loader": "^6.0.0",
     "html-loader": "^1.1.0",
