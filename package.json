@@ -27,7 +27,7 @@
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "http-errors": "^1.7.1",
     "morgan": "^1.9.1",
     "remove": "^0.1.5",
